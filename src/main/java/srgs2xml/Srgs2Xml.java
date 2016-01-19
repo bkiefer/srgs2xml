@@ -187,7 +187,7 @@ public class Srgs2Xml {
      */
 
     String[] inputs = {
-        /*"small pizza",
+        "small pizza",
         "medium pizza",
         "large pizza",
         "a small pizza",
@@ -239,7 +239,7 @@ public class Srgs2Xml {
         "I want a medium pizza with ham please",
         "I want a large pizza with mushrooms please",
         "I want small pizza with salami please",
-        "I want medium pizza with ham please",*/
+        "I want medium pizza with ham please",
         "I want large pizza with mushrooms please",
     };
 

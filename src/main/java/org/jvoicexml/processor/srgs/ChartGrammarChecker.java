@@ -64,7 +64,9 @@ public final class ChartGrammarChecker {
     int start, end, dot, id;
     RuleComponent rule;
     // multiple parents needed, in case added multiple times
-    List<ChartNode> parent;
+    List<ChartNode> children;
+    List<ChartNode> equivs;
+    //ChartNode parent;
 
     /** Constructor
      * @throws GrammarException
@@ -94,25 +96,20 @@ public final class ChartGrammarChecker {
       }
       rule = r;
       dot = d;
-      parent = new ArrayList<ChartNode>();
+      children = new ArrayList<ChartNode>();
     }
+
 
     /** Constructor
      * @throws GrammarException
      */
-    public ChartNode(int s, int e, RuleComponent r, ChartNode p, int d)
+    public ChartNode(int s, int e, RuleComponent r,
+        List<ChartNode> prevChildren, ChartNode nextChild, int d)
         throws GrammarException {
       this(s, e, r, d);
-      parent.add(p);
-    }
-
-    /** Constructor
-     * @throws GrammarException
-     */
-    public ChartNode(int s, int e, RuleComponent r, List<ChartNode> pl, int d)
-        throws GrammarException {
-      this(s, e, r, d);
-      parent.addAll(pl);
+      children = new ArrayList<ChartNode>();
+      if (null != prevChildren) children.addAll(prevChildren);
+      children.add(nextChild);
     }
 
    /** Constructor for predicts
@@ -120,7 +117,7 @@ public final class ChartGrammarChecker {
      */
     public ChartNode(int s, RuleComponent r, ChartNode p)
         throws GrammarException {
-      this(s, s, r, p, 0);
+      this(s, s, r, 0);
     }
 
     public String toString() {
@@ -129,7 +126,7 @@ public final class ChartGrammarChecker {
       .append(Integer.toString(start)).append(',')
       .append(Integer.toString(end)).append(',').append(Integer.toString(dot))
       .append(" <");
-      for (ChartNode c : parent) {
+      for (ChartNode c : children) {
         sb.append(c == null ? "r" : Integer.toString(c.id)).append(' ');
       }
       sb.append("> ").append(rule).append(')');
@@ -139,6 +136,7 @@ public final class ChartGrammarChecker {
     public boolean equals(ChartNode c) {
       return (end == c.end && rule == c.rule && dot == c.dot);
     }
+
   }
 
   /** Logger instance. */
@@ -208,30 +206,30 @@ public final class ChartGrammarChecker {
     // a misnomer. Currently, i let it point to the predecessor active
     // item for the "complete"
     while (! agenda.isEmpty()) {
-      ChartNode current = agenda.pop();
+      ChartNode curr = agenda.pop();
       List<ChartNode> expanded = new ArrayList<ChartNode>();
-      if (current.dot >= 0) {
+      if (curr.dot >= 0) {
         // active item: add predictions
-        predict(grammar, current);
+        predict(grammar, curr);
         // Complete active item to the right
-        if (null != chartOut[current.end]) {
-          for (ChartNode pass : chartOut[current.end]) {
+        if (null != chartOut[curr.end]) {
+          for (ChartNode pass : chartOut[curr.end]) {
             // all passive items this item looks for are to be completed
             if (pass.dot < 0
-                && current.rule.looksFor(getResolved(pass.rule), current.dot)) {
-              expanded.add(new ChartNode(current.start, pass.end, current.rule,
-                  current, current.rule.nextSlot(current.dot)));
+                && curr.rule.looksFor(getResolved(pass.rule), curr.dot)) {
+              expanded.add(new ChartNode(curr.start, pass.end, curr.rule,
+                  curr.children, pass, curr.rule.nextSlot(curr.dot)));
             }
           }
         }
       } else {
         // complete passive to the left
-        for (ChartNode act : chartIn[current.start]) {
+        for (ChartNode act : chartIn[curr.start]) {
           // all active items that look for this passive item are to be completed
           if (act.dot >= 0
-              && act.rule.looksFor(getResolved(current.rule), act.dot)) {
-            expanded.add(new ChartNode(act.start, current.end, act.rule,
-                act, act.rule.nextSlot(act.dot)));
+              && act.rule.looksFor(getResolved(curr.rule), act.dot)) {
+            expanded.add(new ChartNode(act.start, curr.end, act.rule,
+                act.children, curr, act.rule.nextSlot(act.dot)));
           }
         }
       }
@@ -242,12 +240,12 @@ public final class ChartGrammarChecker {
     if (null == chartIn[input.length]) return null;
     for (ChartNode c : chartIn[input.length]) {
       if (c.start == 0 && c.rule == component) {
-        // a valid root item
         return c;
       }
     }
     return null;
   }
+
 
   private void predict(RuleGrammar grammar, ChartNode current)
     throws GrammarException {
@@ -298,22 +296,24 @@ public final class ChartGrammarChecker {
     out.add(c);
   }
 
-  private void add(ChartNode c, String s) {
+  private ChartNode add(ChartNode c, String s) {
     if (null != chartOut[c.start])
       for (ChartNode x: chartOut[c.start])
         if (x.equals(c)) {
-          x.parent.addAll(c.parent);
-          return;
+          if (null == x.equivs) x.equivs = new ArrayList<ChartNode>();
+          x.equivs.add(c);
+          return x;
         }
 
-    System.out.println(s+":"+c);
+    // System.out.println(s+":"+c);
 
     addToChart(c);
     agenda.add(c);
+    return c;
   }
 
-  private void addP(ChartNode c) { add(c, "P"); }
-  private void addC(ChartNode c) { add(c, "C"); }
+  private ChartNode addP(ChartNode c) { return add(c, "P"); }
+  private ChartNode addC(ChartNode c) { return add(c, "C"); }
 
   private void predict(final RuleGrammar grammar,
       final RuleParse reference,
@@ -333,8 +333,7 @@ public final class ChartGrammarChecker {
       for (int dot = 1; dot < components.length; ++dot) {
         // add predictions for the other alternatives, and one for the
         // embedded node
-        addP(new ChartNode(current.end, current.end, alternatives,
-            current.parent, dot));
+        addP(new ChartNode(current.end, current.end, alternatives, dot));
       }
     }
     addP(new ChartNode(current.end, components[current.dot], current));
@@ -364,7 +363,7 @@ public final class ChartGrammarChecker {
     }
     if (repeat >= min) {
       // add passive item
-      addP(new ChartNode(current.start, current.end, count, current.parent, -1));
+      addP(new ChartNode(current.start, current.end, count, -1));
     }
   }
 
@@ -392,7 +391,7 @@ public final class ChartGrammarChecker {
       ++pos;
     }
     // now, for the first time, we add a complete token
-    addP(new ChartNode(current.start, pos, token, current, -1));
+    addP(new ChartNode(current.start, pos, token, -1));
   }
 
   /** This is rather a scan than predict. It directly creates a passive item, if
@@ -405,7 +404,7 @@ public final class ChartGrammarChecker {
   private void predict(final RuleGrammar grammar, final RuleTag tag,
       final ChartNode current) throws GrammarException {
     // add complete epsilon item
-    addP(new ChartNode(current.start, current.end, tag, current, -1));
+    addP(new ChartNode(current.start, current.end, tag, -1));
   }
 
 
