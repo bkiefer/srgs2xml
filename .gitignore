@@ -2,3 +2,4 @@
 .project
 log4j.properties
 target
+.settings

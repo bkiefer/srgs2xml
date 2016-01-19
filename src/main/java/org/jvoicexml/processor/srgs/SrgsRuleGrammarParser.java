@@ -60,7 +60,7 @@ import org.xml.sax.SAXException;
 
 /**
  * A parser for SRGS grammars.
- * 
+ *
  * @author Renato Cassaca
  * @author Dirk Schnelle-Walka
  * @version $Revision: 1370 $
@@ -71,7 +71,6 @@ public class SrgsRuleGrammarParser {
     private Map<String, String> attributes;
 
     public static class EmptyEntityResolver implements EntityResolver {
-        @Override
         public InputSource resolveEntity(String publicId, String systemId)
                 throws SAXException, IOException {
             return new InputSource(new StringReader(""));

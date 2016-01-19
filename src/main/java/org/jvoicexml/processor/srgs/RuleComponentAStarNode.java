@@ -49,31 +49,30 @@ public class RuleComponentAStarNode implements AStarNode {
         }
     }
 
-    @Override
     public int compareTo(AStarNode other) {
         double diff = priority - other.getPriority();
         return (int) Math.signum(diff);
     }
 
-    @Override
+
     public void setPredecessor(AStarNode node) {
         predecessor = (RuleComponentAStarNode) node;
     }
 
-    @Override
+
     public double getCostsFromStart() {
         return costsFromStart;
     }
 
-    @Override
+
     public void setCostsFromStart(double costs) {
         costsFromStart = costs;
     }
 
-    @Override
+
     public double costsTo(AStarNode successor) {
         final RuleComponentAStarNode other = (RuleComponentAStarNode) successor;
-        
+
         final double h = getHeuristicCosts();
         final double otherH = other.getHeuristicCosts();
         if (otherH < h) {
@@ -82,17 +81,17 @@ public class RuleComponentAStarNode implements AStarNode {
         return otherH;
     }
 
-    @Override
+
     public double getHeuristicCosts() {
         return input.size();
     }
 
-    @Override
+
     public void setPriority(double value) {
         priority = value;
     }
 
-    @Override
+
     public double getPriority() {
         return priority;
     }
@@ -222,7 +221,7 @@ public class RuleComponentAStarNode implements AStarNode {
         return new RuleComponent[] { next };
     }
 
-    @Override
+
     public Collection<AStarNode> getSuccessors() {
         final Collection<AStarNode> successors = new java.util.ArrayList<AStarNode>();
         try {

@@ -37,7 +37,6 @@ public final class JVoiceXmlGrammarTypeFactory implements GrammarTypeFactory {
     /**
      * {@inheritDoc}
      */
-    @Override
     public GrammarType getGrammarType(final String attribute) {
         if (attribute == null) {
             return null;
