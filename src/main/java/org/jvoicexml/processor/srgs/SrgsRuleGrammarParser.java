@@ -126,7 +126,10 @@ public class SrgsRuleGrammarParser {
             builder.setEntityResolver(entityResolver);
 
             final Document document = builder.parse(inputSource);
-            final Node grammarNode = document.getFirstChild();
+            Node grammarNode = document.getFirstChild();
+            while(! grammarNode.getNodeName().equalsIgnoreCase("grammar")) {
+              grammarNode = grammarNode.getNextSibling();
+            }
 
             final Rule[] rules = parseGrammar(grammarNode);
 

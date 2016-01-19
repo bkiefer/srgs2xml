@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+-->
+<grammar version="1.0" xml:lang="en-US" mode="voice" root="toplevel"
+         xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+  <rule id="toplevel" scope="public">
+    <one-of>
+      <item>
+        <ruleref uri="#start_demo"/>
+        <tag> out=rules.start_demo; </tag>
+      </item>
+      <item>
+        <ruleref uri="#robot_fetch"/>
+        <tag> out=rules.robot_fetch; </tag>
+      </item>
+      <item>
+        <ruleref uri="#request_fetch"/>
+        <tag> out=rules.request_fetch; </tag>
+      </item>
+      <item>
+        <ruleref uri="#request_bring"/>
+        <tag> out=rules.request_bring; </tag>
+      </item>
+      <item>
+        <ruleref uri="#confirm"/>
+        <tag> out=rules.confirm; </tag>
+      </item>
+      <item>
+        <ruleref uri="#disconfirm"/>
+        <tag> out=rules.disconfirm; </tag>
+      </item>
+      <item>
+        <ruleref uri="#ask_size"/>
+        <tag> out=rules.ask_size; </tag>
+      </item>
+      <item>
+        <ruleref uri="#visitors_arrived"/>
+        <tag> out=rules.visitors_arrived; </tag>
+      </item>
+      <item>
+        <ruleref uri="#request_greet"/>
+        <tag> out=rules.request_greet; </tag>
+      </item>
+      <item>
+        <ruleref uri="#inform_grabtask"/>
+        <tag> out=rules.inform_grabtask; </tag>
+      </item>
+      <item>
+        <ruleref uri="#refer_item"/>
+        <tag> out=rules.refer_item; </tag>
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="start_demo">
+    <item>
+      <ruleref uri="#nonhumans"/> please start the demo
+      <tag>
+        out.speechact="Request";
+        out.proposition="Start";
+        out.sender="Malte";
+        out.addressee=rules.nonhumans;
+        out.hasActivity="Demonstration";
+      </tag>
+    </item>
+  </rule>
+
+  <rule id="request_fetch">
+    <example>(Gloria|...), I need a (cardboard box in XL size.|...)</example>
+    <item>
+      <ruleref uri="#nonhumans"/>
+      <tag>out.addressee=rules.nonhumans;</tag>
+    </item>
+    <item>I <tag>out.sender="Malte";</tag></item>
+    <item>
+      <item repeat="0-1">also</item>
+      need
+      <tag>
+        out.speechact="Request";
+        out.proposition="Bringing";
+        out.hasGoal="Workertable";
+      </tag>
+    </item>
+    <item>
+      <ruleref uri="#anItem"/>
+      <tag>out.hasTheme=rules.anItem;</tag>
+    </item>
+  </rule>
+
+  <rule id="request_bring">
+    <example>
+      (Gloria|...) (please|) bring this to (the customer|the storage|the worker)
+    </example>
+    <tag>out.addressee="Gloria";</tag>
+    <item repeat="0-1">
+      <ruleref uri="#nonhumans"/>
+      <tag>out.addressee=rules.nonhumans;</tag>
+    </item>
+    <item repeat="0-1">please</item>
+    <item>bring this to</item>
+    <item>
+      <ruleref uri="#bringTarget"/>
+      <tag>out.hasGoal=rules.bringTarget;</tag>
+    </item>
+    <tag>
+      out.speechact="Request";
+      out.proposition="Bringing";
+      out.sender="Malte";
+      out.hasAgent=out.addressee;
+    </tag>
+  </rule>
+
+  <rule id="confirm">
+    <example>Yes</example>
+    <example>Yes, please</example>
+    <example>OK</example>
+    <one-of>
+      <item><item>yes</item><item repeat="0-1">please</item></item>
+      <item>OK</item>
+    </one-of>
+    <tag>
+      out.speechact="Confirm";
+      out.proposition="Frame";
+      out.sender="Malte";
+      out.addressee="UNKNOWN";
+    </tag>
+  </rule>
+
+  <rule id="disconfirm">
+    <example>no</example>
+    <item>no</item>
+    <tag>
+      out.speechact="Disconfirm";
+      out.proposition="Frame";
+      out.sender="Malte";
+      out.addressee="UNKNOWN";
+    </tag>
+  </rule>
+
+  <rule id="ask_size">
+    <example>What are the measurements of the object?</example>
+    <tag>out.addressee="Gloria";</tag>
+    <item repeat="0-1">
+      <ruleref uri="#nonhumans"/>
+      <tag>out.addressee=rules.nonhumans</tag>
+    </item>
+    <item>what are the measurements of</item>
+    <item>
+      <ruleref uri="#anObject"/><tag>out.hasTheme=rules.anObject</tag>
+    </item>
+    <tag>
+      out.speechact="WHQuestion";
+      out.proposition="Size";
+      out.sender="Malte";
+    </tag>
+  </rule>
+
+  <rule id="robot_fetch">
+    <item repeat="0-1">
+      <ruleref uri="#nonhumans"/>
+      <tag>out.addressee=rules.nonhumans</tag>
+    </item>
+    <item repeat="0-1">now</item>
+    <one-of>
+      <item> fetch </item>
+      <item> get </item>
+      <item> I need </item>
+    </one-of>
+    <item repeat="0-1"> me </item>
+    <one-of>
+      <item> the <ruleref uri="#anItem"/>
+      <tag> out.hasTheme=rules.anItem; </tag>
+      </item>
+      <item><ruleref uri="#box"/>
+      <tag> out.hasTheme=rules.box; </tag>
+      </item>
+    </one-of>
+    <item repeat="0-1"> please </item>
+    <tag>
+      out.speechact="Instruct";
+      out.proposition="Bringing";
+      out.sender="Malte";
+    </tag>
+  </rule>
+
+  <rule id="visitors_arrived">
+    <example>Aila we have visitors</example>
+    <item>
+      <tag> out.addressee="Aila"; </tag>
+      <item>
+        <ruleref uri="#nonhumans"/>
+        <tag>out.addressee=rules.nonhumans;</tag>
+      </item>
+      <item>we have</item>
+      <item>
+        <one-of>
+          <item>visitors<tag>out.hasTheme="visitors";</tag></item>
+          <item>a visitor<tag>out.hasTheme="visitor";</tag></item>
+        </one-of>
+      </item>
+    </item>
+    <tag>
+      out.speechact="Inform";
+      out.proposition="Arriving";
+      out.sender="Malte";
+    </tag>
+  </rule>
+
+  <rule id="request_greet">
+    <example>Could you please greet the visitors?“</example>
+    <tag>
+      out.addressee="UNKNOWN";
+    </tag>
+    <item repeat="0-1">
+      <ruleref uri="#nonhumans"/><tag>out.addressee=rules.nonhumans;</tag>
+    </item>
+    <item repeat="0-1">
+      <one-of><item>could</item><item>can</item></one-of>
+      you
+    </item>
+    <item><item repeat="0-1">please</item> greet</item>
+    <one-of>
+      <item>the visitors<tag>out.hasTheme="visitors";</tag></item>
+      <item>the visitor<tag>out.hasTheme="visitor";</tag></item>
+      <item>them<tag>out.hasTheme="pron_acc_pl";</tag></item>
+      <item>him<tag>out.hasTheme="pron_acc_masc_sg";</tag></item>
+      <item>her<tag>out.hasTheme="pron_acc_fem_sg";</tag></item>
+    </one-of>
+    <tag>
+      out.speechact="Request";
+      out.proposition="Greeting";
+      out.sender="Malte";
+    </tag>
+  </rule>
+
+  <rule id="inform_grabtask">
+    <example>I ((will do|take)|(now|) start with) task (one..16)</example>
+    I
+    <item repeat="0-1">will</item>
+    <item repeat="0-1">now</item>
+    <one-of>
+      <item>do</item>
+      <item>take</item>
+      <item>start with</item>
+    </one-of>
+    task
+    <item>
+      <ruleref uri="#number"/>
+      <tag>
+        out.speechact="Inform";
+        out.proposition="Activity";
+        out.sender="Malte";
+        out.addressee="Gloria";
+        out.hasActivity="task_" + rules.number;
+      </tag>
+    </item>
+  </rule>
+
+  <rule id="anObject">
+    <one-of>
+      <item>the object<tag>out="object"</tag></item>
+      <item>the phone<tag>out="phone"</tag></item>
+    </one-of>
+  </rule>
+
+  <rule id="bringTarget">
+    <one-of>
+      <item>the storage<tag>out="storage";</tag></item>
+      <item>
+        <ruleref uri="#humans"/>
+        <tag>out=rules.humans;</tag>
+      </item>
+      <item>
+        <ruleref uri="#nonhumans"/>
+        <tag>out=rules.nonhumans;</tag>
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="humans">
+    <one-of>
+      <item>the customer<tag>out="customer";</tag></item>
+      <item>Malte<tag>out="Malte";</tag></item>
+      <item>Joachim<tag>out="Joachim";</tag></item>
+    </one-of>
+  </rule>
+
+  <rule id="nonhumans">
+    <one-of>
+      <item>
+        <ruleref uri="#robot"/>
+        <tag> out = rules.robot; </tag>
+      </item>
+      <item>
+        <ruleref uri="#vc"/>
+        <tag> out = rules.vc; </tag>
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="robot">
+    <example> aila </example>
+    <example> artemis  </example>
+    <one-of>
+      <!--<item> john  <tag> out = "John"; </tag> </item>-->
+      <item> aila  <tag> out = "Aila"; </tag> </item>
+      <item> artemis <tag> out = "Artemis"; </tag> </item>
+    </one-of>
+  </rule>
+
+  <rule id="vc">
+    <example> gloria </example>
+    <one-of>
+      <item> gloria  <tag> out = "Gloria"; </tag> </item>
+    </one-of>
+  </rule>
+
+  <rule id="refer_item">
+    <ruleref uri="#anItem"/>
+    <tag>
+      out.speechact="Inform";
+      out.proposition="Removing";
+      out.addressee="UNKNOWN";
+      out.sender="Malte";
+      out.hasTheme=rules.anItem;
+    </tag>
+  </rule>
+
+  <rule id="anItem">
+    <example> nuts </example>
+    <item>
+      <one-of>
+        <item>nuts<tag>out="nuts";</tag></item>
+        <item>screws<tag>out="screws";</tag></item>
+        <item>bolts<tag>out="bolts";</tag></item>
+
+        <item>
+          <item repeat="0-1">the</item>
+          <item>
+            <one-of>
+              <item>transport box<tag>out="transport box";</tag></item>
+              <item>masking tape<tag>out="masking tape";</tag></item>
+              <item>parcel tape<tag>out="parcel tape";</tag></item>
+              <item>fabric ribbon<tag>out="fabric ribbon";</tag></item>
+              <item>red ribbon<tag>out="red ribbon";</tag></item>
+              <item>green ribbon<tag>out="green ribbon";</tag></item>
+              <item>blue ribbon<tag>out="blue ribbon";</tag></item>
+              <item>
+                ten millimeter staples
+                <tag>out="ten millimeter staples";</tag>
+              </item>
+              <item>
+                fourteen millimeter staples
+                <tag>out="fourteen millimeter staples";</tag>
+              </item>
+              <item>
+                six millimeter staples
+                <tag>out="six millimeter staples";</tag>
+              </item>
+              <item>tape<tag> out = "tape"; </tag> </item>
+              <item>plastic bags<tag> out = "plastic bags"; </tag> </item>
+              <item>glue sticks<tag> out = "glue sticks"; </tag> </item>
+              <item>
+                box cutter blades
+                <tag> out = "box cutter blades"; </tag>
+              </item>
+              <item>pritt sticks<tag> out = "pritt stick"; </tag> </item>
+              <item>scissors<tag> out = "scissors"; </tag> </item>
+              <item>glue<tag> out = "glue"; </tag> </item>
+            </one-of>
+          </item>
+        </item>
+        <item>
+          <item repeat="0-1">a</item>
+          <one-of>
+            <item>box cutter<tag> out = "box cutter"; </tag></item>
+            <item>stapler<tag> out = "stapler"; </tag></item>
+          </one-of>
+        </item>
+        <item> a cardboard box in xl size <tag>out="xl cardboard box";</tag></item>
+
+        <item>
+          <one-of>
+            <item>an</item>
+            <item>a</item>
+          </one-of>
+          <item>
+            <ruleref uri="#size"/>
+            <tag>out=rules.size + " gift box";</tag>
+          </item>
+          <item>
+            <one-of>
+              <item>gift</item>
+              <item>cardboard</item>
+            </one-of>
+            <item>box</item>
+          </item>
+        </item>
+      </one-of>
+    </item>
+  </rule>
+
+  <rule id="size">
+    <one-of>
+      <item>small<tag>out="small";</tag></item>
+      <item>medium<tag>out="medium";</tag></item>
+      <item>extra large<tag>out="xl";</tag></item>
+      <item>xl<tag>out="xl";</tag></item>
+      <item>large<tag>out="large";</tag></item>
+    </one-of>
+  </rule>
+
+  <rule id="box">
+    <item> box </item>
+    <item repeat="0-1"> number </item>
+    <ruleref uri="#number"/>
+    <tag>out = "box_" + rules.number; </tag>
+  </rule>
+
+  <rule id="number">
+    <example> one </example>
+    <example> five </example>
+    <example> six </example>
+    <example> three </example>
+
+    <one-of>
+      <item><ruleref uri="#nr_1_9"/><tag>out=rules.nr_1_9</tag></item>
+      <item> ten <tag> out = 10; </tag> </item>
+      <item> eleven <tag> out = 11; </tag> </item>
+      <item> twelve <tag> out = 12; </tag> </item>
+      <item> thirteen <tag> out = 13; </tag> </item>
+      <item> fourteen <tag> out = 14; </tag> </item>
+      <item> fifteen <tag> out = 15; </tag> </item>
+      <item> sixteen <tag> out = 16; </tag> </item>
+      <item> seventeen <tag> out = 17; </tag> </item>
+      <item> eighteen <tag> out = 18; </tag> </item>
+      <item> nineteen <tag> out = 19; </tag> </item>
+      <item>
+        <ruleref uri="#nr_tens"/>
+        <tag>out=rules.nr_tens;</tag>
+      </item>
+      <item>
+        <ruleref uri="#nr_tens"/>
+        <ruleref uri="#nr_1_9"/>
+        <tag>out=rules.nr_tens + rules.nr_1_9;</tag>
+      </item>
+      </one-of>
+  </rule>
+
+  <rule id="nr_tens">
+    <one-of>
+      <item> twenty <tag> out = 20; </tag> </item>
+      <item> thirty <tag> out = 30; </tag> </item>
+      <item> fourty <tag> out = 40; </tag> </item>
+      <item> fifty <tag> out = 50; </tag> </item>
+      <item> sixty <tag> out = 60; </tag> </item>
+      <item> seventy <tag> out = 70; </tag> </item>
+      <item> eighty <tag> out = 80; </tag> </item>
+      <item> ninety <tag> out = 90; </tag> </item>
+    </one-of>
+  </rule>
+
+  <rule id="nr_1_9">
+    <example> one </example>
+    <example> five </example>
+    <example> six </example>
+    <example> three </example>
+
+    <one-of>
+      <item> one <tag> out = 1; </tag> </item>
+      <item> two <tag> out = 2; </tag> </item>
+      <item> three <tag> out = 3; </tag> </item>
+      <item> four <tag> out = 4; </tag> </item>
+      <item> five <tag> out = 5; </tag> </item>
+      <item> six <tag> out = 6; </tag> </item>
+      <item> seven <tag> out = 7; </tag> </item>
+      <item> eight <tag> out = 8; </tag> </item>
+      <item> nine <tag> out = 9; </tag> </item>
+    </one-of>
+  </rule>
+</grammar>

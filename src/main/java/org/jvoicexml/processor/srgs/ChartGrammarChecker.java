@@ -50,16 +50,19 @@ import org.jvoicexml.processor.srgs.grammar.RuleToken;
 /**
  * This class provides a means to perform evaluations on a parsed grammar.
  *
- * @author Dirk Schnelle-Walka
- * @author Brian Pendell
+ * @author Bernd Kiefer
  * @version $Revision$
  * @since 0.7
  */
 public final class ChartGrammarChecker {
-  static int gen = 0;
+  private static int gen = 0;
+
+  /** Logger instance. */
+  private static final Logger LOGGER =
+      Logger.getLogger(ChartGrammarChecker.class);
 
   // A chart node structure, a replacement for the rule walker
-  public class ChartNode {
+  public static class ChartNode {
 
     int start, end, dot, id;
     RuleComponent rule;
@@ -68,56 +71,33 @@ public final class ChartGrammarChecker {
     List<ChartNode> equivs;
     //ChartNode parent;
 
-    /** Constructor
+    /** Constructor, for use with other constructors
      * @throws GrammarException
      */
-    private ChartNode(int s, int e, RuleComponent r, int d)
-        throws GrammarException {
+    private ChartNode(int s, int e, RuleComponent r, int d) {
       id = ++gen;
       start = s;
       end = e;
-      if (r instanceof RuleReference) {
-        // resolve r and replace it by the resolved proxy, a RuleParse
-        if (resolved.containsKey(r)) {
-          r = resolved.get(r);
-        } else {
-          final RuleReference reference = (RuleReference)r;
-          final RuleReference resolvedReference = grammar.resolve(reference);
-          final Rule rule = manager.resolve(resolvedReference);
-          if (rule == null) {
-            throw new GrammarException("Invalid rule reference: " + reference);
-          }
-          // TODO need to set the new grammar if it changed
-          final RuleComponent component = rule.getRuleComponent();
-          final RuleParse rp = new RuleParse(reference, component);
-          resolved.put(reference, rp);
-          r = rp;
-        }
-      }
       rule = r;
       dot = d;
       children = new ArrayList<ChartNode>();
     }
 
-
-    /** Constructor
+    /** Constructor for predicts
      * @throws GrammarException
      */
-    public ChartNode(int s, int e, RuleComponent r,
-        List<ChartNode> prevChildren, ChartNode nextChild, int d)
-        throws GrammarException {
-      this(s, e, r, d);
-      children = new ArrayList<ChartNode>();
-      if (null != prevChildren) children.addAll(prevChildren);
-      children.add(nextChild);
+    private ChartNode(int s, RuleComponent r) {
+      this(s, s, r, 0);
     }
 
-   /** Constructor for predicts
+    /** Constructor combining active and passive item
      * @throws GrammarException
      */
-    public ChartNode(int s, RuleComponent r, ChartNode p)
-        throws GrammarException {
-      this(s, s, r, 0);
+    private ChartNode(ChartNode active, ChartNode passive) {
+      this(active.start, passive.end, active.rule,
+          active.rule.nextSlot(active.dot));
+      children.addAll(active.children);
+      children.add(passive);
     }
 
     public String toString() {
@@ -133,14 +113,21 @@ public final class ChartGrammarChecker {
       return sb.toString();
     }
 
-    public boolean equals(ChartNode c) {
-      return (end == c.end && rule == c.rule && dot == c.dot);
+    public void printTree(String indent) {
+      System.out.println(indent + this);
+      for (ChartNode child: children) {
+        child.printTree(indent + "  ");
+      }
     }
 
-  }
+    public boolean equals(ChartNode c) {
+      return (start == c.start && end == c.end && rule == c.rule && dot == c.dot);
+    }
 
-  /** Logger instance. */
-  private static final Logger LOGGER = Logger.getLogger(ChartGrammarChecker.class);
+    public boolean isPassive() {
+      return dot < 0;
+    }
+  }
 
   private final GrammarManager manager;
 
@@ -175,9 +162,13 @@ public final class ChartGrammarChecker {
   }
 
 
-  public RuleComponent getResolved(RuleComponent c) {
+  private RuleComponent getResolved(RuleComponent c) {
     if (c instanceof RuleParse) return ((RuleParse) c).getRuleReference();
     return c;
+  }
+
+  private boolean canExpand(ChartNode active, ChartNode passive) {
+    return active.rule.looksFor(getResolved(passive.rule), active.dot);
   }
 
   /**
@@ -199,47 +190,40 @@ public final class ChartGrammarChecker {
     final String root = grammar.getRoot();
     final Rule rule = grammar.getRule(root);
     final RuleComponent component = rule.getRuleComponent();
-    final ChartNode init = new ChartNode(0, component, null);
-    addP(init);
+    final ChartNode init = new ChartNode(0, component);
+    add(init);
 
-    // What's wrong here: parent structure is a failure, or at least
-    // a misnomer. Currently, i let it point to the predecessor active
-    // item for the "complete"
     while (! agenda.isEmpty()) {
       ChartNode curr = agenda.pop();
       List<ChartNode> expanded = new ArrayList<ChartNode>();
-      if (curr.dot >= 0) {
+      if (curr.isPassive()) {
+        // complete passive to the left
+        for (ChartNode act : chartIn[curr.start]) {
+          // all active items that look for this passive item are to be completed
+          if (canExpand(act, curr)) {
+            expanded.add(new ChartNode(act, curr));
+          }
+        }
+      } else {
         // active item: add predictions
         predict(grammar, curr);
         // Complete active item to the right
         if (null != chartOut[curr.end]) {
           for (ChartNode pass : chartOut[curr.end]) {
             // all passive items this item looks for are to be completed
-            if (pass.dot < 0
-                && curr.rule.looksFor(getResolved(pass.rule), curr.dot)) {
-              expanded.add(new ChartNode(curr.start, pass.end, curr.rule,
-                  curr.children, pass, curr.rule.nextSlot(curr.dot)));
+            if (canExpand(curr, pass)) {
+              expanded.add(new ChartNode(curr, pass));
             }
-          }
-        }
-      } else {
-        // complete passive to the left
-        for (ChartNode act : chartIn[curr.start]) {
-          // all active items that look for this passive item are to be completed
-          if (act.dot >= 0
-              && act.rule.looksFor(getResolved(curr.rule), act.dot)) {
-            expanded.add(new ChartNode(act.start, curr.end, act.rule,
-                act.children, curr, act.rule.nextSlot(act.dot)));
           }
         }
       }
       for (ChartNode c : expanded) {
-        addC(c);
+        add(c);
       }
     }
-    if (null == chartIn[input.length]) return null;
-    for (ChartNode c : chartIn[input.length]) {
-      if (c.start == 0 && c.rule == component) {
+    if (null == chartOut[0]) return null;
+    for (ChartNode c : chartOut[0]) {
+      if (c.end == input.length && c.rule == component) {
         return c;
       }
     }
@@ -267,10 +251,10 @@ public final class ChartGrammarChecker {
       predict(grammar, parse, current);
     } else if (component instanceof RuleToken) {
       final RuleToken token = (RuleToken) component;
-      predict(grammar, token, current);
+      scan(grammar, token, current);
     } else if (component instanceof RuleTag) {
       final RuleTag tag = (RuleTag) component;
-      predict(grammar, tag, current);
+      scan(grammar, tag, current);
     }
   }
 
@@ -281,39 +265,66 @@ public final class ChartGrammarChecker {
     chartOut = new ArrayList[tokens + 1];
   }
 
-  private void addToChart(ChartNode c) {
-    List<ChartNode> in = chartIn[c.end];
-    if (null == in) {
-      in = new ArrayList<ChartNode>();
-      chartIn[c.end] = in;
-    }
-    List<ChartNode> out = chartOut[c.start];
-    if (null == out) {
-      out = new ArrayList<ChartNode>();
-      chartOut[c.start] = out;
-    }
-    in.add(c);
-    out.add(c);
-  }
-
-  private ChartNode add(ChartNode c, String s) {
-    if (null != chartOut[c.start])
-      for (ChartNode x: chartOut[c.start])
+  private ChartNode addToChart(ChartNode c) {
+    if (c.isPassive()) {
+      List<ChartNode> out = chartOut[c.start];
+      if (null == out) {
+        out = new ArrayList<ChartNode>();
+        chartOut[c.start] = out;
+      }
+      for (ChartNode x: out)
         if (x.equals(c)) {
           if (null == x.equivs) x.equivs = new ArrayList<ChartNode>();
           x.equivs.add(c);
           return x;
         }
-
-    // System.out.println(s+":"+c);
-
-    addToChart(c);
-    agenda.add(c);
+      out.add(c);
+    } else {
+      List<ChartNode> in = chartIn[c.end];
+      if (null == in) {
+        in = new ArrayList<ChartNode>();
+        chartIn[c.end] = in;
+      }
+      for (ChartNode x: in)
+        if (x.equals(c)) {
+          if (null == x.equivs) x.equivs = new ArrayList<ChartNode>();
+          x.equivs.add(c);
+          return x;
+        }
+      in.add(c);
+    }
     return c;
   }
 
-  private ChartNode addP(ChartNode c) { return add(c, "P"); }
-  private ChartNode addC(ChartNode c) { return add(c, "C"); }
+  private ChartNode add(ChartNode c) {
+    if (addToChart(c) == c) {
+      agenda.add(c);
+    }
+    return c;
+  }
+
+  private ChartNode addPrediction(int pos, RuleComponent r)
+      throws GrammarException {
+    if (r instanceof RuleReference) {
+      // resolve r and replace it by the resolved proxy, a RuleParse
+      if (resolved.containsKey(r)) {
+        r = resolved.get(r);
+      } else {
+        final RuleReference reference = (RuleReference)r;
+        final RuleReference resolvedReference = grammar.resolve(reference);
+        final Rule rule = manager.resolve(resolvedReference);
+        if (rule == null) {
+          throw new GrammarException("Invalid rule reference: " + reference);
+        }
+        // TODO need to set the new grammar if it changed
+        final RuleComponent component = rule.getRuleComponent();
+        final RuleParse rp = new RuleParse(reference, component);
+        resolved.put(reference, rp);
+        r = rp;
+      }
+    }
+    return add(new ChartNode(pos, r));
+  }
 
   private void predict(final RuleGrammar grammar,
       final RuleParse reference,
@@ -321,29 +332,31 @@ public final class ChartGrammarChecker {
     // TODO need to set the new grammar if it changed
     final RuleComponent component = reference.getParse();
     // predict RHS of new nonterminal: new prediction
-    addP(new ChartNode(current.end, component, current));
+    addPrediction(current.end, component);
   }
 
   private void predict(final RuleGrammar grammar,
       final RuleAlternatives alternatives,
       final ChartNode current) throws GrammarException {
     final RuleComponent[] components = alternatives.getRuleComponents();
-    // one new prediction for all alternatives: an implicit NT
+    // one new prediction per alternative: an implicit nonterminal
     if (current.dot == 0) {
+      // the one with dot == zero is responsible to introduce the rest
       for (int dot = 1; dot < components.length; ++dot) {
         // add predictions for the other alternatives, and one for the
         // embedded node
-        addP(new ChartNode(current.end, current.end, alternatives, dot));
+        add(new ChartNode(current.end, current.end, alternatives, dot));
       }
     }
-    addP(new ChartNode(current.end, components[current.dot], current));
+    // every alternative predicts its own sub-component
+    addPrediction(current.end, components[current.dot]);
   }
 
   private void predict(final RuleGrammar grammar,
       final RuleSequence sequence,
       final ChartNode current) throws GrammarException {
     final RuleComponent[] components = sequence.getRuleComponents();
-    addP(new ChartNode(current.end, components[current.dot], current));
+    addPrediction(current.end, components[current.dot]);
   }
 
 
@@ -352,18 +365,15 @@ public final class ChartGrammarChecker {
     final RuleComponent component = count.getRuleComponent();
     final int min = count.getRepeatMin();
     int max = count.getRepeatMax();
-    final int pos = current.end;
-    if (max > input.length - pos) {
-      max = input.length - pos;
-    }
-    int repeat = current.dot;
-    if (repeat < max) {
-      // predict sub-component
-      addP(new ChartNode(current.end, component, current));
+    final int repeat = current.dot;
+    if (repeat < max) { // predict sub-component
+      addPrediction(current.end, component);
     }
     if (repeat >= min) {
-      // add passive item
-      addP(new ChartNode(current.start, current.end, count, -1));
+      // add passive item: a special case
+      ChartNode c = new ChartNode(current.start, current.end, count, -1);
+      c.children.addAll(current.children);
+      add(c);
     }
   }
 
@@ -375,7 +385,7 @@ public final class ChartGrammarChecker {
    * @param current
    * @throws GrammarException
    */
-  private void predict(final RuleGrammar grammar, final RuleToken token,
+  private void scan(final RuleGrammar grammar, final RuleToken token,
       final ChartNode current) throws GrammarException {
     int pos = current.start;
     final String text = token.getText();
@@ -391,7 +401,7 @@ public final class ChartGrammarChecker {
       ++pos;
     }
     // now, for the first time, we add a complete token
-    addP(new ChartNode(current.start, pos, token, -1));
+    add(new ChartNode(current.start, pos, token, -1));
   }
 
   /** This is rather a scan than predict. It directly creates a passive item, if
@@ -401,107 +411,10 @@ public final class ChartGrammarChecker {
    * @param current
    * @throws GrammarException
    */
-  private void predict(final RuleGrammar grammar, final RuleTag tag,
+  private void scan(final RuleGrammar grammar, final RuleTag tag,
       final ChartNode current) throws GrammarException {
     // add complete epsilon item
-    addP(new ChartNode(current.start, current.end, tag, -1));
+    add(new ChartNode(current.start, current.end, tag, -1));
   }
 
-
-  /**
-   * Retrieves the result of the grammar check process. This may differ from
-   * the parsed tokens of the original utterance.
-   * <p>
-   * A call to this method is only valid after a call to
-   * {@link #isValid(String[])} until the next validation check.
-   * </p>
-   * <p>
-   * <b>NOTE:</b> This is just a first attempt to go into the direction of
-   * semantic interpretation and may change.
-   * </p>
-   *
-   * @return interpretation result
-   *
-  public String[] getInterpretation() {
-    Collection<String> result = new java.util.ArrayList<String>();
-    for (GrammarNode node : matchedTokens) {
-      final GrammarNodeType type = node.getType();
-
-      if (type == GrammarNodeType.TOKEN) {
-        final TokenGrammarNode tokenNode = (TokenGrammarNode) node;
-
-        Collection<GrammarNode> nextNodes = tokenNode.getNextNodes();
-        for (int i = 0; i < nextNodes.size(); i++) {
-          GrammarNode nextNode = (GrammarNode) nextNodes.toArray()[i];
-
-          if (nextNode.getType() == GrammarNodeType.TAG) {
-            final TagGrammarNode tagNode = (TagGrammarNode) nextNode;
-            final String tag = tagNode.getTag();
-            result.add(tag);
-          }
-
-          if (nextNode.getType() == GrammarNodeType.SEQUENCE_END) {
-            nextNode = (GrammarNode) nextNode.getNextNodes()
-              .toArray()[0];
-            if (nextNode.getType() == GrammarNodeType.TAG) {
-              final TagGrammarNode tagNode = (TagGrammarNode) nextNode;
-              final String tag = tagNode.getTag();
-              result.add(tag);
-            }
-          }
-        }
-      }
-    }
-
-    String[] finalResult = new String[result.size()];
-    for (int i = 0; i < result.size(); i++) {
-      finalResult[i] = (String) result.toArray()[i];
-    }
-
-    return finalResult;
-
-  }
-
-  /**
-   * Prints out information about a node, including the type of node and tag
-   * or token information, if available.
-   *
-   * @param node
-   *            The node to be described.
-   */
-  private void printNode(final GrammarNode node) {
-    String typeString = "UNDEFINED";
-    String additionalString = "";
-    final GrammarNodeType currentType = node.getType();
-
-    if (currentType == GrammarNodeType.START) {
-      typeString = "START";
-    } else if (currentType == GrammarNodeType.ALTERNATIVE_START) {
-      typeString = "ALTERNATIVE_START";
-    } else if (currentType == GrammarNodeType.ALTERNATIVE_END) {
-      typeString = "ALTERNATIVE_END";
-    } else if (currentType == GrammarNodeType.SEQUENCE_START) {
-      typeString = "SEQUENCE_START";
-    } else if (currentType == GrammarNodeType.SEQUENCE_END) {
-      typeString = "SEQUENCE_END";
-    } else if (currentType == GrammarNodeType.TOKEN) {
-      typeString = "TOKEN";
-      TokenGrammarNode tokenNode = (TokenGrammarNode) node;
-      additionalString = "token body = '" + tokenNode.getToken() + "'";
-    } else if (currentType == GrammarNodeType.TAG) {
-      typeString = "TAG";
-      TagGrammarNode tagNode = (TagGrammarNode) node;
-      additionalString = "tag body = '" + tagNode.getTag() + "'";
-    } else if (currentType == GrammarNodeType.GRAPH) {
-      typeString = "GRAPH";
-    } else if (currentType == GrammarNodeType.RULE) {
-      typeString = "RULE";
-      RuleNode ruleNode = (RuleNode) node;
-      additionalString = " ID = " + ruleNode.getId();
-    }
-
-    LOGGER.debug("Node Type:" + typeString + " min repetitions: "
-                 + node.getMinRepeat() + ", max repetitions: "
-                 + node.getMaxRepeat() + " " + additionalString);
-  }
 }
