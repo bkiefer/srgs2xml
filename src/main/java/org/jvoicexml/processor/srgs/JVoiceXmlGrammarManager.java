@@ -15,24 +15,23 @@ import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
 import org.jvoicexml.processor.srgs.grammar.RuleReference;
 
 public class JVoiceXmlGrammarManager implements GrammarManager {
+
     private final Map<URI, Grammar> grammars;
 
     public JVoiceXmlGrammarManager() {
         grammars = new java.util.HashMap<URI, Grammar>();
     }
 
-
     public Grammar[] listGrammars() {
         final Grammar[] listed = new Grammar[grammars.size()];
         return grammars.values().toArray(listed);
     }
 
-
-
     public Grammar getGrammar(URI grammarReference) {
         return grammars.get(grammarReference);
     }
 
+   
 
     public Grammar loadGrammar(URI grammarReference)
             throws GrammarException, IOException {
@@ -65,7 +64,6 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
 
         return grammar;
     }
-
 
     public void deleteGrammar(Grammar grammar) {
         grammars.remove(grammar);

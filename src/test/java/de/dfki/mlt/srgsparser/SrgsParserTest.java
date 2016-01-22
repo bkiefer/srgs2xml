@@ -1,9 +1,10 @@
-package srgs2xml;
+package de.dfki.mlt.srgsparser;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.junit.Test;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
@@ -15,7 +16,7 @@ import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
 public class SrgsParserTest {
 
   @Test
-  public void pizzatest() throws GrammarException, IOException {
+  public void pizzatest() throws GrammarException, IOException, URISyntaxException {
     String[] inputs = {
         "small pizza",
         "medium pizza",
@@ -75,7 +76,7 @@ public class SrgsParserTest {
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
-        new File("src/test/data/pizza.srgs").toURI());
+         this.getClass().getResource("/pizza.srgs").toURI());
 
     for (String s : inputs) {
       String[] tokens = s.split(" +");
@@ -87,14 +88,14 @@ public class SrgsParserTest {
   }
 
   @Test
-  public void hySocTest() throws GrammarException, IOException {
+  public void hySocTest() throws GrammarException, IOException, URISyntaxException {
     String[] inputs = {
         "gloria i also need the parcel tape"
     };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
-        new File("src/test/data/hysoc.xml").toURI());
+         this.getClass().getResource("/hysoc.xml").toURI());
 
 
     for (String s : inputs) {
@@ -107,7 +108,7 @@ public class SrgsParserTest {
   }
 
   @Test
-  public void repeatTest() throws GrammarException, IOException {
+  public void repeatTest() throws GrammarException, IOException, URISyntaxException {
     String[] inputs = {
         "fuck yeah", //w
         "fuck yeah yeah", //c
@@ -123,7 +124,7 @@ public class SrgsParserTest {
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
-        new File("src/test/data/repeat.xml").toURI());
+        this.getClass().getResource("/repeat.xml").toURI());
 
     int i = 0;
     for (String s : inputs) {

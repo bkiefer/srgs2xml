@@ -29,7 +29,7 @@ package org.jvoicexml.processor.srgs.grammar;
 //Comp. 2.0.6
 
 public class RuleToken extends RuleComponent {
-    private String text;
+    private String text; 
 
     public RuleToken(String text) throws IllegalArgumentException {
         if ((text == null) || (text.length() == 0)) {
