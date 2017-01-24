@@ -9,3 +9,9 @@ There is no guarantee that grammars that can be processed with this module will 
 Including subgrammars has not been tested.
 
 There are JUnit tests, and the file Example.java that illustrate how to use the code.
+
+You can also try to run it on a small example which is included (after building the project):
+
+```
+java -jar target/srgs-parser-0.9-jar-with-dependencies.jar src/main/resources/hysoc.xml src/main/resources/hyxamples.txt
+```
