@@ -51,22 +51,22 @@
 
     <repositories>
         <repository>
-            <id>BSNSOFT</id>
-            <name>BSNSOFT</name>
-            <url>http://www.bsnsoft.de/nexus/content/groups/public/</url>
+            <id>FORSCHUNGSSOFTWARE</id>
+            <name>FORSCHUNGSSOFTWARE</name>
+            <url>http://www.forschungssoftware.de/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <snapshotRepository>
-            <id>BSNSOFT</id>
-            <name>BSNSOFT</name>
-            <url>http://www.bsnsoft.de/nexus/content/repositories/snapshots/</url>
+            <id>FORSCHUNGSSOFTWARE</id>
+            <name>FORSCHUNGSSOFTWARE</name>
+            <url>http://www.forschungssoftware.de/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>BSNSOFT</id>
-            <name>BSNSOFT</name>
-            <url>http://www.bsnsoft.de/nexus/content/repositories/releases/</url>
+            <id>FORSCHUNGSSOFTWARE</id>
+            <name>FORSCHUNGSSOFTWARE</name>
+            <url>http://www.forschungssoftware.de/nexus/content/repositories/releases/</url>
         </repository>
     </distributionManagement>
 
