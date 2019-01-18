@@ -26,12 +26,15 @@
 
 package org.jvoicexml.processor.srgs.grammar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //Comp. 2.0.6
 
 public class RuleSequence extends RuleComponent {
-    private RuleComponent[] ruleComponents;
+    private List<RuleComponent> ruleComponents;
 
-    public RuleSequence(RuleComponent[] ruleComponents)
+    public RuleSequence(List<RuleComponent> ruleComponents)
             throws IllegalArgumentException {
         if (ruleComponents == null) {
             throw new IllegalArgumentException(
@@ -44,15 +47,23 @@ public class RuleSequence extends RuleComponent {
         if (tokens == null) {
             throw new IllegalArgumentException("Tokens must not be null!");
         }
-        ruleComponents = new RuleComponent[tokens.length];
+        ruleComponents = new ArrayList<RuleComponent>(tokens.length);
 
         for (int i = 0; i < tokens.length; i++) {
             final String token = tokens[i];
-            ruleComponents[i] = new RuleToken(token);
+            ruleComponents.add(new RuleToken(token));
         }
     }
 
-    public RuleComponent[] getRuleComponents() {
+    public RuleSequence() {
+      ruleComponents = new ArrayList<>();
+    }
+
+    public void addElement(RuleComponent c) {
+      ruleComponents.add(c);
+    }
+
+    public List<RuleComponent> getRuleComponents() {
         return ruleComponents;
     }
 
@@ -62,8 +73,8 @@ public class RuleSequence extends RuleComponent {
         }
 
         final StringBuffer str = new StringBuffer();
-        for (int i = 0; i < ruleComponents.length; i++) {
-            final RuleComponent component = ruleComponents[i];
+        for (int i = 0; i < ruleComponents.size(); i++) {
+            final RuleComponent component = ruleComponents.get(i);
             if (component == null) {
                 str.append(RuleSpecial.NULL.toString());
             } else {
@@ -77,13 +88,13 @@ public class RuleSequence extends RuleComponent {
     @Override
     public boolean looksFor(RuleComponent r, int i) {
       // check the i'th element of the sequence
-      return ruleComponents[i] == r;
+      return ruleComponents.get(i) == r;
     }
 
     @Override
     public int nextSlot(int dot) {
       ++dot;
-      return dot == ruleComponents.length ? -1 : dot ;
+      return dot == ruleComponents.size() ? -1 : dot ;
     }
 
 }

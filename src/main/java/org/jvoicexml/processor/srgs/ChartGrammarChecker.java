@@ -25,27 +25,9 @@
  */
 package org.jvoicexml.processor.srgs;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.log4j.Logger;
-import org.json.JSONObject;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
-import org.jvoicexml.processor.srgs.grammar.RuleComponent;
-import org.jvoicexml.processor.srgs.grammar.RuleCount;
-import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
-import org.jvoicexml.processor.srgs.grammar.RuleParse;
-import org.jvoicexml.processor.srgs.grammar.RuleReference;
-import org.jvoicexml.processor.srgs.grammar.RuleSequence;
-import org.jvoicexml.processor.srgs.grammar.RuleTag;
-import org.jvoicexml.processor.srgs.grammar.RuleToken;
+import org.jvoicexml.processor.srgs.grammar.*;
 
 /**
  * This class provides a means to perform evaluations on a parsed grammar.
@@ -248,6 +230,9 @@ public final class ChartGrammarChecker {
     } else if (component instanceof RuleAlternatives) {
       final RuleAlternatives alternatives = (RuleAlternatives) component;
       predict(grammar, alternatives, current);
+    } else if (component instanceof RuleAlternative) {
+      final RuleAlternative alternative = (RuleAlternative) component;
+      predict(grammar, alternative, current);
     } else if (component instanceof RuleCount) {
       final RuleCount count = (RuleCount) component;
       predict(grammar, count, current);
@@ -349,24 +334,30 @@ public final class ChartGrammarChecker {
   private void predict(final RuleGrammar grammar,
       final RuleAlternatives alternatives, final ChartNode current)
       throws GrammarException {
-    final RuleComponent[] components = alternatives.getRuleComponents();
+    final List<RuleAlternative> components = alternatives.getRuleAlternatives();
     // one new prediction per alternative: an implicit nonterminal
     if (current.dot == 0) {
       // the one with dot == zero is responsible to introduce the rest
-      for (int dot = 1; dot < components.length; ++dot) {
+      for (int dot = 1; dot < components.size(); ++dot) {
         // add predictions for the other alternatives, and one for the
         // embedded node
         add(new ChartNode(current.end, current.end, alternatives, dot));
       }
     }
     // every alternative predicts its own sub-component
-    addPrediction(current.end, components[current.dot]);
+    addPrediction(current.end, components.get(current.dot));
+  }
+
+  private void predict(final RuleGrammar grammar,
+      final RuleAlternative alternative, final ChartNode current)
+      throws GrammarException {
+    addPrediction(current.end, alternative.getRuleComponent());
   }
 
   private void predict(final RuleGrammar grammar, final RuleSequence sequence,
       final ChartNode current) throws GrammarException {
-    final RuleComponent[] components = sequence.getRuleComponents();
-    addPrediction(current.end, components[current.dot]);
+    final List<RuleComponent> components = sequence.getRuleComponents();
+    addPrediction(current.end, components.get(current.dot));
   }
 
   private void predict(final RuleGrammar grammar, final RuleCount count,

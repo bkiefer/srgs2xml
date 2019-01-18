@@ -26,6 +26,7 @@
 
 package org.jvoicexml.processor.srgs.grammar;
 
+import java.util.List;
 import java.util.Vector;
 
 //Comp. 2.0.6
@@ -62,9 +63,9 @@ public class RuleParse extends RuleComponent {
             tags.addElement(tagName);
         } else if (component instanceof RuleAlternatives) {
             final RuleAlternatives alternatives = (RuleAlternatives) component;
-            RuleComponent[] components = alternatives.getRuleComponents();
-            for (int i = 0; i < components.length; i++) {
-                final RuleComponent actComponent = components[i];
+            List<RuleAlternative> components = alternatives.getRuleAlternatives();
+            for (int i = 0; i < components.size(); i++) {
+                final RuleComponent actComponent = components.get(i);
                 addTags(tags, actComponent);
             }
         } else if (component instanceof RuleCount) {
@@ -77,9 +78,9 @@ public class RuleParse extends RuleComponent {
             addTags(tags, actComponent);
         } else if (component instanceof RuleSequence) {
             final RuleSequence sequence = (RuleSequence) component;
-            RuleComponent[] components = sequence.getRuleComponents();
-            for (int i = 0; i < components.length; i++) {
-                final RuleComponent actComponent = components[i];
+            List<RuleComponent> components = sequence.getRuleComponents();
+            for (int i = 0; i < components.size(); i++) {
+                final RuleComponent actComponent = components.get(i);
                 addTags(tags, actComponent);
             }
         }

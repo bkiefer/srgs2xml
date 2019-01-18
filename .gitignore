@@ -3,3 +3,6 @@
 log4j.properties
 target
 .settings
+src/main/java/org/jvoicexml/processor/srgs/abnf/SrgsAbnf.java
+src/main/java/org/jvoicexml/processor/srgs/abnf/SrgsAbnf.output
+src/main/java/org/jvoicexml/processor/srgs/abnf/SrgsLexer.java

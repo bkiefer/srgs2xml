@@ -42,7 +42,7 @@ public interface Grammar {
 
     int getActivationMode();
 
-    GrammarManager getGrammarManager();
+    //GrammarManager getGrammarManager();
 
     URI getReference();
 

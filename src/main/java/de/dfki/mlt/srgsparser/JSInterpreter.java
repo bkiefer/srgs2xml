@@ -5,15 +5,14 @@
  */
 package de.dfki.mlt.srgsparser;
 
-import java.util.ArrayList;
 import java.util.Stack;
+
 import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.grammar.RuleParse;
 import org.jvoicexml.processor.srgs.grammar.RuleTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.tools.shell.Environment;
 
 /**
  *
@@ -78,7 +77,7 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
         try {
             Scriptable script = ctx.initStandardObjects();
             ctx.evaluateString(script, source.toString(), "<cmd>", 0, null);
-            Object result = ctx.evaluateString(script, "JSON.stringify(rules.root);", "<cmd>", 0, null);            
+            Object result = ctx.evaluateString(script, "JSON.stringify(rules.root);", "<cmd>", 0, null);
             return new JSONObject(result.toString());
         } finally {
             Context.exit();

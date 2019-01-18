@@ -29,13 +29,14 @@ package org.jvoicexml.processor.srgs.grammar;
 //Comp. 2.0.6
 
 public class RuleToken extends RuleComponent {
-    private String text; 
+    private String text;
 
-    public RuleToken(String text) throws IllegalArgumentException {
+    public RuleToken(String text, String language) throws IllegalArgumentException {
         if ((text == null) || (text.length() == 0)) {
             throw new IllegalArgumentException("'" + text + "'"
                     + " is not a valid grammar text");
         }
+        lang = language;
 
         // TODO Check causes for IllegalArgumentsException
 
@@ -61,12 +62,20 @@ public class RuleToken extends RuleComponent {
         this.text = str.toString();
     }
 
+    public RuleToken(String text) {
+      this(text, null);
+    }
+
     public String getText() {
         return text;
     }
 
+    public String getLanguage() {
+      return lang;
+    }
+
     public String toString() {
-        return text;
+        return " " + text;
     }
 
     public int hashCode() {

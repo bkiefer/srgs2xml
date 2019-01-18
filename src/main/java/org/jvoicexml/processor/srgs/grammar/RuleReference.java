@@ -58,6 +58,10 @@ public class RuleReference extends RuleComponent {
         return grammarReference;
     }
 
+    public void setMediaType(String t) {
+      mediaType = t;
+    }
+
     public String getMediaType() {
         if (mediaType == null) {
             return DEFAULT_MEDIA_TYPE;

@@ -61,21 +61,21 @@
 				<item repeat="0-1">a</item>
 				<ruleref uri="#size" />
 				pizza
-                <tag>out.order.size = rules.size;</tag>
+                                <tag>out.order.size = rules.size;</tag>
 			</item>
 			<item>
 				<item repeat="0-1">a</item>
 				<item repeat="0-1">pizza with</item>
 				<ruleref uri="#topping" />
-                <tag>out.order.topping = rules.topping;</tag>
+                                <tag>out.order.topping = rules.topping;</tag>
 			</item>
 			<item>
 				<item repeat="0-1">a</item>
 				<ruleref uri="#size" />
-                <tag>out.order.size = rules.size;</tag>
+                                <tag>out.order.size = rules.size;</tag>
 				pizza with
 				<ruleref uri="#topping" />
-                <tag>out.order.topping = rules.topping;</tag>
+                                <tag>out.order.topping = rules.topping;</tag>
 			</item>
 		</one-of>
 		<ruleref uri="#politeness2" />

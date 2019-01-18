@@ -29,6 +29,8 @@ package org.jvoicexml.processor.srgs.grammar;
 //Comp 2.0.6
 
 public abstract class RuleComponent {
+    protected String lang;
+
     /**
      * Checks if the given text is a valid grammar text.
      *
@@ -103,5 +105,13 @@ public abstract class RuleComponent {
    */
   public int nextSlot(int dot){
     return -1;
+  }
+
+  public void setLanguage(String s) {
+    lang = s;
+  }
+
+  public String getLanguage() {
+    return lang;
   }
 }

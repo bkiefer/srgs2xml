@@ -39,7 +39,7 @@ public class RuleCount extends RuleComponent {
 
     private int repeatMax;
 
-    private int repeatProbability;
+    private double repeatProbability;
 
     public RuleCount(RuleComponent ruleComponent, int repeatMin)
         throws IllegalArgumentException {
@@ -67,7 +67,7 @@ public class RuleCount extends RuleComponent {
     }
 
     public RuleCount(RuleComponent ruleComponent, int repeatMin, int repeatMax,
-            int repeatProbability) throws IllegalArgumentException {
+            double repeatProbability) throws IllegalArgumentException {
         if (repeatMin < 0 || (repeatMin > repeatMax)) {
             throw new IllegalArgumentException(
                     "Repeat minimum must be greater or equal to 0 and smaller "
@@ -92,7 +92,7 @@ public class RuleCount extends RuleComponent {
         return repeatMin;
     }
 
-    public int getRepeatProbability() {
+    public double getRepeatProbability() {
         if (repeatProbability < 0) {
             return REPEAT_INDEFINITELY;
         }

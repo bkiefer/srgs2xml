@@ -1,8 +1,12 @@
 package de.dfki.mlt.srgsparser;
 
+
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,13 +18,13 @@ import org.jvoicexml.processor.srgs.AbnfRuleGrammarParser;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
+import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
 import org.jvoicexml.processor.srgs.grammar.GrammarException;
 import org.jvoicexml.processor.srgs.grammar.GrammarManager;
 import org.jvoicexml.processor.srgs.grammar.Rule;
 import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
 
-public class SrgsParserTest {
-
+public class AbnfParserTest {
   @BeforeClass
   public static void init() {
     BasicConfigurator.configure();
@@ -87,7 +91,7 @@ public class SrgsParserTest {
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
-         this.getClass().getResource("/pizza.srgs").toURI());
+         this.getClass().getResource("/pizza.gram").toURI());
 
     for (String s : inputs) {
       String[] tokens = s.split(" +");
@@ -98,95 +102,64 @@ public class SrgsParserTest {
     }
   }
 
-  @Test
-  public void hySocTest() throws GrammarException, IOException, URISyntaxException {
-    String[] inputs = {
-        "gloria i also need the parcel tape"
-    };
 
-    final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
-         this.getClass().getResource("/hysoc.xml").toURI());
-
-
-    for (String s : inputs) {
-      String[] tokens = s.split(" +");
-      final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-      final ChartGrammarChecker.ChartNode validRule =
-          checker.parse(ruleGrammar, tokens);
-      assertTrue(validRule != null);
-    }
-  }
-
-  @Test
-  public void repeatTest() throws GrammarException, IOException, URISyntaxException {
-    String[] inputs = {
-        "fuck yeah", //w
-        "fuck yeah yeah", //c
-        "fuck fuck yeah", //w
-        "fuck fuck yeah yeah", //c
-        "fuck yeah yeah yeah", //c
-        "fuck fuck yeah yeah yeah", //c
-        "fuck fuck yeah yeah yeah yeah", //w
-        "yeah yeah yeah", //w
-    };
-
-    boolean[] correct = { false, true, false, true, true, true, false, false };
-
-    final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
-        this.getClass().getResource("/repeat.xml").toURI());
-
-    int i = 0;
-    for (String s : inputs) {
-      String[] tokens = s.split(" +");
-      final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-      final ChartGrammarChecker.ChartNode validRule =
-          checker.parse(ruleGrammar, tokens);
-      assertEquals(s, correct[i], (validRule != null));
-      ++i;
-    }
-  }
-
-  @Test
-  public void alternativesTest() throws GrammarException, IOException, URISyntaxException {
-    String[] inputs = {
-        "one", //c
-        "two", //c
-        "three", //c
-        "four", //w
-        "one two", //
-        "fuck fuck yeah yeah yeah", //w
-        "fuck fuck yeah yeah yeah yeah", //w
-        "yeah yeah yeah", //w
-    };
-
-    boolean[] correct = { true, true, true, false, false, false, false, false };
-
-    final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
-        this.getClass().getResource("/alternatives.xml").toURI());
-
-    int i = 0;
-    for (String s : inputs) {
-      String[] tokens = s.split(" +");
-      final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-      final ChartGrammarChecker.ChartNode validRule =
-          checker.parse(ruleGrammar, tokens);
-      assertEquals(s, correct[i], (validRule != null));
-      ++i;
-    }
-  }
-
-  public void parserTest() throws URISyntaxException, IOException {
-    URI grammarReference = this.getClass().getResource("/pizza.srgs").toURI();
+  public void lexerTest() throws URISyntaxException, IOException {
+    URI grammarReference = this.getClass().getResource("/pizza.gram").toURI();
     final URL url = grammarReference.toURL();
-    SrgsRuleGrammarParser p = new SrgsRuleGrammarParser();
-    Rule[] rules = p.load(url.openStream());
-    String rootname = p.getAttributes().get("root");
-    for (Rule r : rules) {
-      System.out.println(r);
+    InputStream in = url.openStream();
+    Reader r = new InputStreamReader(in, "UTF-8");
+    SrgsLexer lexer = new SrgsLexer(r);
+    int clz;
+    while ((clz = lexer.yylex()) != SrgsLexer.EOF) {
+      System.out.println(lexer.yytext() + " " + clz + " " + lexer.yystate());
     }
-    System.out.println(rootname);
+  }
+
+  @Test
+  public void parserTest() throws URISyntaxException, IOException {
+    URI grammarReference = this.getClass().getResource("/pizza.gram").toURI();
+    URL url = grammarReference.toURL();
+    AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(grammarReference.toString());
+    Rule[] rules = p.load(url.openStream());
+    grammarReference = this.getClass().getResource("/pizza.srgs").toURI();
+    url = grammarReference.toURL();
+    SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
+    Rule[] xmlrules = s.load(url.openStream());
+
+    for (Rule r : rules) {
+      Rule xmlrule = null;
+      for (Rule xr : xmlrules) {
+        if (r.getRuleName().equals(xr.getRuleName())) {
+          xmlrule = xr;
+          break;
+        }
+      }
+      assertNotNull(xmlrule);
+      assertEquals(xmlrule.getRuleName(), r.toString(), xmlrule.toString());
+    }
+  }
+
+  @Test
+  public void parserTest2() throws URISyntaxException, IOException {
+    URI grammarReference = this.getClass().getResource("/mini.gram").toURI();
+    URL url = grammarReference.toURL();
+    AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(grammarReference.toString());
+    Rule[] rules = p.load(url.openStream());
+    grammarReference = this.getClass().getResource("/mini.xml").toURI();
+    url = grammarReference.toURL();
+    SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
+    Rule[] xmlrules = s.load(url.openStream());
+
+    for (Rule r : rules) {
+      Rule xmlrule = null;
+      for (Rule xr : xmlrules) {
+        if (r.getRuleName().equals(xr.getRuleName())) {
+          xmlrule = xr;
+          break;
+        }
+      }
+      assertNotNull(xmlrule);
+      assertEquals(xmlrule.getRuleName(), r.toString(), xmlrule.toString());
+    }
   }
 }

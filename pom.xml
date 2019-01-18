@@ -46,6 +46,23 @@
             </descriptorRefs>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.1</version>
+          <executions>
+            <execution>
+              <id>makebisonflex</id>
+              <phase>generate-sources</phase>
+              <goals><goal>exec</goal></goals>
+              <configuration>
+                <workingDirectory>${project.build.sourceDirectory}/org/jvoicexml/processor/srgs/abnf</workingDirectory>
+                <executable>make</executable>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </build>
 

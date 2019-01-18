@@ -26,6 +26,10 @@
 
 package org.jvoicexml.processor.srgs.grammar;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 //Comp 2.0.6
 
 public class RuleAlternatives extends RuleComponent {
@@ -35,85 +39,75 @@ public class RuleAlternatives extends RuleComponent {
 
     public static final int MIN_WEIGHT = 0x0;
 
-    private RuleComponent[] ruleComponents;
+    private List<RuleAlternative> ruleComponents;
 
-    private int[] weights;
-
-    public RuleAlternatives(RuleComponent[] ruleComponents)
-     throws IllegalArgumentException {
-        if (ruleComponents == null) {
-            throw new IllegalArgumentException(
-                    "Rule components must not be null!");
-        }
-        this.ruleComponents = ruleComponents;
+    public RuleAlternatives() {
+      ruleComponents = new ArrayList<>();
     }
 
-    public RuleAlternatives(RuleComponent[] ruleComponents, int[] weights)
+    public RuleAlternatives(List<RuleComponent> ruleComponents)
+        throws IllegalArgumentException {
+      if (ruleComponents == null) {
+        throw new IllegalArgumentException(
+            "Rule components must not be null!");
+      }
+      this.ruleComponents = new ArrayList<>(ruleComponents.size());
+      for (RuleComponent c : ruleComponents) {
+        this.ruleComponents.add(new RuleAlternative(c));
+      }
+    }
+
+    public RuleAlternatives(List<RuleComponent> ruleComponents, int[] weights)
         throws IllegalArgumentException {
         if (ruleComponents == null) {
             throw new IllegalArgumentException(
                     "Rule components must not be null!");
         }
-        this.ruleComponents = ruleComponents;
-        if (weights == null) {
-            this.weights = new int[ruleComponents.length];
-            for (int i = 0; i < ruleComponents.length; i++) {
-                this.weights[i] = NORM_WEIGHT;
-            }
+        this.ruleComponents = new ArrayList<>(ruleComponents.size());
+        if (weights == null || ruleComponents.size() != weights.length) {
+          for (RuleComponent c : ruleComponents) {
+            this.ruleComponents.add(new RuleAlternative(c));
+          }
         } else {
-            if (ruleComponents.length != weights.length) {
-                throw new IllegalArgumentException(
-                        "Lengths of rule components and weights do not match!");
-            }
-            this.weights = weights;
+          int i = 0;
+          for (RuleComponent c : ruleComponents) {
+            this.ruleComponents.add(new RuleAlternative(c, weights[i++]));
+          }
         }
     }
 
     public RuleAlternatives(String[] tokens) {
         if (tokens != null) {
-            ruleComponents = new RuleComponent[tokens.length];
+            ruleComponents = new ArrayList<>();
             for (int i = 0; i < tokens.length; i++) {
-                final String token = tokens[i];
-                ruleComponents[i] = new RuleToken(token);
+              final String token = tokens[i];
+              ruleComponents.add(new RuleAlternative(token));
             }
         }
     }
 
-    public RuleComponent[] getRuleComponents() {
-        return ruleComponents;
+    public void addAlternative(RuleComponent c) {
+      addAlternative(c, NORM_WEIGHT);
     }
 
-    public int[] getWeights() {
-        return weights;
+    public void addAlternative(RuleComponent c, int weight) {
+      ruleComponents.add(new RuleAlternative(c, weight));
+    }
+
+    public List<RuleAlternative> getRuleAlternatives() {
+      return ruleComponents;
     }
 
     public String toString() {
-        if ((ruleComponents == null) || (ruleComponents.length == 0)) {
+        if ((ruleComponents == null) || (ruleComponents.size() == 0)) {
             return RuleSpecial.VOID.toString();
         }
 
         final StringBuffer str = new StringBuffer();
         str.append("<one-of>");
 
-        for (int i = 0; i < ruleComponents.length; i++) {
-            str.append("<item");
-            if (weights != null) {
-                if (weights[i] != NORM_WEIGHT) {
-                    // TODO we should divide by NORM_WEIGHT but this is not
-                    // supported in CLDC 1.0
-                    str.append(" weight=\"");
-                    str.append(weights[i]);
-                    str.append("\"");
-                }
-            }
-            str.append('>');
-            final RuleComponent component = ruleComponents[i];
-            if (component == null) {
-                str.append(RuleSpecial.NULL.toString());
-            } else {
-                str.append(component.toString());
-            }
-            str.append("</item>");
+        for (RuleAlternative alt : ruleComponents) {
+            str.append(alt);
         }
         str.append("</one-of>");
 
@@ -125,6 +119,6 @@ public class RuleAlternatives extends RuleComponent {
       // r must be equal to the ith alternative. Because we're using the
       // RuleComponents as immutable objects from the grammar, it should suffice
       // to test for token identity
-      return ruleComponents[i] == r;
+      return ruleComponents.get(i).looksFor(r, i);
     }
 }

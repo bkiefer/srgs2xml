@@ -7,12 +7,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
-import org.jvoicexml.processor.srgs.grammar.Grammar;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
-import org.jvoicexml.processor.srgs.grammar.RuleReference;
+import org.jvoicexml.processor.srgs.grammar.*;
 
 public class JVoiceXmlGrammarManager implements GrammarManager {
 
@@ -31,18 +26,26 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
         return grammars.get(grammarReference);
     }
 
-   
-
     public Grammar loadGrammar(URI grammarReference)
             throws GrammarException, IOException {
-        final SrgsRuleGrammarParser parser = new SrgsRuleGrammarParser();
         final URL url = grammarReference.toURL();
-        final InputStream in = url.openStream();
-        Rule[] rules;
+        InputStream in = url.openStream();
+        int c;
+        while ((c = in.read()) != '<' && c >= 0 && c != 'A') {}
+        in.close();
+        in = url.openStream();
+        final RuleGrammarParser parser = c == '<'
+            ? new SrgsRuleGrammarParser()
+                : new AbnfRuleGrammarParser(grammarReference.toString());
+
+        Rule[] rules = null;
         try {
             rules = parser.load(in);
         } catch (URISyntaxException e) {
             throw new IOException(e.getMessage(), e);
+        } catch (Exception e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         }
         if (rules == null) {
             throw new IOException("Unable to load grammar '" + grammarReference

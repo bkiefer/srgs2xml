@@ -40,20 +40,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
-import org.jvoicexml.processor.srgs.grammar.RuleComponent;
-import org.jvoicexml.processor.srgs.grammar.RuleCount;
-import org.jvoicexml.processor.srgs.grammar.RuleReference;
-import org.jvoicexml.processor.srgs.grammar.RuleSequence;
-import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
-import org.jvoicexml.processor.srgs.grammar.RuleTag;
-import org.jvoicexml.processor.srgs.grammar.RuleToken;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
+import org.jvoicexml.processor.srgs.grammar.*;
+import org.w3c.dom.*;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -65,7 +53,7 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 1370 $
  */
-public class SrgsRuleGrammarParser {
+public class SrgsRuleGrammarParser implements RuleGrammarParser {
 
     private static EntityResolver entityResolver = new EmptyEntityResolver();
     private Map<String, String> attributes;
@@ -177,8 +165,8 @@ public class SrgsRuleGrammarParser {
                 final Rule rule = new Rule(ruleId, components.get(0), scope);
                 rules.add(rule);
             } else if (components.size() > 1) {
-                final RuleSequence rs = new RuleSequence(
-                        components.toArray(new RuleComponent[] {}));
+                final RuleSequence rs =
+                    new RuleSequence(new ArrayList<RuleComponent>(components));
                 Rule rule = new Rule(ruleId, rs, scope);
                 rules.add(rule);
             }
@@ -204,9 +192,8 @@ public class SrgsRuleGrammarParser {
 
     private RuleComponent evalOneOf(final Node node) throws URISyntaxException {
         final List<RuleComponent> components = evalChildNodes(node);
-        final RuleComponent[] alternatives = new RuleComponent[components
-                .size()];
-        components.toArray(alternatives);
+        final List<RuleComponent> alternatives =
+            new ArrayList<RuleComponent>(components);
         return new RuleAlternatives(alternatives);
     }
 
@@ -243,9 +230,8 @@ public class SrgsRuleGrammarParser {
         if (components.size() == 1) {
             component = components.get(0);
         } else {
-            final RuleComponent[] sequenceComponents = new RuleComponent[components
-                    .size()];
-            components.toArray(sequenceComponents);
+            final List<RuleComponent> sequenceComponents =
+                new ArrayList<RuleComponent>(components);
             component = new RuleSequence(sequenceComponents);
         }
         if ((repeatMin != -1) && (repeatMax != -1) && (repeatProb != -1)) {
