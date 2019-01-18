@@ -65,8 +65,8 @@ public class RuleParse extends RuleComponent {
             final RuleAlternatives alternatives = (RuleAlternatives) component;
             List<RuleAlternative> components = alternatives.getRuleAlternatives();
             for (int i = 0; i < components.size(); i++) {
-                final RuleComponent actComponent = components.get(i);
-                addTags(tags, actComponent);
+                final RuleAlternative actComponent = components.get(i);
+                addTags(tags, actComponent.getRuleComponent());
             }
         } else if (component instanceof RuleCount) {
             final RuleCount count = (RuleCount) component;
