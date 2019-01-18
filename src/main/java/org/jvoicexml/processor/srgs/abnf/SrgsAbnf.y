@@ -105,7 +105,7 @@ import org.jvoicexml.processor.srgs.grammar.*;
     int hashIndex = uriStr.indexOf("#");
     // if no #, reference to root rule of grammar
     final String ruleName =
-      hashIndex >= 0 ? uriStr.substring(hashIndex + 1).trim() : null;
+      hashIndex >= 0 ? uriStr.substring(hashIndex + 1).trim() : "___root";
     final String grammarName =
       hashIndex >= 0 ? uriStr.substring(0, hashIndex) : uriStr;
     //if (grammarName.isEmpty)
@@ -262,7 +262,7 @@ ruleExpansion: sequence {
 }
 | SlashNum sequence {
   RuleAlternatives alt = new RuleAlternatives();
-  alt.addAlternative($2, Integer.parseInt($1));
+  alt.addAlternative($2, Double.parseDouble($1));
   $$ = alt;
 }
 | ruleExpansion '|' sequence {
@@ -278,12 +278,12 @@ ruleExpansion: sequence {
 }
 | ruleExpansion '|' SlashNum sequence {
   if ($1 instanceof RuleAlternatives) {
-    ((RuleAlternatives)$1).addAlternative($4, Integer.parseInt($3));
+    ((RuleAlternatives)$1).addAlternative($4, Double.parseDouble($3));
     $$ = $1;
   } else {
     RuleAlternatives alt = new RuleAlternatives();
     alt.addAlternative($1);
-    alt.addAlternative($4, Integer.parseInt($3));
+    alt.addAlternative($4, Double.parseDouble($3));
     $$ = alt;
   }
 }

@@ -37,13 +37,13 @@ public class RuleAlternative extends RuleComponent {
 
     private RuleComponent component;
 
-    private int weight;
+    private double weight;
 
     public RuleAlternative(RuleComponent ruleComponent) {
         this(ruleComponent, NORM_WEIGHT);
     }
 
-    public RuleAlternative(RuleComponent ruleComponent, int weight) {
+    public RuleAlternative(RuleComponent ruleComponent, double weight) {
       this.weight = weight;
       this.component = ruleComponent;
     }
@@ -56,7 +56,7 @@ public class RuleAlternative extends RuleComponent {
       return component;
     }
 
-    public int getWeight() {
+    public double getWeight() {
       return weight;
     }
 
@@ -67,7 +67,7 @@ public class RuleAlternative extends RuleComponent {
       // TODO we should divide by NORM_WEIGHT but this is not
       // supported in CLDC 1.0
       str.append(" weight=\"");
-      str.append(Integer.toString(weight));
+      str.append(Double.toString(weight));
       str.append("\"");
     }
     str.append('>');

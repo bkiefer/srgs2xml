@@ -90,7 +90,7 @@ public class RuleAlternatives extends RuleComponent {
       addAlternative(c, NORM_WEIGHT);
     }
 
-    public void addAlternative(RuleComponent c, int weight) {
+    public void addAlternative(RuleComponent c, double weight) {
       ruleComponents.add(new RuleAlternative(c, weight));
     }
 

@@ -26,82 +26,72 @@
 
 package org.jvoicexml.processor.srgs.grammar;
 
+import java.util.regex.Pattern;
+
 //Comp. 2.0.6
 
 public class RuleToken extends RuleComponent {
-    private String text;
+  private String text;
+  private Pattern p;
 
-    public RuleToken(String text, String language) throws IllegalArgumentException {
-        if ((text == null) || (text.length() == 0)) {
-            throw new IllegalArgumentException("'" + text + "'"
-                    + " is not a valid grammar text");
-        }
-        lang = language;
-
-        // TODO Check causes for IllegalArgumentsException
-
-        final char[] chars = text.toCharArray();
-        StringBuffer str = new StringBuffer();
-        int pos = 0;
-        do {
-            while ((pos < chars.length) && isWhitespace(chars[pos])) {
-                ++pos;
-            }
-
-            if ((pos < chars.length) && (str.length() > 0)) {
-                str.append(' ');
-            }
-
-            while ((pos < chars.length)
-                    && !isWhitespace(chars[pos])) {
-                str.append(chars[pos]);
-                ++pos;
-            }
-        } while (pos < text.length());
-
-        this.text = str.toString();
+  public RuleToken(String text, String language)
+      throws IllegalArgumentException {
+    if ((text == null) || (text.length() == 0)) {
+      throw new IllegalArgumentException(
+          "'" + text + "'" + " is not a valid grammar text");
     }
+    lang = language;
+    if (text.startsWith("$$")) {
+      p = Pattern.compile(text.substring(2));
+      this.text = text;
+    } else
+      this.text = text.trim().replaceAll("  +", " ");
+  }
 
-    public RuleToken(String text) {
-      this(text, null);
-    }
+  public RuleToken(String text) {
+    this(text, null);
+  }
 
-    public String getText() {
-        return text;
-    }
+  public Pattern getPattern() {
+    return p;
+  }
 
-    public String getLanguage() {
-      return lang;
-    }
+  public String getText() {
+    return text;
+  }
 
-    public String toString() {
-        return " " + text;
-    }
+  public String getLanguage() {
+    return lang;
+  }
 
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((text == null) ? 0 : text.hashCode());
-        return result;
-    }
+  public String toString() {
+    return " " + text;
+  }
 
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null){
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        RuleToken other = (RuleToken) obj;
-        if (text == null) {
-            if (other.text != null) {
-                return false;
-            }
-        } else if (!text.equals(other.text)) {
-            return false;
-        }
-        return true;
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((text == null) ? 0 : text.hashCode());
+    return result;
+  }
+
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null) {
+      return false;
     }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    RuleToken other = (RuleToken) obj;
+    if (text == null) {
+      if (other.text != null) {
+        return false;
+      }
+    } else if (!text.equals(other.text)) {
+      return false;
+    }
+    return true;
+  }
 }

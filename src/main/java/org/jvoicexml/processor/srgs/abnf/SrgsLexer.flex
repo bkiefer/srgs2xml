@@ -139,7 +139,7 @@ Digit = [:digit:]
 NameChar = ({Letter}|{Digit}|[-._:])
 ConstrainedChar = ({Letter}|{Digit}|[_])
 
-Number = ([0-9]+|[0-9]+'.'[0-9]*|[0-9]*'.'[0-9]+)
+Number = ({Digit}+|{Digit}+"."{Digit}*|{Digit}*"."{Digit}+)
 
 /* comments */
 Comment = {TraditionalComment} | {EndOfLineComment} |
@@ -151,7 +151,6 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 //"
 %s header
 %s ruleref
-%s slashnum
 %s tag
 %s tag2
 %s repeat
@@ -218,7 +217,7 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 
 <ruleref, header>{
 "<"[^>]+">" {
-  yylval = new String[]{ yytext().substring(1, yytext().length() - 2)};
+  yylval = new String[]{ yytext().substring(1, yylength() - 1)};
   // RuleReference with URI without media
   yybegin(YYINITIAL);
   return URI;
@@ -237,18 +236,16 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 }
 
 
-"/" {Number} "/" {
-  yybegin(YYINITIAL);
-  yylval = yytext().substring(1, yytext().length() - 2);
+"/"{Number}"/" {
+  yylval = yytext().substring(1, yylength() - 1);
   return SlashNum ;
 }
 
-'<' { yybegin(repeat); return '<'; }
+"<" { yybegin(repeat); return '<'; }
 
-<repeat> [0-9]+("-"[0-9]*)?  {
+<repeat> [0-9]+("-"[0-9]*)? {
   yybegin(YYINITIAL);
-  String s = yytext();
-  yylval = s.substring(1, s.length() - 2);
+  yylval = yytext();
   return Repeat;
 }
 
@@ -289,7 +286,7 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 <YYINITIAL,tag,tag2,header>{WhiteSpace} { addComment(yytext()); }
 
 <tag,tag2,header,YYINITIAL> (\'[^']*\')|(\"[^\"]*\") {
-  yylval = yytext() ;
+  yylval = yytext().substring(1, yylength()-1) ;
   return QuotedCharacters ;
 }
 

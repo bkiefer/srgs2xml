@@ -116,6 +116,36 @@ public class AbnfParserTest {
   }
 
   @Test
+  public void regexTest() throws GrammarException, IOException, URISyntaxException {
+    String[] inputs = {
+        "one", //c
+        "two", //c
+        "three", //c
+        "four", //w
+        "onetwo", //
+        "fuckfuckyeahyeahyeah", //w
+        "fuckyeahyeahyeahyeah", //w
+        "yeahyeahyeah", //w
+    };
+
+    boolean[] correct = { true, true, true, false, false, true, true, false };
+
+    final GrammarManager manager = new JVoiceXmlGrammarManager();
+    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
+        this.getClass().getResource("/regex.gram").toURI());
+
+    int i = 0;
+    for (String s : inputs) {
+      String[] tokens = s.split(" +");
+      final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
+      final ChartGrammarChecker.ChartNode validRule =
+          checker.parse(ruleGrammar, tokens);
+      assertEquals(s, correct[i], (validRule != null));
+      ++i;
+    }
+  }
+
+  @Test
   public void parserTest() throws URISyntaxException, IOException {
     URI grammarReference = this.getClass().getResource("/pizza.gram").toURI();
     URL url = grammarReference.toURL();

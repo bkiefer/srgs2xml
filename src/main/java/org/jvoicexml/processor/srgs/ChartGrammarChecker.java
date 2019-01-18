@@ -26,6 +26,7 @@
 package org.jvoicexml.processor.srgs;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import org.jvoicexml.processor.srgs.grammar.*;
 
@@ -389,18 +390,28 @@ public final class ChartGrammarChecker {
   private void scan(final RuleGrammar grammar, final RuleToken token,
       final ChartNode current) throws GrammarException {
     int pos = current.start;
-    final String text = token.getText();
-    final String[] tokens = text.split(" ");
-    for (String tok : tokens) {
-      if (pos >= input.length) {
-        return;
+    Pattern p = token.getPattern();
+    if (p == null) {
+      final String text = token.getText();
+      final String[] tokens = text.split(" ");
+      for (String tok : tokens) {
+        if (pos >= input.length) {
+          return;
+        }
+        final String currentInput = input[pos];
+        if (!tok.equalsIgnoreCase(currentInput)) {
+          return;
+        }
+        ++pos;
       }
+    } else {
       final String currentInput = input[pos];
-      if (!tok.equalsIgnoreCase(currentInput)) {
+      if (! p.matcher(currentInput).matches()) {
         return;
       }
       ++pos;
     }
+
     // now, for the first time, we add a complete token
     add(new ChartNode(current.start, pos, token, -1));
   }
