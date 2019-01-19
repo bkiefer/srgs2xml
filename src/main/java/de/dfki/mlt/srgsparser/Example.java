@@ -10,7 +10,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
-import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
+import org.jvoicexml.processor.srgs.grammar.Grammar;
 
 /**
  *
@@ -25,7 +25,7 @@ public class Example {
 
         URI uri = Example.class.getResource("/hysoc.xml").toURI(); //From Resource Folder
         final JVoiceXmlGrammarManager manager = new JVoiceXmlGrammarManager();
-        final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(uri);
+        final Grammar ruleGrammar = manager.loadGrammar(uri);
 
         String[] inputs = {"aila please start the demo",
             "artemis please start the demo",
@@ -39,7 +39,7 @@ public class Example {
             final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
             final ChartGrammarChecker.ChartNode validRule = checker.parse(ruleGrammar, tokens);
 
-            // System.out.println(validRule);      
+            // System.out.println(validRule);
             if (validRule != null) {
                 JSInterpreter walker = new JSInterpreter();
                 validRule.preorder(walker);

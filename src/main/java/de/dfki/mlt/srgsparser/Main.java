@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
+import org.jvoicexml.processor.srgs.grammar.Grammar;
 
 /**
  *
@@ -36,7 +36,7 @@ public class Main {
     }
     File grammarFile = new File(args[0]);
     final JVoiceXmlGrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager
+    final Grammar ruleGrammar = (Grammar) manager
         .loadGrammar(grammarFile.toURI());
 
     Stream<String> in = Files.lines(Paths.get(args[1]));

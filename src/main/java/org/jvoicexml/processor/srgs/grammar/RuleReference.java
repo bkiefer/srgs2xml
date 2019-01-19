@@ -94,6 +94,7 @@ public class RuleReference extends RuleComponent {
     public String toString() {
         StringBuffer str = new StringBuffer();
         appendStartTag(str);
+        appendLang(str); // handle optional language attachment
         str.append("/>");
 
         return str.toString();

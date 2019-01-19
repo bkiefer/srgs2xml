@@ -6,18 +6,15 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.jvoicexml.processor.srgs.AbnfRuleGrammarParser;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
+import org.jvoicexml.processor.srgs.grammar.*;
 
 public class SrgsParserTest {
 
@@ -86,7 +83,7 @@ public class SrgsParserTest {
     };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
+    final Grammar ruleGrammar = manager.loadGrammar(
          this.getClass().getResource("/pizza.srgs").toURI());
 
     for (String s : inputs) {
@@ -105,7 +102,7 @@ public class SrgsParserTest {
     };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
+    final Grammar ruleGrammar = manager.loadGrammar(
          this.getClass().getResource("/hysoc.xml").toURI());
 
 
@@ -134,7 +131,7 @@ public class SrgsParserTest {
     boolean[] correct = { false, true, false, true, true, true, false, false };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
+    final Grammar ruleGrammar = manager.loadGrammar(
         this.getClass().getResource("/repeat.xml").toURI());
 
     int i = 0;
@@ -164,7 +161,7 @@ public class SrgsParserTest {
     boolean[] correct = { true, true, true, false, false, false, false, false };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
+    final Grammar ruleGrammar = manager.loadGrammar(
         this.getClass().getResource("/alternatives.xml").toURI());
 
     int i = 0;
@@ -194,7 +191,7 @@ public class SrgsParserTest {
     boolean[] correct = { true, true, true, false, false, true, true, false };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
+    final Grammar ruleGrammar = manager.loadGrammar(
         this.getClass().getResource("/regex.xml").toURI());
 
     int i = 0;
@@ -212,8 +209,8 @@ public class SrgsParserTest {
     URI grammarReference = this.getClass().getResource("/pizza.srgs").toURI();
     final URL url = grammarReference.toURL();
     SrgsRuleGrammarParser p = new SrgsRuleGrammarParser();
-    Rule[] rules = p.load(url.openStream());
-    String rootname = p.getAttributes().get("root");
+    List<Rule> rules = p.load(url.openStream());
+    String rootname = (String)p.getAttributes().get("root");
     for (Rule r : rules) {
       System.out.println(r);
     }

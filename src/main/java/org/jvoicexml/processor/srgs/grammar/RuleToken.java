@@ -65,7 +65,8 @@ public class RuleToken extends RuleComponent {
   }
 
   public String toString() {
-    return " " + text;
+    return (lang != null)
+        ? "<item xml:lang=\"" + lang + "\">" + text + "</item>" : " " + text;
   }
 
   public int hashCode() {

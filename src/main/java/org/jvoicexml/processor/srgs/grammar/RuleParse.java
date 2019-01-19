@@ -26,11 +26,9 @@
 
 package org.jvoicexml.processor.srgs.grammar;
 
-import java.util.List;
-import java.util.Vector;
 
 //Comp. 2.0.6
-
+/** This stands in for a resolved RuleReference, kind of a proxy */
 public class RuleParse extends RuleComponent {
     private RuleReference ruleReference;
 
@@ -40,7 +38,7 @@ public class RuleParse extends RuleComponent {
         this.ruleReference = ruleReference;
         this.parse = parse;
     }
-
+    /*
     public Object[] getTags() {
         if (parse == null) {
             return null;
@@ -84,7 +82,7 @@ public class RuleParse extends RuleComponent {
                 addTags(tags, actComponent);
             }
         }
-    }
+    }*/
 
     public RuleComponent getParse() {
         return parse;
@@ -103,6 +101,7 @@ public class RuleParse extends RuleComponent {
 
         if (ruleReference != null) {
             ruleReference.appendStartTag(str);
+            appendLang(str);
             str.append('>');
         }
 

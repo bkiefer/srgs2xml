@@ -3,26 +3,18 @@ package de.dfki.mlt.srgsparser;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.jvoicexml.processor.srgs.AbnfRuleGrammarParser;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
-import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
+import org.jvoicexml.processor.srgs.*;
 import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
+import org.jvoicexml.processor.srgs.grammar.*;
 
 public class AbnfParserTest {
   @BeforeClass
@@ -90,7 +82,7 @@ public class AbnfParserTest {
     };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
+    final Grammar ruleGrammar = manager.loadGrammar(
          this.getClass().getResource("/pizza.gram").toURI());
 
     for (String s : inputs) {
@@ -131,7 +123,7 @@ public class AbnfParserTest {
     boolean[] correct = { true, true, true, false, false, true, true, false };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final RuleGrammar ruleGrammar = (RuleGrammar) manager.loadGrammar(
+    final Grammar ruleGrammar = manager.loadGrammar(
         this.getClass().getResource("/regex.gram").toURI());
 
     int i = 0;
@@ -150,11 +142,11 @@ public class AbnfParserTest {
     URI grammarReference = this.getClass().getResource("/pizza.gram").toURI();
     URL url = grammarReference.toURL();
     AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(grammarReference.toString());
-    Rule[] rules = p.load(url.openStream());
+    List<Rule> rules = p.load(url.openStream());
     grammarReference = this.getClass().getResource("/pizza.srgs").toURI();
     url = grammarReference.toURL();
     SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
-    Rule[] xmlrules = s.load(url.openStream());
+    List<Rule> xmlrules = s.load(url.openStream());
 
     for (Rule r : rules) {
       Rule xmlrule = null;
@@ -174,11 +166,11 @@ public class AbnfParserTest {
     URI grammarReference = this.getClass().getResource("/mini.gram").toURI();
     URL url = grammarReference.toURL();
     AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(grammarReference.toString());
-    Rule[] rules = p.load(url.openStream());
+    List<Rule> rules = p.load(url.openStream());
     grammarReference = this.getClass().getResource("/mini.xml").toURI();
     url = grammarReference.toURL();
     SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
-    Rule[] xmlrules = s.load(url.openStream());
+    List<Rule> xmlrules = s.load(url.openStream());
 
     for (Rule r : rules) {
       Rule xmlrule = null;

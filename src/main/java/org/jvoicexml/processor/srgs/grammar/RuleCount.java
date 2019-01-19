@@ -126,6 +126,7 @@ public class RuleCount extends RuleComponent {
             str.append("\"");
         }
 
+        appendLang(str);
         str.append(">");
 
         // TODO: What to do with null rule components?

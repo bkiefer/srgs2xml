@@ -27,6 +27,7 @@
 package org.jvoicexml.processor.srgs;
 
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +35,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.jvoicexml.processor.srgs.abnf.SrgsAbnf;
 import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.srgs.grammar.Rule;
 
 /**
  * A parser for SRGS ABNF grammars.
@@ -46,17 +47,16 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
 
   Logger logger = Logger.getLogger(AbnfRuleGrammarParser.class);
 
-  private Map<String, String> attributes;
+  private Map<String, Object> attributes;
 
   private String description;
   public static boolean DEBUG_GRAMMAR = false;
 
   public AbnfRuleGrammarParser(String desc) {
     description = desc;
-    attributes = new java.util.HashMap<String, String>();
   }
 
-  public Rule[] load(final InputStream stream) {
+  public List<Rule> load(final InputStream stream) {
     try {
       StringBuffer sb = new StringBuffer();
       int c;
@@ -77,15 +77,14 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
       } else {
         r = new InputStreamReader(stream);
       }
-      final Rule[] rules = parseGrammar(r);
-      return rules;
+      return parseGrammar(r);
     } catch (IOException ex) {
       logger.error(ex);
     }
     return null;
   }
 
-  private Rule[] parseGrammar(Reader r) throws IOException {
+  private List<Rule> parseGrammar(Reader r) throws IOException {
     SrgsLexer lexer = new SrgsLexer(r);
     lexer.setOrigin(description);
     SrgsAbnf grammar = new SrgsAbnf(lexer);
@@ -95,12 +94,12 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
     }
     if (!grammar.parse())
       return null;
-    SrgsAbnf.Grammar g = grammar.getGrammar();
-    attributes.put("root", g.root);
-    return g.rules.toArray(new Rule[g.rules.size()]);
+    attributes = grammar.getAttributes();
+    List<Rule> rules = grammar.getRules();
+    return rules;
   }
 
-  public Map<String, String> getAttributes() {
+  public Map<String, Object> getAttributes() {
     return attributes;
   }
 }

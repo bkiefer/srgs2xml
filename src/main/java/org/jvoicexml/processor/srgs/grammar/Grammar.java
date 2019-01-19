@@ -27,6 +27,7 @@
 package org.jvoicexml.processor.srgs.grammar;
 
 import java.net.URI;
+import java.util.Map;
 
 
 //Comp. 2.0.6
@@ -53,4 +54,16 @@ public interface Grammar {
     boolean isActivatable();
 
     void setActivatable(boolean activatable);
+
+    Rule getRule(String ruleName);
+
+    void addRule(Rule rule);
+
+    RuleReference resolve(RuleReference ruleReference) throws GrammarException;
+
+    void setRoot(String rootName);
+
+    String getRoot();
+
+    Map<String, Object> getAttributes();
 }

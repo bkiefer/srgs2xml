@@ -139,8 +139,8 @@ public final class ChartGrammarChecker {
   /** An agenda */
   private Deque<ChartNode> agenda;
 
-  /** The currently used RuleGrammar */
-  private RuleGrammar grammar;
+  /** The currently used Grammar */
+  private Grammar grammar;
 
   /** Constructs a new GrammarChecker.
    *
@@ -170,7 +170,7 @@ public final class ChartGrammarChecker {
    * @return <code>true</code> if the tokens are valid.
    * @throws GrammarException
    */
-  public ChartNode parse(final RuleGrammar gram, final String[] in)
+  public ChartNode parse(final Grammar gram, final String[] in)
       throws GrammarException {
     input = in;
     newChart(input.length);
@@ -221,7 +221,7 @@ public final class ChartGrammarChecker {
     return null;
   }
 
-  private void predict(RuleGrammar grammar, ChartNode current)
+  private void predict(Grammar grammar, ChartNode current)
       throws GrammarException {
     RuleComponent component = current.rule;
 
@@ -324,7 +324,7 @@ public final class ChartGrammarChecker {
     return add(new ChartNode(pos, r));
   }
 
-  private void predict(final RuleGrammar grammar, final RuleParse reference,
+  private void predict(final Grammar grammar, final RuleParse reference,
       final ChartNode current) throws GrammarException {
     // TODO need to set the new grammar if it changed
     final RuleComponent component = reference.getParse();
@@ -332,7 +332,7 @@ public final class ChartGrammarChecker {
     addPrediction(current.end, component);
   }
 
-  private void predict(final RuleGrammar grammar,
+  private void predict(final Grammar grammar,
       final RuleAlternatives alternatives, final ChartNode current)
       throws GrammarException {
     final List<RuleAlternative> components = alternatives.getRuleAlternatives();
@@ -349,19 +349,19 @@ public final class ChartGrammarChecker {
     addPrediction(current.end, components.get(current.dot));
   }
 
-  private void predict(final RuleGrammar grammar,
+  private void predict(final Grammar grammar,
       final RuleAlternative alternative, final ChartNode current)
       throws GrammarException {
     addPrediction(current.end, alternative.getRuleComponent());
   }
 
-  private void predict(final RuleGrammar grammar, final RuleSequence sequence,
+  private void predict(final Grammar grammar, final RuleSequence sequence,
       final ChartNode current) throws GrammarException {
     final List<RuleComponent> components = sequence.getRuleComponents();
     addPrediction(current.end, components.get(current.dot));
   }
 
-  private void predict(final RuleGrammar grammar, final RuleCount count,
+  private void predict(final Grammar grammar, final RuleCount count,
       final ChartNode current) throws GrammarException {
     final RuleComponent component = count.getRuleComponent();
     final int min = count.getRepeatMin();
@@ -387,7 +387,7 @@ public final class ChartGrammarChecker {
    * @param current
    * @throws GrammarException
    */
-  private void scan(final RuleGrammar grammar, final RuleToken token,
+  private void scan(final Grammar grammar, final RuleToken token,
       final ChartNode current) throws GrammarException {
     int pos = current.start;
     Pattern p = token.getPattern();
@@ -425,7 +425,7 @@ public final class ChartGrammarChecker {
    * @param current
    * @throws GrammarException
    */
-  private void scan(final RuleGrammar grammar, final RuleTag tag,
+  private void scan(final Grammar grammar, final RuleTag tag,
       final ChartNode current) throws GrammarException {
     // add complete epsilon item
     add(new ChartNode(current.start, current.end, tag, -1));

@@ -27,7 +27,6 @@
 package org.jvoicexml.processor.srgs.grammar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 //Comp 2.0.6

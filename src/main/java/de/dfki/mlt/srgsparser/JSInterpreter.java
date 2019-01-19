@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
+import org.jvoicexml.processor.srgs.ChartGrammarChecker.ChartNode;
 import org.jvoicexml.processor.srgs.grammar.RuleParse;
 import org.jvoicexml.processor.srgs.grammar.RuleTag;
 import org.mozilla.javascript.Context;
@@ -20,11 +21,11 @@ import org.mozilla.javascript.Scriptable;
  */
 public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
 
-    private final Stack<String> stack = new Stack<String>();
+    private final Stack<ChartNode> stack = new Stack<>();
     private final StringBuilder source = new StringBuilder();
 
     public JSInterpreter() {
-        stack.push("root");
+        stack.push(null);
         exec("rules = {};");
         exec("function rule_root(){");
         exec("var out = {};");
@@ -35,11 +36,11 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
         this.source.append("\n");
     }
 
-    public void enter(ChartGrammarChecker.ChartNode node, boolean leaf) {
+    public void enter(ChartNode node, boolean leaf) {
         if (node.getRule() instanceof RuleParse) {
             RuleParse parse = (RuleParse) node.getRule();
             String current = parse.getRuleReference().getRuleName();
-            stack.push(current);
+            stack.push(node);
             exec("function rule_" + current + "(){");
             exec(" var out = {};");
         }
@@ -53,7 +54,7 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
 
     public void leave(ChartGrammarChecker.ChartNode node, boolean leaf) {
         if (node.getRule() instanceof RuleParse) {
-            String env = stack.pop();
+            ChartNode env = stack.pop();
             exec("return out;");
             exec("} ");
             exec("rules." + env + "= rule_" + env + "();");
@@ -62,7 +63,7 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
 
     public void finish(boolean debug) {
         while (!stack.isEmpty()) {
-            String env = stack.pop();
+            ChartNode env = stack.pop();
             exec("return out;");
             exec("}");
             exec("rules." + env + " = rule_" + env + "();");

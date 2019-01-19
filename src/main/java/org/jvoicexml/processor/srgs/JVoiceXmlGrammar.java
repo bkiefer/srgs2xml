@@ -1,26 +1,24 @@
 package org.jvoicexml.processor.srgs;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleGrammar;
-import org.jvoicexml.processor.srgs.grammar.RuleParse;
-import org.jvoicexml.processor.srgs.grammar.RuleReference;
+import org.jvoicexml.processor.srgs.grammar.*;
 
-public class JVoiceXmlGrammar implements RuleGrammar {
+public class JVoiceXmlGrammar implements Grammar {
     private final GrammarManager manager;
     private final URI reference;
     private String root;
     private final Map<String, Rule> rules;
+    private Map<String, Object> attributes;
 
-    public JVoiceXmlGrammar(final GrammarManager grammarManager, final URI ref) {
+    public JVoiceXmlGrammar(final GrammarManager grammarManager, final URI ref,
+        List<Rule> rules) {
         manager = grammarManager;
         reference = ref;
-        rules = new java.util.HashMap<String, Rule>();
+        this.rules = new java.util.HashMap<String, Rule>();
+        for (Rule r : rules) addRule(r);
     }
 
 
@@ -43,7 +41,6 @@ public class JVoiceXmlGrammar implements RuleGrammar {
         // TODO Auto-generated method stub
 
     }
-
 
     public boolean isActive() {
         // TODO Auto-generated method stub
@@ -74,18 +71,6 @@ public class JVoiceXmlGrammar implements RuleGrammar {
 
     }
 
-    public void addElement(String element) throws GrammarException {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    public void removeElement(String element) {
-        // TODO Auto-generated method stub
-
-    }
-
-
     public Rule getRule(String ruleName) {
         return rules.get(ruleName);
     }
@@ -96,65 +81,9 @@ public class JVoiceXmlGrammar implements RuleGrammar {
         rules.put(ruleName, rule);
     }
 
-
-    public void addRule(String ruleText) throws GrammarException {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    public void addRules(Rule[] rules) {
-        for (Rule rule : rules) {
-            addRule(rule);
-        }
-    }
-
-
     public void removeRule(String ruleName) throws IllegalArgumentException {
         rules.remove(ruleName);
     }
-
-
-    public String[] listRuleNames() {
-        final Set<String> keys = rules.keySet();
-        final String[] names = new String[keys.size()];
-        return keys.toArray(names);
-    }
-
-
-    public void setAttribute(String attribute, String value)
-            throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    public String getAttribute(String attribute)
-            throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public String[] getElements() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public RuleParse parse(String[] tokens, String ruleName)
-            throws IllegalArgumentException, GrammarException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public RuleParse parse(String text, String ruleName)
-            throws IllegalArgumentException, GrammarException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 
     public RuleReference resolve(RuleReference ruleReference)
             throws GrammarException {
@@ -166,14 +95,17 @@ public class JVoiceXmlGrammar implements RuleGrammar {
         return ruleReference;
     }
 
-
     public void setRoot(String rootName) {
         root = rootName;
     }
 
-
     public String getRoot() {
         return root;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+      return attributes;
     }
 
 }

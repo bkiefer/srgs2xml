@@ -68,6 +68,7 @@ public class RuleAlternative extends RuleComponent {
       // supported in CLDC 1.0
       str.append(" weight=\"");
       str.append(Double.toString(weight));
+      appendLang(str);
       str.append("\"");
     }
     str.append('>');

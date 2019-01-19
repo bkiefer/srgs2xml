@@ -86,8 +86,13 @@ public abstract class RuleComponent {
         }
     }
 
+    protected void appendLang(StringBuffer str) {
+      if (lang != null)
+        str.append(" xml:lang=\"").append(lang).append('"');
+    }
+
     public String toString() {
-        return null;
+      throw new UnsupportedOperationException();
     }
 
   /** Test, for every subclass, if the given RuleComponent is the one required in

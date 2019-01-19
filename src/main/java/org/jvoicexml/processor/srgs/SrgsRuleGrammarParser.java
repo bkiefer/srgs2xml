@@ -56,7 +56,7 @@ import org.xml.sax.SAXException;
 public class SrgsRuleGrammarParser implements RuleGrammarParser {
 
     private static EntityResolver entityResolver = new EmptyEntityResolver();
-    private Map<String, String> attributes;
+    private Map<String, Object> attributes;
 
     public static class EmptyEntityResolver implements EntityResolver {
         public InputSource resolveEntity(String publicId, String systemId)
@@ -66,20 +66,20 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
     }
 
     public SrgsRuleGrammarParser() {
-        attributes = new java.util.HashMap<String, String>();
+        attributes = new java.util.HashMap<>();
     }
 
-    public Rule[] load(final Reader reader) throws URISyntaxException {
+    public List<Rule> load(final Reader reader) throws URISyntaxException {
         final InputSource source = new InputSource(reader);
         return load(source);
     }
 
-    public Rule[] load(final InputStream stream) throws URISyntaxException {
+    public List<Rule> load(final InputStream stream) throws URISyntaxException {
         final InputSource source = new InputSource(stream);
         return load(source);
     }
 
-    public Rule[] loadRule(final Reader reader) {
+    public List<Rule> loadRule(final Reader reader) {
         try {
             final DocumentBuilder builder = DocumentBuilderFactory
                     .newInstance().newDocumentBuilder();
@@ -92,7 +92,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         }
     }
 
-    public Rule[] loadRule(InputStream stream) {
+    public List<Rule> loadRule(InputStream stream) {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
@@ -105,7 +105,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         }
     }
 
-    private Rule[] load(final InputSource inputSource)
+    private List<Rule> load(final InputSource inputSource)
             throws URISyntaxException {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -119,7 +119,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
               grammarNode = grammarNode.getNextSibling();
             }
 
-            final Rule[] rules = parseGrammar(grammarNode);
+            final List<Rule> rules = parseGrammar(grammarNode);
 
             // Extract header from grammar
             final NamedNodeMap docAttributes = grammarNode.getAttributes();
@@ -141,7 +141,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         }
     }
 
-    private Rule[] parseGrammar(Node grammarNode) throws URISyntaxException {
+    private List<Rule> parseGrammar(Node grammarNode) throws URISyntaxException {
         List<Rule> rules = new ArrayList<Rule>();
         NodeList childNodes = grammarNode.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
@@ -171,7 +171,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
                 rules.add(rule);
             }
         }
-        return rules.toArray(new Rule[] {});
+        return rules;
     }
 
     private String getAttribute(NamedNodeMap attributes, String name) {
@@ -326,7 +326,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         return ruleComponents;
     }
 
-    public Map<String, String> getAttributes() {
+    public Map<String, Object> getAttributes() {
         return attributes;
     }
 }

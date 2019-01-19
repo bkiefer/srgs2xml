@@ -9,7 +9,7 @@ import java.util.*;
 
 import org.jvoicexml.processor.srgs.grammar.*;
 
-@SuppressWarnings({"unused"})
+@SuppressWarnings({"unused", "unchecked"})
 }
 
 %locations
@@ -23,31 +23,37 @@ import org.jvoicexml.processor.srgs.grammar.*;
 %define parse.error verbose
 
 %code {
+  List<Rule> rules = new ArrayList<>();
+  Map<String, Object> attributes = new HashMap<>();
 
-  public class Grammar {
-    public String base;
-    public String mode;
-    public String language;
-    public String root;
-    public String tag_format;
-    public List<lexicon> lexis = new ArrayList<>();
-    public List<meta> metas = new ArrayList<>();
-    public List<Rule> rules = new ArrayList<>();
+  public List<Rule> getRules() { return rules; }
+  public Map<String, Object> getAttributes() { return attributes; }
 
-    void addRuleDef(String ref, String scope, RuleComponent body){
-      rules.add(new Rule(ref, body,
-                         scope.compareToIgnoreCase("public") == 0
-                         ? Rule.PUBLIC : Rule.PRIVATE));
-    }
-
-    void addMeta(meta m) { metas.add(m); }
-
-    //void parseHeader(String h) {}
+  private void addRuleDef(String ref, String scope, RuleComponent body){
+    rules.add(new Rule(ref, body,
+                       scope.compareToIgnoreCase("public") == 0
+                       ? Rule.PUBLIC : Rule.PRIVATE));
   }
 
-  Grammar gram = new Grammar();
+  private void addMeta(meta m) {
+    List<meta> metas;
+    metas = (List<meta>) attributes.get("meta");
+    if (metas == null) {
+      metas = new ArrayList<>();
+      attributes.put("meta", metas);
+    }
+    metas.add(m);
+  }
 
-  public Grammar getGrammar() { return gram; }
+  private void addLexicon(lexicon m) {
+    List<lexicon> lexica;
+    lexica = (List<lexicon>) attributes.get("lexicon");
+    if (lexica == null) {
+      lexica = new ArrayList<>();
+      attributes.put("lexicon", lexica);
+    }
+    lexica.add(m);
+  }
 
   class lexicon {
     public String uri;
@@ -185,7 +191,7 @@ declaration: baseDecl
              | metaDecl
 ;
 
-baseDecl: DECL_BASE URI ';' { gram.base = $2[0];
+baseDecl: DECL_BASE URI ';' { attributes.put("base", $2[0]);
 /* Additional constraints:
    - A base declaration must not appear more than
    once in grammar.
@@ -193,7 +199,7 @@ baseDecl: DECL_BASE URI ';' { gram.base = $2[0];
 }
 ;
 
-languageDecl: DECL_LANG Nmtoken ';' { gram.language = $2;
+languageDecl: DECL_LANG Nmtoken ';' { attributes.put("language", $2);
   /* Additional constraints:
      - A language declaration must not appear more than
      once in grammar.
@@ -202,14 +208,14 @@ languageDecl: DECL_LANG Nmtoken ';' { gram.language = $2;
   */ }
 ;
 
-modeDecl: DECL_MODE ';' { gram.mode = $1 ; }
+modeDecl: DECL_MODE ';' { attributes.put("mode", $1); }
           /* Additional constraints:
              - A mode declaration must not appear more than
              once in grammar.
           */
 ;
 
-rootRuleDecl: DECL_ROOT ';' { gram.root = $1;
+rootRuleDecl: DECL_ROOT ';' { attributes.put("root", $1);
   /*Additional constraints:
           - A root rule declaration must not appear more
             than once in grammar.
@@ -218,23 +224,23 @@ rootRuleDecl: DECL_ROOT ';' { gram.root = $1;
         */}
 ;
 
-tagFormatDecl: DECL_TAG_FORMAT URI ';' { gram.tag_format = $2[0]; }
+tagFormatDecl: DECL_TAG_FORMAT URI ';' { attributes.put("tag_format", $2[0]); }
 /*Additional constraints:
   - A tag-format declaration must not appear more
   than once in grammar.
 */
-| DECL_TAG_FORMAT QuotedCharacters ';' { gram.tag_format = $2; }
+| DECL_TAG_FORMAT QuotedCharacters ';' { attributes.put("tag_format", $2); }
 
 ;
 
-lexiconDecl: DECL_LEXICON URI ';' { gram.lexis.add(new lexicon($2[0])); }
+lexiconDecl: DECL_LEXICON URI ';' { addLexicon(new lexicon($2[0])); }
 ;
 
 metaDecl: DECL_HTTP_EQUIV QuotedCharacters DECL_IS QuotedCharacters ';' {
-  gram.addMeta(new meta($2, $4, true));
+  addMeta(new meta($2, $4, true));
 }
 | DECL_META QuotedCharacters DECL_IS QuotedCharacters ';' {
-  gram.addMeta(new meta($2, $4, false));
+  addMeta(new meta($2, $4, false));
 }
 ;
 
@@ -248,7 +254,7 @@ ruleDefinition: scope RuleName '=' ruleExpansion ';'
                i.e. no rule must be defined more than once
                within a grammar.
           */
-          gram.addRuleDef($2, $1, $4);
+          addRuleDef($2, $1, $4);
         }
 ;
 

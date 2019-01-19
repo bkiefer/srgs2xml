@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.jvoicexml.processor.srgs.grammar.*;
@@ -38,7 +39,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
             ? new SrgsRuleGrammarParser()
                 : new AbnfRuleGrammarParser(grammarReference.toString());
 
-        Rule[] rules = null;
+        List<Rule> rules = null;
         try {
             rules = parser.load(in);
         } catch (URISyntaxException e) {
@@ -53,10 +54,9 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
         }
         // Initialize rule grammar
         final JVoiceXmlGrammar grammar = new JVoiceXmlGrammar(this,
-                grammarReference);
-        grammar.addRules(rules);
-        final Map<String, String> attributes = parser.getAttributes();
-        final String root = attributes.get("root");
+            grammarReference, rules);
+        final Map<String, Object> attributes = parser.getAttributes();
+        final String root = (String)attributes.get("root");
         if (root != null) {
             grammar.setRoot(root);
             grammar.setActivatable(root, true);
@@ -74,7 +74,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
 
     public Rule resolve(RuleReference reference) {
         final URI ref = reference.getGrammarReference();
-        final RuleGrammar grammar = (RuleGrammar) grammars.get(ref);
+        final Grammar grammar = (Grammar) grammars.get(ref);
         if (ref == null) {
             return null;
         }
