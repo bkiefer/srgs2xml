@@ -5,4 +5,5 @@ root $toplevel;
 mode voice;
 tag-format "semantics/1.0";
 /* foo */
-public $toplevel = /0.8/ "$$(((fuck)+(yeah)+)|one|two|three)" <0-1 /0.8/> ;
+public $toplevel =
+  /0.8/ "$$(((fuck)+(yeah)+)|one|two|three)" <0-1 /0.8/> { out.s = "$1$"; };

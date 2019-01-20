@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
+import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.processor.srgs.*;
@@ -129,7 +130,6 @@ public class AbnfParserTest {
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final Grammar ruleGrammar = manager.loadGrammar(testURI("regex.gram"));
 
-
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
@@ -138,6 +138,14 @@ public class AbnfParserTest {
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
       ++i;
+      if (validRule != null) {
+        JSInterpreter walker = new JSInterpreter(checker);
+        validRule.preorder(walker);
+        walker.finish(false);
+        JSONObject object = walker.execute();
+        String out = object.getString("s");
+        assertEquals(s, out);
+      }
     }
   }
 

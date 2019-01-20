@@ -121,6 +121,8 @@ public final class ChartGrammarChecker {
     public boolean isPassive() {
       return dot < 0;
     }
+
+    public List<ChartNode> getChildren() { return children; }
   }
 
   private final GrammarManager manager;
@@ -219,6 +221,16 @@ public final class ChartGrammarChecker {
       }
     }
     return null;
+  }
+
+  /** Return the input string covered by the chart node n */
+  public String covered (ChartNode n) {
+    StringBuilder sb = new StringBuilder();
+    for(int i = n.start; i < n.end; ++i) {
+      sb.append(input[i]).append(' ');
+    }
+    sb.deleteCharAt(sb.length()-1); // delete trailing space
+    return sb.toString();
   }
 
   private void predict(Grammar grammar, ChartNode current)
