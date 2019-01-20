@@ -29,6 +29,7 @@ package org.jvoicexml.processor.srgs.grammar;
 
 //Comp 2.0.6
 
+@SuppressWarnings("serial")
 public class GrammarException extends Exception {
 
     private GrammarExceptionDetail[] details;
@@ -40,7 +41,7 @@ public class GrammarException extends Exception {
         super(message);
     }
 
-    public GrammarException(String message, GrammarExceptionDetail[] details) 
+    public GrammarException(String message, GrammarExceptionDetail[] details)
         throws IllegalArgumentException {
         super(message);
         if (details == null) {

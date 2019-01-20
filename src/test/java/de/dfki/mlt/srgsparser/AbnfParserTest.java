@@ -17,6 +17,11 @@ import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
 import org.jvoicexml.processor.srgs.grammar.*;
 
 public class AbnfParserTest {
+  public static final String RESOURCE_DIR = "src/test/resources/";
+  public static URI testURI(String name) {
+    return new File(RESOURCE_DIR, name).toURI();
+  }
+
   @BeforeClass
   public static void init() {
     BasicConfigurator.configure();
@@ -82,8 +87,7 @@ public class AbnfParserTest {
     };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final Grammar ruleGrammar = manager.loadGrammar(
-         this.getClass().getResource("/pizza.gram").toURI());
+    final Grammar ruleGrammar = manager.loadGrammar(testURI("pizza.gram"));
 
     for (String s : inputs) {
       String[] tokens = s.split(" +");
@@ -96,7 +100,7 @@ public class AbnfParserTest {
 
 
   public void lexerTest() throws URISyntaxException, IOException {
-    URI grammarReference = this.getClass().getResource("/pizza.gram").toURI();
+    URI grammarReference = testURI("pizza.gram");
     final URL url = grammarReference.toURL();
     InputStream in = url.openStream();
     Reader r = new InputStreamReader(in, "UTF-8");
@@ -123,8 +127,8 @@ public class AbnfParserTest {
     boolean[] correct = { true, true, true, false, false, true, true, false };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final Grammar ruleGrammar = manager.loadGrammar(
-        this.getClass().getResource("/regex.gram").toURI());
+    final Grammar ruleGrammar = manager.loadGrammar(testURI("regex.gram"));
+
 
     int i = 0;
     for (String s : inputs) {
@@ -139,11 +143,11 @@ public class AbnfParserTest {
 
   @Test
   public void parserTest() throws URISyntaxException, IOException {
-    URI grammarReference = this.getClass().getResource("/pizza.gram").toURI();
+    URI grammarReference = testURI("pizza.gram");
     URL url = grammarReference.toURL();
     AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(grammarReference.toString());
     List<Rule> rules = p.load(url.openStream());
-    grammarReference = this.getClass().getResource("/pizza.srgs").toURI();
+    grammarReference = testURI("pizza.srgs");
     url = grammarReference.toURL();
     SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
     List<Rule> xmlrules = s.load(url.openStream());
@@ -163,11 +167,11 @@ public class AbnfParserTest {
 
   @Test
   public void parserTest2() throws URISyntaxException, IOException {
-    URI grammarReference = this.getClass().getResource("/mini.gram").toURI();
+    URI grammarReference = testURI("mini.gram");
     URL url = grammarReference.toURL();
     AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(grammarReference.toString());
     List<Rule> rules = p.load(url.openStream());
-    grammarReference = this.getClass().getResource("/mini.xml").toURI();
+    grammarReference = testURI("mini.xml");
     url = grammarReference.toURL();
     SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
     List<Rule> xmlrules = s.load(url.openStream());
