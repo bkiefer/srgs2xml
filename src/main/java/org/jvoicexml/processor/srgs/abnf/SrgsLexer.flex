@@ -37,10 +37,6 @@ import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
   private String origin;
 
   private Object yylval;
-  private StringBuffer string = new StringBuffer();
-  private Position sstart;
-
-  private boolean init;
 
   private LinkedList<Token> commentTokens = new LinkedList<>();
 
@@ -99,7 +95,7 @@ import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
    * @param msg The string for the error message.
    */
   public void yyerror (SrgsAbnf.Location loc, String msg) {
-    logger.error(loc + ": " + msg);
+    logger.error(loc.begin + ": " + msg);
     //registerError(msg, new Location(loc.begin, loc.end), PARSE_ERROR);
   }
 
@@ -162,8 +158,8 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
                   // UTF8 byte order mark
                 }
 
-\#ABNF\x201.0(\x20{NameChar}+)?;\r?\n  { yybegin(header);
-  init = false;
+\#ABNF\x201.0(\x20{NameChar}+)?;\r?\n  {
+  yybegin(header);
   yylval = yytext().substring(yytext().indexOf(' ') + 1);
   return SelfIdentHeader;
 }
@@ -206,14 +202,14 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
   return specialRuleReference;
 }
 
-<YYINITIAL> "$" { yybegin(ruleref); }
-
 ({Letter}|'_'){ConstrainedChar}* {
   yylval = yytext();
   yybegin(YYINITIAL);
   return RuleName;
 }
 } // end <ruleref>
+
+<YYINITIAL> "$" { yybegin(ruleref); }
 
 <ruleref, header>{
 "<"[^>]+">" {
@@ -269,8 +265,6 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 }
 */
 
-   /* <tag,tag2>"%tokens" { return TagTokens; } */
-
 ("private"|"public")/{WhiteSpace}+"$"  {
   yybegin(YYINITIAL);
   return ((yytext().charAt(1) == 'r') ? Private : Public) ;
@@ -283,16 +277,18 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 
 <tag,tag2,YYINITIAL>[=;\(\)\[\]!|<>] { return yytext().charAt(0); }
 
-<YYINITIAL,tag,tag2,header>{WhiteSpace} { addComment(yytext()); }
+<YYINITIAL,header,tag,tag2>{
+  {WhiteSpace} { addComment(yytext()); }
 
-<tag,tag2,header,YYINITIAL> (\'[^']*\')|(\"[^\"]*\") {
-  yylval = yytext().substring(1, yylength()-1) ;
-  return QuotedCharacters ;
+  (\'[^']*\')|(\"[^\"]*\") { // 'for syntax highlighting''
+    yylval = yytext().substring(1, yylength()-1) ;
+    return QuotedCharacters ;
+  }
 }
 
 /* error fallback */
-[^]                              {
-  throw new RuntimeException("Illegal character \""+yytext()+
-    "\" at line "+yyline+", column "+yycolumn); }
+[^] {
+    return IllegalCharacter;
+}
 
-<<EOF>>                          { return SrgsAbnf.Lexer.EOF; }
+<<EOF>>  { return SrgsAbnf.Lexer.EOF; }

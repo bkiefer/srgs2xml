@@ -145,6 +145,7 @@ import org.jvoicexml.processor.srgs.grammar.*;
 %token  DECL_HTTP_EQUIV
 %token  DECL_META
 %token  DECL_IS
+%token  IllegalCharacter
 
 %token <String[]> URI
 %token SelfIdentHeader

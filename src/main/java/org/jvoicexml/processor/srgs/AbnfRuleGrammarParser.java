@@ -53,7 +53,12 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
   public static boolean DEBUG_GRAMMAR = false;
 
   public AbnfRuleGrammarParser(String desc) {
-    description = desc;
+    String pwd = new File(".").getAbsolutePath();
+    pwd = pwd.substring(0, pwd.length() - 1);
+    description = desc.startsWith("file:") ? desc.substring(5) : desc;
+    if (description.startsWith(pwd)) {
+      description = description.substring(pwd.length());
+    }
   }
 
   public List<Rule> load(final InputStream stream) {
