@@ -79,7 +79,7 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
       RuleParse parse = (RuleParse) node.getRule();
       // TODO: we need another name generating function for multiple grammars
       String current = parse.getRuleReference().getRuleName();
-      exec("function rule_" + current + "(){");
+      exec("function rule_" + current + node.getId() + "(){");
       exec(" var out = {};");
     } else if (node.getRule() instanceof RuleTag) {
       exec("//user tag start");
@@ -95,16 +95,15 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
       String ruleName = ((RuleParse)env.getRule()).getRuleReference().getRuleName();
       exec("return out;");
       exec("} ");
-      exec("rules." + ruleName + "= rule_" + ruleName + "();");
+      exec("rules." + ruleName + "= rule_" + ruleName + node.getId() + "();");
     }
   }
 
   public void finish(boolean debug) {
     assert (stack.isEmpty());
-    String ruleName = "root";
     exec("return out;");
     exec("}");
-    exec("rules." + ruleName + " = rule_" + ruleName + "();");
+    exec("rules.root = rule_root();");
     if (debug) {
       System.out.println(source.toString());
     }

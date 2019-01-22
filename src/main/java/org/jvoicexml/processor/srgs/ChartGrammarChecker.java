@@ -123,6 +123,8 @@ public final class ChartGrammarChecker {
     }
 
     public List<ChartNode> getChildren() { return children; }
+
+    public int getId() { return id; }
   }
 
   private final GrammarManager manager;

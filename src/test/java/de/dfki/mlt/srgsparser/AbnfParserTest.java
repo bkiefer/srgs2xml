@@ -196,4 +196,21 @@ public class AbnfParserTest {
       assertEquals(xmlrule.getRuleName(), r.toString(), xmlrule.toString());
     }
   }
+
+  @Test
+  public void tagsTest() throws URISyntaxException, IOException, GrammarException {
+    final GrammarManager manager = new JVoiceXmlGrammarManager();
+    final Grammar ruleGrammar = manager.loadGrammar(testURI("tags.gram"));
+
+    String[] tokens = {"1", "is", "2" };
+    final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
+    final ChartGrammarChecker.ChartNode validRule =
+        checker.parse(ruleGrammar, tokens);
+    JSInterpreter walker = new JSInterpreter(checker);
+    validRule.preorder(walker);
+    walker.finish(false);
+    JSONObject o = walker.execute();
+    assertEquals("1", o.getString("one"));
+    assertEquals("2", o.getString("two"));
+  }
 }
