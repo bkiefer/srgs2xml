@@ -41,7 +41,7 @@ public class Example {
 
             // System.out.println(validRule);
             if (validRule != null) {
-                JSInterpreter walker = new JSInterpreter(checker);
+                MSJSInterpreter walker = new MSJSInterpreter(checker);
                 validRule.preorder(walker);
                 walker.finish(false);
                 JSONObject object = walker.execute();

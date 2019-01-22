@@ -18,11 +18,16 @@ import org.jvoicexml.processor.srgs.grammar.RuleTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-/**
+/** Interprets the JavaScript tags as the processor for the Microsoft Speech
+ *  API does (could not find "official" specification, so do it looking at
+ *  examples).
  *
- * @author Christian.Buerckert@DFKI.de
+ *  The only exception is the handling of $$NUM patterns for putting the
+ *  matched string of the current-NUM token into a slot.
+ *
+ * @author Christian.Buerckert@DFKI.de, Bernd.Kiefer@dfki.de
  */
-public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
+public class MSJSInterpreter implements ChartGrammarChecker.TreeWalker {
 
   private final ChartGrammarChecker checker;
   private final Stack<ChartNode> stack = new Stack<>();
@@ -60,7 +65,7 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
     return in;
   }
 
-  public JSInterpreter(ChartGrammarChecker c) {
+  public MSJSInterpreter(ChartGrammarChecker c) {
     checker = c;
     //stack.push(null);
     exec("rules = {};");
@@ -120,7 +125,6 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
     } finally {
       Context.exit();
     }
-
   }
 
 }
