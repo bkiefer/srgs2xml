@@ -28,7 +28,7 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
   private final Stack<ChartNode> stack = new Stack<>();
   private final StringBuilder source = new StringBuilder();
 
-  private static final Pattern tok = Pattern.compile("\\$[0-9]+\\$");
+  private static final Pattern tok = Pattern.compile("\\$\\$[0-9]+");
 
   private String massageTag(ChartNode tag) {
     String in = ((RuleTag) tag.getRule()).getTag().toString();
@@ -50,7 +50,7 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
         assert (tagIndex < seq.size());
       }
       String match = m.group();
-      int delta = Integer.parseInt(match.substring(1, match.length() - 1));
+      int delta = Integer.parseInt(match.substring(2));
       m.appendReplacement(sb, checker.covered(seq.get(tagIndex - delta)));
     }
     if (sb != null) {

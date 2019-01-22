@@ -1,0 +1,11 @@
+#ABNF 1.0 UTF-8;
+
+language en-US;
+root $toplevel;
+mode voice;
+tag-format "semantics/1.0";
+
+$number = "$$[0-9]+" { out = "$$1"; };
+
+public $toplevel =
+  $number { out.one = rules.number; } is $number { out.two = rules.number; } ;

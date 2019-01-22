@@ -130,10 +130,10 @@ public class AbnfParserTest {
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final Grammar ruleGrammar = manager.loadGrammar(testURI("regex.gram"));
 
+    final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
       final ChartGrammarChecker.ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
@@ -147,6 +147,13 @@ public class AbnfParserTest {
         assertEquals(s, out);
       }
     }
+    ChartGrammarChecker.ChartNode validRule;
+    String[] tok2 = { "damn" };
+    String[] tok3 = { "damn", "goooood"};
+    validRule = checker.parse(ruleGrammar, tok2);
+    assertNotNull(validRule);
+    validRule = checker.parse(ruleGrammar, tok3);
+    assertNotNull(validRule);
   }
 
   @Test
@@ -204,7 +211,7 @@ public class AbnfParserTest {
 
     String[] tokens = {"1", "is", "2" };
     final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-    final ChartGrammarChecker.ChartNode validRule =
+    ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSInterpreter walker = new JSInterpreter(checker);
     validRule.preorder(walker);
