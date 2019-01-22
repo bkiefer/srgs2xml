@@ -419,6 +419,9 @@ public final class ChartGrammarChecker {
         ++pos;
       }
     } else {
+      if (pos >= input.length) {
+        return;
+      }
       final String currentInput = input[pos];
       if (! p.matcher(currentInput).matches()) {
         return;
