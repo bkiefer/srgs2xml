@@ -1,0 +1,13 @@
+#ABNF 1.0 UTF-8;
+
+language en-EN;
+root $checkalt;
+mode voice;
+tag-format "semantics/1.0";
+
+$num = "$$[0-9]" { out="$$1"; };
+$alpha = "$$[a-z]" { out="$$1"; };
+$punct = "$$[;:?/.,]" { out="$$1"; };
+
+public $checkalt = is it ( $num | $alpha | $punct )
+       { out.val=$%1; out.tag="$$2"; } ;

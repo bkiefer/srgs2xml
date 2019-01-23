@@ -245,9 +245,6 @@ public final class ChartGrammarChecker {
     } else if (component instanceof RuleAlternatives) {
       final RuleAlternatives alternatives = (RuleAlternatives) component;
       predict(grammar, alternatives, current);
-    } else if (component instanceof RuleAlternative) {
-      final RuleAlternative alternative = (RuleAlternative) component;
-      predict(grammar, alternative, current);
     } else if (component instanceof RuleCount) {
       final RuleCount count = (RuleCount) component;
       predict(grammar, count, current);
@@ -349,24 +346,25 @@ public final class ChartGrammarChecker {
   private void predict(final Grammar grammar,
       final RuleAlternatives alternatives, final ChartNode current)
       throws GrammarException {
-    final List<RuleAlternative> components = alternatives.getRuleAlternatives();
     // one new prediction per alternative: an implicit nonterminal
     if (current.dot == 0) {
       // the one with dot == zero is responsible to introduce the rest
-      for (int dot = 1; dot < components.size(); ++dot) {
+      for (int dot = 1; dot < alternatives.size(); ++dot) {
         // add predictions for the other alternatives, and one for the
         // embedded node
         add(new ChartNode(current.end, current.end, alternatives, dot));
       }
     }
     // every alternative predicts its own sub-component
-    addPrediction(current.end, components.get(current.dot));
-  }
-
-  private void predict(final Grammar grammar,
-      final RuleAlternative alternative, final ChartNode current)
-      throws GrammarException {
-    addPrediction(current.end, alternative.getRuleComponent());
+    addPrediction(current.end, alternatives.getAlternative(current.dot));
+    /*
+    // This seems attractive, but it makes the completion of active items
+    // much more complicated. I currently don't have a solution, so i'll stick
+    // with what works
+    for (RuleAlternative alt : alternatives.getRuleAlternatives()) {
+      addPrediction(current.end, alt.getRuleComponent());
+    }
+    */
   }
 
   private void predict(final Grammar grammar, final RuleSequence sequence,

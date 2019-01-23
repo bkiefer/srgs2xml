@@ -141,7 +141,7 @@ public class AbnfParserTest {
       if (validRule != null) {
         MSJSInterpreter walker = new MSJSInterpreter(checker);
         validRule.preorder(walker);
-        walker.finish(false);
+        walker.finish(true);
         JSONObject object = walker.execute();
         String out = object.getString("s");
         assertEquals(s, out);
@@ -220,4 +220,27 @@ public class AbnfParserTest {
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
   }
+
+  /*
+  @Test
+  public void altTest() throws URISyntaxException, IOException, GrammarException {
+    final GrammarManager manager = new JVoiceXmlGrammarManager();
+    final Grammar ruleGrammar = manager.loadGrammar(testURI("alternatives.gram"));
+
+    String[][] tokens = {
+        { "is", "it", "2" },
+        { "is", "it", "f" },
+        { "is", "it", "?" }
+    };
+    final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
+    for (String[] toks : tokens) {
+      ChartGrammarChecker.ChartNode validRule = checker.parse(ruleGrammar, toks);
+      MSJSInterpreter walker = new MSJSInterpreter(checker);
+      validRule.preorder(walker);
+      walker.finish(true);
+      JSONObject o = walker.execute();
+      assertEquals(toks[2], o.getJSONObject("out").getString("val"));
+    }
+  }
+  */
 }
