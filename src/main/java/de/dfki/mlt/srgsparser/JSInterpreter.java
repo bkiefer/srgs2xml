@@ -59,12 +59,7 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
       if (match.charAt(1) == '$') {
         m.appendReplacement(sb, checker.covered(target));
       } else {
-        RuleComponent r = target.getRule();
-        if (r instanceof RuleParse) {
-          m.appendReplacement(sb, "rule_" + target.getId() + "()");
-        } else if (r instanceof RuleAlternatives) {
-          m.appendReplacement(sb, "alt_" + target.getId() + "()");
-        }
+        m.appendReplacement(sb, "node_" + target.getId() + "()");
       }
     }
     if (sb != null) {
@@ -77,9 +72,8 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
   public JSInterpreter(ChartGrammarChecker c) {
     checker = c;
     //stack.push(null);
-    exec("rules = {}; alt = {};");
     exec("function rule_root(){");
-    exec("var out = {};");
+    exec("var out = {}; var rules = {};");
   }
 
   private void exec(String source) {
@@ -89,42 +83,32 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
 
   public void enter(ChartNode node, boolean leaf) {
     stack.push(node);
-    if (node.getRule() instanceof RuleParse) {
-      RuleParse parse = (RuleParse) node.getRule();
-      // TODO: we need another name generating function for multiple grammars
-      String current = parse.getRuleReference().getRuleName();
-      exec("function rule_" + node.getId() + "(){");
-      exec(" var out = {};");
-    } else if (node.getRule() instanceof RuleTag) {
+    if (node.getRule() instanceof RuleTag) {
       exec("//user tag start");
       exec(massageTag(node));
       exec("//user tag end");
-    } else if (node.getRule() instanceof RuleAlternatives) {
-      exec("function alt_" + node.getId() + "(){");
-      exec(" var out = {};");
+    } else {
+      exec("function node_" + node.getId() + "(){");
+      exec(" var out = {}; var rules = {};");
     }
   }
 
   public void leave(ChartNode node, boolean leaf) {
     ChartNode env = stack.pop(); // == node
+    if (node.getRule() instanceof RuleAlternatives) {
+      exec("if (out.length == 0) out = node_"
+          + node.getChildren().get(0).getId() + "();");
+    } else if (node.getRule() instanceof RuleToken) {
+      exec("if (out.length == 0) out = \"" + checker.covered(node) + "\";");
+    }
+    if (!(node.getRule() instanceof RuleTag)) {
+      exec("return out;");
+      exec("} ");
+    }
     if (node.getRule() instanceof RuleParse) {
       // TODO: we need another name generating function for multiple grammars
       String ruleName = ((RuleParse)env.getRule()).getRuleReference().getRuleName();
-      exec("return out;");
-      exec("} ");
       exec("rules." + ruleName + "= rule_" + node.getId() + "();");
-    } else if (node.getRule() instanceof RuleAlternatives) {
-      // only one child: get chart node for chosen ruleCompo
-      ChartNode chosenNode = node.getChildren().get(0).getChildren().get(0);
-      RuleComponent chosen = chosenNode.getRule();
-      if (chosen instanceof RuleParse) {
-        exec("out = rule_\" + chosenNode.getId() + \"();");
-      } else if (chosen instanceof RuleAlternatives) {
-        exec("out = alt_\" + chosenNode.getId() + \"();");
-      }
-      exec("return out;");
-      exec("} ");
-      exec("alt.alt" + node.getId() + "= alt_" + node.getId() + "();");
     }
   }
 
@@ -132,7 +116,9 @@ public class JSInterpreter implements ChartGrammarChecker.TreeWalker {
     assert (stack.isEmpty());
     exec("return out;");
     exec("}");
+    exec("var rules = {};");
     exec("rules.root = rule_root();");
+    exec("var out = rules.root;");
     if (debug) {
       System.out.println(source.toString());
     }

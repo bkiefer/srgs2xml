@@ -1,6 +1,6 @@
 package de.dfki.mlt.srgsparser;
 
-import static de.dfki.mlt.srgsparser.AbnfParserTest.testURI;
+import static de.dfki.mlt.srgsparser.AbnfParserTest.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
@@ -19,62 +19,6 @@ import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
 import org.jvoicexml.processor.srgs.grammar.*;
 
 public class SrgsParserTest {
-    public static String[] pizzainputs = {
-        "small pizza",
-        "medium pizza",
-        "large pizza",
-        "a small pizza",
-        "a medium pizza",
-        "a large pizza",
-        "I want a small pizza",
-        "I want a medium pizza",
-        "I want a large pizza",
-        "I want small pizza",
-        "I want medium pizza",
-        "I want large pizza",
-        "I want a small pizza please",
-        "I want a medium pizza please",
-        "I want a large pizza please",
-        "I want small pizza please",
-        "I want medium pizza please",
-        "I want large pizza please",
-        "pizza with salami",
-        "pizza with ham",
-        "pizza with mushrooms",
-        "a pizza with salami",
-        "a pizza with ham",
-        "a pizza with mushrooms",
-        "I want a pizza with salami",
-        "I want a pizza with ham",
-        "I want a pizza with mushrooms",
-        "I want pizza with salami",
-        "I want pizza with ham",
-        "I want pizza with mushrooms",
-        "I want a pizza with salami please",
-        "I want a pizza with ham please",
-        "I want a pizza with mushrooms please",
-        "I want pizza with salami please",
-        "I want pizza with ham please",
-        "I want pizza with mushrooms please",
-        "small pizza with salami",
-        "medium pizza with ham",
-        "large pizza with mushrooms",
-        "a small pizza with salami",
-        "a medium pizza with ham",
-        "a large pizza with mushrooms",
-        "I want a small pizza with salami",
-        "I want a medium pizza with ham",
-        "I want a large pizza with mushrooms",
-        "I want small pizza with salami",
-        "I want medium pizza with ham",
-        "I want large pizza with mushrooms",
-        "I want a small pizza with salami please",
-        "I want a medium pizza with ham please",
-        "I want a large pizza with mushrooms please",
-        "I want small pizza with salami please",
-        "I want medium pizza with ham please",
-        "I want large pizza with mushrooms please",
-    };
 
   @BeforeClass
   public static void init() {

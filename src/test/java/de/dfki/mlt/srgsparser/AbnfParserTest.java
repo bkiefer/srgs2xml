@@ -23,6 +23,63 @@ public class AbnfParserTest {
     return new File(RESOURCE_DIR, name).toURI();
   }
 
+  public static String[] pizzainputs = {
+      "small pizza",
+      "medium pizza",
+      "large pizza",
+      "a small pizza",
+      "a medium pizza",
+      "a large pizza",
+      "I want a small pizza",
+      "I want a medium pizza",
+      "I want a large pizza",
+      "I want small pizza",
+      "I want medium pizza",
+      "I want large pizza",
+      "I want a small pizza please",
+      "I want a medium pizza please",
+      "I want a large pizza please",
+      "I want small pizza please",
+      "I want medium pizza please",
+      "I want large pizza please",
+      "pizza with salami",
+      "pizza with ham",
+      "pizza with mushrooms",
+      "a pizza with salami",
+      "a pizza with ham",
+      "a pizza with mushrooms",
+      "I want a pizza with salami",
+      "I want a pizza with ham",
+      "I want a pizza with mushrooms",
+      "I want pizza with salami",
+      "I want pizza with ham",
+      "I want pizza with mushrooms",
+      "I want a pizza with salami please",
+      "I want a pizza with ham please",
+      "I want a pizza with mushrooms please",
+      "I want pizza with salami please",
+      "I want pizza with ham please",
+      "I want pizza with mushrooms please",
+      "small pizza with salami",
+      "medium pizza with ham",
+      "large pizza with mushrooms",
+      "a small pizza with salami",
+      "a medium pizza with ham",
+      "a large pizza with mushrooms",
+      "I want a small pizza with salami",
+      "I want a medium pizza with ham",
+      "I want a large pizza with mushrooms",
+      "I want small pizza with salami",
+      "I want medium pizza with ham",
+      "I want large pizza with mushrooms",
+      "I want a small pizza with salami please",
+      "I want a medium pizza with ham please",
+      "I want a large pizza with mushrooms please",
+      "I want small pizza with salami please",
+      "I want medium pizza with ham please",
+      "I want large pizza with mushrooms please",
+  };
+
   @BeforeClass
   public static void init() {
     BasicConfigurator.configure();
@@ -30,67 +87,11 @@ public class AbnfParserTest {
 
   @Test
   public void pizzatest() throws GrammarException, IOException, URISyntaxException {
-    String[] inputs = {
-        "small pizza",
-        "medium pizza",
-        "large pizza",
-        "a small pizza",
-        "a medium pizza",
-        "a large pizza",
-        "I want a small pizza",
-        "I want a medium pizza",
-        "I want a large pizza",
-        "I want small pizza",
-        "I want medium pizza",
-        "I want large pizza",
-        "I want a small pizza please",
-        "I want a medium pizza please",
-        "I want a large pizza please",
-        "I want small pizza please",
-        "I want medium pizza please",
-        "I want large pizza please",
-        "pizza with salami",
-        "pizza with ham",
-        "pizza with mushrooms",
-        "a pizza with salami",
-        "a pizza with ham",
-        "a pizza with mushrooms",
-        "I want a pizza with salami",
-        "I want a pizza with ham",
-        "I want a pizza with mushrooms",
-        "I want pizza with salami",
-        "I want pizza with ham",
-        "I want pizza with mushrooms",
-        "I want a pizza with salami please",
-        "I want a pizza with ham please",
-        "I want a pizza with mushrooms please",
-        "I want pizza with salami please",
-        "I want pizza with ham please",
-        "I want pizza with mushrooms please",
-        "small pizza with salami",
-        "medium pizza with ham",
-        "large pizza with mushrooms",
-        "a small pizza with salami",
-        "a medium pizza with ham",
-        "a large pizza with mushrooms",
-        "I want a small pizza with salami",
-        "I want a medium pizza with ham",
-        "I want a large pizza with mushrooms",
-        "I want small pizza with salami",
-        "I want medium pizza with ham",
-        "I want large pizza with mushrooms",
-        "I want a small pizza with salami please",
-        "I want a medium pizza with ham please",
-        "I want a large pizza with mushrooms please",
-        "I want small pizza with salami please",
-        "I want medium pizza with ham please",
-        "I want large pizza with mushrooms please",
-    };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final Grammar ruleGrammar = manager.loadGrammar(testURI("pizza.gram"));
 
-    for (String s : inputs) {
+    for (String s : pizzainputs) {
       String[] tokens = s.split(" +");
       final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
       final ChartGrammarChecker.ChartNode validRule =
@@ -141,7 +142,7 @@ public class AbnfParserTest {
       if (validRule != null) {
         MSJSInterpreter walker = new MSJSInterpreter(checker);
         validRule.preorder(walker);
-        walker.finish(true);
+        walker.finish(false);
         JSONObject object = walker.execute();
         String out = object.getString("s");
         assertEquals(s, out);
@@ -220,27 +221,4 @@ public class AbnfParserTest {
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
   }
-
-  /*
-  @Test
-  public void altTest() throws URISyntaxException, IOException, GrammarException {
-    final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final Grammar ruleGrammar = manager.loadGrammar(testURI("alternatives.gram"));
-
-    String[][] tokens = {
-        { "is", "it", "2" },
-        { "is", "it", "f" },
-        { "is", "it", "?" }
-    };
-    final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-    for (String[] toks : tokens) {
-      ChartGrammarChecker.ChartNode validRule = checker.parse(ruleGrammar, toks);
-      MSJSInterpreter walker = new MSJSInterpreter(checker);
-      validRule.preorder(walker);
-      walker.finish(true);
-      JSONObject o = walker.execute();
-      assertEquals(toks[2], o.getJSONObject("out").getString("val"));
-    }
-  }
-  */
 }
