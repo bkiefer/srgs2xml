@@ -1,0 +1,41 @@
+#ABNF 1.0 UTF-8;
+
+language en-EN;
+root $order;
+mode voice;
+tag-format "semantics/1.0";
+
+$politeness1 = [I want];
+$politeness2 = [ please ];
+$size0 = (small {out = "small";}
+      | medium {out = "medium";}
+      | large) {out = "big";}
+      ;
+
+$small = small {out = "$$1";};
+$medium = medium {out = "$$1";};
+$large = large {out = "big";};
+
+$size = (($small
+         | $medium
+         | $large) pizza
+         {out = $%2;})
+        | (hot chili) { out="chili"; }
+       ;
+
+$topping = Salami {out = "salami";}
+         | Ham {out = "ham";}
+         | Mushrooms {out = "mushrooms";}
+         ;
+
+public $order =
+  {out = new Object(); out.order = new Object;}
+  $politeness1
+  (
+  [a] $size pizza {out.order.size = rules.size;}
+  | [a] [pizza with] $topping {out.order.topping = rules.topping;}
+  | [a] $size {out.order.size = rules.size;}
+    with $topping {out.order.topping = rules.topping;}
+  )
+  $politeness2
+;

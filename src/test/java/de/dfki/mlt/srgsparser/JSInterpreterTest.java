@@ -36,7 +36,27 @@ public class JSInterpreterTest {
         checker.parse(ruleGrammar, tokens);
     JSInterpreter walker = new JSInterpreter(checker);
     validRule.preorder(walker);
-    walker.finish(true);
+    walker.finish(false);
+    JSONObject object = walker.execute();
+    JSONObject order = object.getJSONObject("order");
+    assertNotNull(order);
+    assertEquals("big", order.getString("size"));
+    assertEquals("mushrooms", order.getString("topping"));
+  }
+
+  @Test
+  public void pizzatest3() throws GrammarException, IOException, URISyntaxException {
+    final GrammarManager manager = new JVoiceXmlGrammarManager();
+    final Grammar ruleGrammar = manager.loadGrammar(testURI("pizza2.gram"));
+
+    String s = pizzainputs[pizzainputs.length-1];
+    String[] tokens = s.split(" +");
+    final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
+    final ChartGrammarChecker.ChartNode validRule =
+        checker.parse(ruleGrammar, tokens);
+    JSInterpreter walker = new JSInterpreter(checker);
+    validRule.preorder(walker);
+    walker.finish(false);
     JSONObject object = walker.execute();
     JSONObject order = object.getJSONObject("order");
     assertNotNull(order);
@@ -55,7 +75,7 @@ public class JSInterpreterTest {
         checker.parse(ruleGrammar, tokens);
     JSInterpreter walker = new JSInterpreter(checker);
     validRule.preorder(walker);
-    walker.finish(true);
+    walker.finish(false);
     JSONObject o = walker.execute();
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
@@ -76,9 +96,9 @@ public class JSInterpreterTest {
       ChartGrammarChecker.ChartNode validRule = checker.parse(ruleGrammar, toks);
       JSInterpreter walker = new JSInterpreter(checker);
       validRule.preorder(walker);
-      walker.finish(true);
+      walker.finish(false);
       JSONObject o = walker.execute();
-      assertEquals(toks[2], o.getJSONObject("out").getString("val"));
+      assertEquals(toks[2], o.getString("val"));
     }
   }
 }
