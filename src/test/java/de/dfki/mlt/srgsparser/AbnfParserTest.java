@@ -141,9 +141,7 @@ public class AbnfParserTest {
       ++i;
       if (validRule != null) {
         MSJSInterpreter walker = new MSJSInterpreter(checker);
-        validRule.preorder(walker);
-        walker.finish(false);
-        JSONObject object = walker.execute();
+        JSONObject object = walker.evaluate(validRule);
         String out = object.getString("s");
         assertEquals(s, out);
       }
@@ -215,9 +213,7 @@ public class AbnfParserTest {
     ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     MSJSInterpreter walker = new MSJSInterpreter(checker);
-    validRule.preorder(walker);
-    walker.finish(false);
-    JSONObject o = walker.execute();
+    JSONObject o = walker.evaluate(validRule);
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
   }

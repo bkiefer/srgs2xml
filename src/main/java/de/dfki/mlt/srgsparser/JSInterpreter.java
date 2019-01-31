@@ -22,7 +22,7 @@ import org.jvoicexml.processor.srgs.grammar.*;
  *
  * @author Christian.Buerckert@DFKI.de, Bernd.Kiefer@dfki.de
  */
-public class JSInterpreter extends AbstractJSInterpreter {
+public class JSInterpreter extends Interpreter {
 
   private static final Pattern tok = Pattern.compile("\\$(\\$|%)[0-9]+");
 

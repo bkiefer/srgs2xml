@@ -35,9 +35,7 @@ public class JSInterpreterTest {
     final ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSInterpreter walker = new JSInterpreter(checker);
-    validRule.preorder(walker);
-    walker.finish(false);
-    JSONObject object = walker.execute();
+    JSONObject object = walker.evaluate(validRule);
     JSONObject order = object.getJSONObject("order");
     assertNotNull(order);
     assertEquals("big", order.getString("size"));
@@ -55,9 +53,7 @@ public class JSInterpreterTest {
     final ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSInterpreter walker = new JSInterpreter(checker);
-    validRule.preorder(walker);
-    walker.finish(false);
-    JSONObject object = walker.execute();
+    JSONObject object = walker.evaluate(validRule);
     JSONObject order = object.getJSONObject("order");
     assertNotNull(order);
     assertEquals("big", order.getString("size"));
@@ -74,9 +70,7 @@ public class JSInterpreterTest {
     ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSInterpreter walker = new JSInterpreter(checker);
-    validRule.preorder(walker);
-    walker.finish(false);
-    JSONObject o = walker.execute();
+    JSONObject o = walker.evaluate(validRule);
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
   }
@@ -95,9 +89,7 @@ public class JSInterpreterTest {
     for (String[] toks : tokens) {
       ChartGrammarChecker.ChartNode validRule = checker.parse(ruleGrammar, toks);
       JSInterpreter walker = new JSInterpreter(checker);
-      validRule.preorder(walker);
-      walker.finish(false);
-      JSONObject o = walker.execute();
+      JSONObject o = walker.evaluate(validRule);
       assertEquals(toks[2], o.getString("val"));
     }
   }

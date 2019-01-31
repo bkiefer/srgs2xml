@@ -42,9 +42,7 @@ public class Example {
             // System.out.println(validRule);
             if (validRule != null) {
                 MSJSInterpreter walker = new MSJSInterpreter(checker);
-                validRule.preorder(walker);
-                walker.finish(false);
-                JSONObject object = walker.execute();
+                JSONObject object = walker.evaluate(validRule);
                 System.out.println("============================================================");
                 System.out.println(object.toString());
             } else {
