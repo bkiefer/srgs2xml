@@ -10,6 +10,12 @@ Including subgrammars has not been tested.
 
 There are JUnit tests, and the file Example.java that illustrate how to use the code.
 
+The new version also contains support for the ABNF form of SRGS grammars, and the parser compiling these grammars makes use of `bison` and `jflex`. To install these in Ubuntu/Debian, execute:
+
+```
+sudo apt install bison jflex
+```
+
 You can also try to run it on a small example which is included (after building the project):
 
 ```
