@@ -10,7 +10,7 @@ Including subgrammars has not been tested.
 
 There are JUnit tests, and the file Example.java that illustrate how to use the code.
 
-The new version also contains support for the ABNF form of SRGS grammars, and the parser compiling these grammars makes use of `bison` and `jflex`. To install these in Ubuntu/Debian, execute:
+The new version also contains support for the ABNF form of SRGS grammars, and the parser compiling these grammars makes use of `bison` and `jflex`. Pre-build java files exist, so installing those tools is only required if the grammar or lexer specification is changed. On Ubuntu, that can be achieved executing the following command:
 
 ```
 sudo apt install bison jflex
