@@ -19,5 +19,5 @@ sudo apt install bison jflex
 You can also try to run it on a small example which is included (after building the project):
 
 ```
-java -jar target/srgs-parser-0.9-jar-with-dependencies.jar src/main/resources/hysoc.xml src/main/resources/hyxamples.txt
+java -jar target/srgs-parser-0.95-jar-with-dependencies.jar src/test/resources/hysoc.xml src/test/resources/hyxamples.txt
 ```
