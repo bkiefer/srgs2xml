@@ -26,12 +26,18 @@ public class JSInterpreter extends Interpreter {
 
   private static final Pattern tok = Pattern.compile("\\$(\\$|%)[0-9]+");
 
+  /** This does the handling of $$n and $%n tags, which have special meanings
+   *  $$n : the matched string n positions before this tag
+   *  $%n : the value returned by the rule n positions before this tag
+   *  n always starts at one. zero is the tag position (not sensible)
+   */
   protected String massageTag(ChartNode tag) {
     String in = ((RuleTag) tag.getRule()).getTag().toString();
     Matcher m = tok.matcher(in);
     int tagIndex = -1;
     List<ChartNode> seq = null;
     StringBuffer sb = null;
+    // Replace the $$n and $%n by the right things
     while (m.find()) {
       if (tagIndex < 0) {
         sb = new StringBuffer();
