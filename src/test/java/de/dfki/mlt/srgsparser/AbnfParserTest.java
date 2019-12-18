@@ -124,9 +124,14 @@ public class AbnfParserTest {
         "fuckfuckyeahyeahyeah", //w
         "fuckyeahyeahyeahyeah", //w
         "yeahyeahyeah", //w
+        "wow wow", //w
+        "wow wow wow", //c
+        "wow wow wow wow", //c
     };
 
-    boolean[] correct = { true, true, true, false, false, true, true, false };
+    boolean[] correct = {
+        true, true, true, false, false, true, true, false, false, true, true
+    };
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final Grammar ruleGrammar = manager.loadGrammar(testURI("regex.gram"));

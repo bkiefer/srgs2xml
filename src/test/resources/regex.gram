@@ -9,4 +9,5 @@ public $toplevel =
   /0.8/ "$$(((fuck)+(yeah)+)|one|two|three)" <0-1 /0.8/> { out.s = "$$1"; }
   | (damn ["$$(go+d)"]) // check they don't produce input overflow
   | damn
+  | ( wow<3- /0.8/> ) { out.s = "$$1"; }
   ;
