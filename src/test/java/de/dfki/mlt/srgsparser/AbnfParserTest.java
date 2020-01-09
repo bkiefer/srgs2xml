@@ -9,7 +9,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -79,11 +78,6 @@ public class AbnfParserTest {
       "I want medium pizza with ham please",
       "I want large pizza with mushrooms please",
   };
-
-  @BeforeClass
-  public static void init() {
-    BasicConfigurator.configure();
-  }
 
   @Test
   public void pizzatest() throws GrammarException, IOException, URISyntaxException {

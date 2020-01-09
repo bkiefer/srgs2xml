@@ -9,7 +9,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -19,11 +18,6 @@ import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
 import org.jvoicexml.processor.srgs.grammar.*;
 
 public class SrgsParserTest {
-
-  @BeforeClass
-  public static void init() {
-    BasicConfigurator.configure();
-  }
 
   @Test
   public void pizzatest() throws GrammarException, IOException, URISyntaxException {

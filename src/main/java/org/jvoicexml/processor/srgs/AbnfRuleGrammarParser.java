@@ -32,10 +32,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.processor.srgs.abnf.SrgsAbnf;
 import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
 import org.jvoicexml.processor.srgs.grammar.Rule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A parser for SRGS ABNF grammars.
@@ -45,7 +46,7 @@ import org.jvoicexml.processor.srgs.grammar.Rule;
  */
 public class AbnfRuleGrammarParser implements RuleGrammarParser {
 
-  Logger logger = Logger.getLogger(AbnfRuleGrammarParser.class);
+  Logger logger = LoggerFactory.getLogger(AbnfRuleGrammarParser.class);
 
   private Map<String, Object> attributes;
 
@@ -84,7 +85,7 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
       }
       return parseGrammar(r);
     } catch (IOException ex) {
-      logger.error(ex);
+      logger.error("{}", ex);
     }
     return null;
   }

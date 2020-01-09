@@ -7,7 +7,6 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.apache.log4j.BasicConfigurator;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,11 +17,6 @@ import org.jvoicexml.processor.srgs.grammar.GrammarException;
 import org.jvoicexml.processor.srgs.grammar.GrammarManager;
 
 public class JSInterpreterTest {
-
-  @BeforeClass
-  public static void init() {
-    BasicConfigurator.configure();
-  }
 
   @Test
   public void pizzatest2() throws GrammarException, IOException, URISyntaxException {

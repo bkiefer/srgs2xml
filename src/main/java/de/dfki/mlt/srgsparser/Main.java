@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import org.apache.log4j.BasicConfigurator;
 import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker.ChartNode;
@@ -68,8 +67,6 @@ public class Main {
   }
 
   public static void main(String[] args) throws Throwable {
-    BasicConfigurator.resetConfiguration();
-
     if (args.length < 1) {
       usage();
       System.exit(1);

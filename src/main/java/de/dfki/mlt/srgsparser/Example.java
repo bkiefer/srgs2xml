@@ -6,7 +6,6 @@
 package de.dfki.mlt.srgsparser;
 
 import java.net.URI;
-import org.apache.log4j.BasicConfigurator;
 import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
@@ -19,9 +18,6 @@ import org.jvoicexml.processor.srgs.grammar.Grammar;
 public class Example {
 
     public static void main(String[] args) throws Throwable {
-        BasicConfigurator.resetConfiguration();
-        //Logger.getRootLogger().setLevel(Level.TRACE);
-        //Logger.getLogger(GrammarChecker.class).setLevel(Level.TRACE);
 
         URI uri = Example.class.getResource("/hysoc.xml").toURI(); //From Resource Folder
         final JVoiceXmlGrammarManager manager = new JVoiceXmlGrammarManager();
