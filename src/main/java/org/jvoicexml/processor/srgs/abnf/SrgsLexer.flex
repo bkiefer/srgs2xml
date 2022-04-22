@@ -12,9 +12,9 @@ package org.jvoicexml.processor.srgs.abnf;
 
 import java.util.*;
 
-import org.apache.log4j.Logger;
-import org.jvoicexml.processor.srgs.abnf.Position;
 import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 %%
 
@@ -32,7 +32,7 @@ import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
 %byaccj
 
 %{
-  private static final Logger logger = Logger.getLogger(SrgsLexer.class);
+  private static final Logger logger = LoggerFactory.getLogger(SrgsLexer.class);
 
   private String origin;
 
@@ -121,7 +121,15 @@ import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
   public void begin_repeat() { yybegin(repeat); }
 
   public void begin_header() { yybegin(header); }
-
+  
+  // RuleReference with URI with media
+  private void treatUriWithMedia() {
+    String uri_with_media = yytext();
+    int uriend = uri_with_media.indexOf(">~<");
+    String base = uri_with_media.substring(1, uriend);
+    String type = uri_with_media.substring(uriend + 3, uri_with_media.length() - 1);
+    yylval = new String[]{ base, type };
+  }
 %}
 
 /* main character classes */
@@ -211,7 +219,20 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 
 <YYINITIAL> "$" { yybegin(ruleref); }
 
-<ruleref, header>{
+<header>{
+"<"[^>]+">" {
+  yylval = new String[]{ yytext().substring(1, yylength() - 1)};
+  // RuleReference with URI without media
+  return URI;
+}
+
+"<"[^>]+">~<"[^>]+">" {
+  treatUriWithMedia();
+  return URI;
+}
+}
+
+<ruleref>{
 "<"[^>]+">" {
   yylval = new String[]{ yytext().substring(1, yylength() - 1)};
   // RuleReference with URI without media
@@ -220,12 +241,7 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 }
 
 "<"[^>]+">~<"[^>]+">" {
-  String uri_with_media = yytext();
-  int uriend = uri_with_media.indexOf(">~<");
-  String base = uri_with_media.substring(0, uriend);
-  String type = uri_with_media.substring(uriend + 3);
-  yylval = new String[]{ base, type };
-  // RuleReference with URI with media
+  treatUriWithMedia();
   yybegin(YYINITIAL);
   return URI;
 }
