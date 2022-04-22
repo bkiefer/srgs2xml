@@ -14,13 +14,15 @@ import org.jvoicexml.processor.srgs.grammar.*;
 
 %locations
 
-%define package "org.jvoicexml.processor.srgs.abnf"
+%define api.package "org.jvoicexml.processor.srgs.abnf"
 
-%define public
+%define api.parser.public
 
-%define parser_class_name {SrgsAbnf}
+%define api.parser.class {SrgsAbnf}
 
 %define parse.error verbose
+
+%define parse.trace
 
 %code {
   List<Rule> rules = new ArrayList<>();
@@ -119,7 +121,7 @@ import org.jvoicexml.processor.srgs.grammar.*;
     try {
       RuleReference res = new RuleReference(new URI(grammarName), ruleName);
       if (uri.length == 2)
-        res.setMediaType(uri[2]);
+        res.setMediaType(uri[1]);
       return res;
     }
     catch (URISyntaxException ex) {
@@ -179,7 +181,7 @@ grammar:    SelfIdentHeader // { gram.parseHeader($1); } // checked before
             declarations
             ruleDefinitions;
 
-declarations: declaration
+declarations: %empty
               | declarations declaration
 ;
 
