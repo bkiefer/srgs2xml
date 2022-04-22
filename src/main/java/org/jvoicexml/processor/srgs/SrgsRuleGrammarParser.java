@@ -123,7 +123,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
 
             // Extract header from grammar
             final NamedNodeMap docAttributes = grammarNode.getAttributes();
-            for (int i = 0; i < docAttributes.getLength(); i++) {
+            for (int i = 0; docAttributes != null && i < docAttributes.getLength(); i++) {
                 final Node node = docAttributes.item(i);
                 attributes.put(node.getNodeName(), node.getNodeValue());
             }

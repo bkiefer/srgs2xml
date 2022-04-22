@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.ByteOrderMark;
+import org.apache.commons.io.input.BOMInputStream;
 import org.jvoicexml.processor.srgs.abnf.SrgsAbnf;
 import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
 import org.jvoicexml.processor.srgs.grammar.Rule;
@@ -52,6 +54,9 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
 
   private String description;
   public static boolean DEBUG_GRAMMAR = false;
+  
+  private Pattern HEADERPAT =
+      Pattern.compile("(?:\\xef\\xbb\\xbf)?#ABNF ([0-9.]+)\\s*( [^;]+)?\\s*;.*");
 
   public AbnfRuleGrammarParser(String desc) {
     String pwd = new File(".").getAbsolutePath();
@@ -62,26 +67,33 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
     }
   }
 
-  public List<Rule> load(final InputStream stream) {
-    try {
-      StringBuffer sb = new StringBuffer();
+  public List<Rule> load(final InputStream is) {
+    try (BOMInputStream stream = new BOMInputStream(is, ByteOrderMark.UTF_8, 
+        ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE,
+        ByteOrderMark.UTF_32LE)) {
+      ByteOrderMark bom = stream.getBOM();            
       int c;
-      stream.mark(100);
-      while ((c = stream.read()) > 0 && (c != '\n')) {
-        sb.append((char) c);
-      }
-      Matcher m = Pattern.compile("(?:\\xef\\xbb\\xbf)?#ABNF ([0-9.]+) ([^;]*);.*")
-          .matcher(sb.toString());
-      if (!m.matches()) {
-        logger.error("Wrong ABNF Header: " + sb.toString());
-        return null;
-      }
-      stream.reset();
-      Reader r = null;
-      if (m.groupCount() > 2) {
-        r = new InputStreamReader(stream, m.group(2));
+      StringBuffer sb = new StringBuffer();
+      Reader r = null;      
+      if (bom != null) {
+        r = new InputStreamReader(stream, bom.getCharsetName());
       } else {
-        r = new InputStreamReader(stream);
+        stream.mark(100);
+        while ((c = stream.read()) > 0 && (c != '\n') && (c != '\r')) {
+          sb.append((char) c);
+        }
+        String s = sb.toString();
+        Matcher m = HEADERPAT.matcher(s);
+        if (!m.matches()) {
+          logger.error("Wrong ABNF Header: " + sb.toString());
+          return null;
+        }
+        stream.reset();
+        if (m.groupCount() >= 2 && m.group(2) != null) {
+          r = new InputStreamReader(stream, m.group(2).trim());
+        } else {
+          r = new InputStreamReader(stream);
+        }
       }
       return parseGrammar(r);
     } catch (IOException ex) {
