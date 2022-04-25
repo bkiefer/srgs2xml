@@ -74,7 +74,8 @@ public final class ChartGrammarChecker {
 
     /** Constructor for predicts */
     private ChartNode(int s, RuleComponent r) {
-      this(s, s, r, 0);
+      // if it's an epsilon, it's passive (dot == -1)
+      this(s, s, r, (r.equals(RuleSpecial.NULL) ? -1 : 0));
     }
 
     /** Constructor combining active and passive item */
@@ -85,6 +86,8 @@ public final class ChartGrammarChecker {
       children.add(passive);
     }
 
+    // TODO: would be nicer if we had a "graphical" dot, but for that, we would
+    // need functions to print the rule with a dot argument
     public String toString() {
       StringBuilder sb = new StringBuilder();
       sb.append('(').append(Integer.toString(id)).append(':')
@@ -182,7 +185,10 @@ public final class ChartGrammarChecker {
     grammar = gram;
     final String root = grammar.getRoot();
     final Rule rule = grammar.getRule(root);
-    final RuleComponent component = rule.getRuleComponent();
+    if (rule == null) {
+      throw new GrammarException("Undefined rule referenced: " + root);
+    }
+    RuleComponent component = rule.getRuleComponent();
     final ChartNode init = new ChartNode(0, component);
     add(init);
 
@@ -217,6 +223,9 @@ public final class ChartGrammarChecker {
     if (null == chartOut[0]) {
       return null;
     }
+    if (component instanceof RuleReference) {
+      component = resolved.get(component);
+    }
     for (ChartNode c : chartOut[0]) {
       if (c.end == input.length && c.rule == component) {
         return c;
@@ -224,7 +233,7 @@ public final class ChartGrammarChecker {
     }
     return null;
   }
-
+  
   /** Return the input string covered by the chart node n */
   public String covered (ChartNode n) {
     StringBuilder sb = new StringBuilder();
@@ -249,7 +258,8 @@ public final class ChartGrammarChecker {
       final RuleCount count = (RuleCount) component;
       predict(grammar, count, current);
     } else if (component instanceof RuleReference) {
-      throw new RuntimeException("WTF?");
+      final RuleReference ref = (RuleReference)component;
+      predict(grammar, ref, current);
     } else if (component instanceof RuleParse) {
       final RuleParse parse = (RuleParse) component;
       predict(grammar, parse, current);
@@ -320,12 +330,10 @@ public final class ChartGrammarChecker {
         r = resolved.get(r);
       } else {
         final RuleReference reference = (RuleReference) r;
-        final RuleReference resolvedReference = grammar.resolve(reference);
-        final Rule rule = manager.resolve(resolvedReference);
+        final Rule rule = manager.resolve(reference);
         if (rule == null) {
           throw new GrammarException("Invalid rule reference: " + reference);
         }
-        // TODO need to set the new grammar if it changed
         final RuleComponent component = rule.getRuleComponent();
         final RuleParse rp = new RuleParse(reference, component);
         resolved.put(reference, rp);
@@ -337,7 +345,6 @@ public final class ChartGrammarChecker {
 
   private void predict(final Grammar grammar, final RuleParse reference,
       final ChartNode current) throws GrammarException {
-    // TODO need to set the new grammar if it changed
     final RuleComponent component = reference.getParse();
     // predict RHS of new nonterminal: new prediction
     addPrediction(current.end, component);
@@ -388,6 +395,11 @@ public final class ChartGrammarChecker {
       c.children.addAll(current.children);
       add(c);
     }
+  }
+
+  private void predict(final Grammar grammar, final RuleReference ref,
+      final ChartNode current) throws GrammarException {
+    addPrediction(current.end, ref);
   }
 
   /**
