@@ -7,15 +7,19 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import org.jvoicexml.processor.srgs.grammar.*;
 
 public class JVoiceXmlGrammarManager implements GrammarManager {
 
+    private final Stack<Grammar> grammarStack;
+  
     private final Map<URI, Grammar> grammars;
 
     public JVoiceXmlGrammarManager() {
         grammars = new java.util.HashMap<URI, Grammar>();
+        grammarStack = new Stack<>();
     }
 
     public Grammar[] listGrammars() {
@@ -41,47 +45,87 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
 
         List<Rule> rules = null;
         try {
-            rules = parser.load(in);
+            rules = parser.load(in);            
         } catch (URISyntaxException e) {
-            throw new IOException(e.getMessage(), e);
+            throw new GrammarException(e.getMessage(), e);
         } catch (Exception e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+            throw new GrammarException(e.getMessage(), e);
         }
         if (rules == null) {
-            throw new IOException("Unable to load grammar '" + grammarReference
+          throw new GrammarException("Failure in parsing '" + grammarReference
                     + "'");
         }
         // Initialize rule grammar
         final JVoiceXmlGrammar grammar = new JVoiceXmlGrammar(this,
-            grammarReference, rules);
-        final Map<String, Object> attributes = parser.getAttributes();
-        final String root = (String)attributes.get("root");
-        if (root != null) {
-            grammar.setRoot(root);
-            grammar.setActivatable(root, true);
-        }
+            grammarReference, rules, parser.getAttributes());
 
         // Register grammar
-        grammars.put(grammarReference, grammar);
-
+        grammars.put(grammar.getReference(), grammar);
+        
+        grammarStack.push(grammar);
+        loadExternalGrammars(rules, grammar);
+        grammarStack.pop();
+        
         return grammar;
     }
 
     public void deleteGrammar(Grammar grammar) {
-        grammars.remove(grammar);
+        grammars.remove(grammar.getReference());
     }
 
     public Rule resolve(RuleReference reference) {
         final URI ref = reference.getGrammarReference();
         final Grammar grammar = (Grammar) grammars.get(ref);
-        if (ref == null) {
+        if (ref == null || grammar == null) {
             return null;
         }
         String name = reference.getRuleName();
-        if (name == null) {
+        if (name == null || name.equals("___root")) {
             name = grammar.getRoot();
         }
         return grammar.getRule(name);
+    }
+    
+    /** Recursively walk the elements of this grammar to look for external
+     *  references.
+     * 
+     * @param component
+     * @throws IOException 
+     * @throws GrammarException 
+     */
+    private void walkSubcomponents(RuleComponent component) throws GrammarException, IOException {
+      if (component instanceof RuleSequence) {
+        final RuleSequence sequence = (RuleSequence) component;
+        for (RuleComponent c : sequence.getRuleComponents()) {
+          walkSubcomponents(c);
+        }
+      } else if (component instanceof RuleAlternatives) {
+        final RuleAlternatives alternatives = (RuleAlternatives) component;
+        for (int i = 0; i < alternatives.size(); ++i) {
+          walkSubcomponents(alternatives.getAlternative(i));
+        }
+      } else if (component instanceof RuleCount) {
+        final RuleCount count = (RuleCount) component;
+        walkSubcomponents(count.getRuleComponent());
+      } else if (component instanceof RuleReference) {
+        final RuleReference ref = 
+            grammarStack.peek().resolve((RuleReference)component);
+        // check if this is an unknown external reference
+        if (! grammars.containsKey(ref.getGrammarReference())) {           
+            loadGrammar(ref.getGrammarReference());
+        }
+      }
+    }
+    
+    /** Check all right hand sides for external references and load the 
+     *  referenced grammars
+     * @param rules a list of Rules
+     * @throws IOException 
+     * @throws GrammarException 
+     */
+    private void loadExternalGrammars(List<Rule> rules, JVoiceXmlGrammar grammar) throws GrammarException, IOException {
+      for (Rule r : rules) {
+        walkSubcomponents(r.getRuleComponent());
+      }
     }
 }

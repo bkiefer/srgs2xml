@@ -41,6 +41,10 @@ public class GrammarException extends Exception {
         super(message);
     }
 
+    public GrammarException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public GrammarException(String message, GrammarExceptionDetail[] details)
         throws IllegalArgumentException {
         super(message);

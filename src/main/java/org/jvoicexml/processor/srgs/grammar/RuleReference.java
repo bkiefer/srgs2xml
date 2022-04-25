@@ -58,6 +58,10 @@ public class RuleReference extends RuleComponent {
         return grammarReference;
     }
 
+    public void setGrammarReference(URI uri) {
+        grammarReference = uri;
+    }
+    
     public void setMediaType(String t) {
       mediaType = t;
     }

@@ -1,24 +1,66 @@
 package org.jvoicexml.processor.srgs;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.srgs.grammar.Grammar;
+import org.jvoicexml.processor.srgs.grammar.GrammarException;
+import org.jvoicexml.processor.srgs.grammar.GrammarManager;
+import org.jvoicexml.processor.srgs.grammar.Meta;
+import org.jvoicexml.processor.srgs.grammar.Rule;
+import org.jvoicexml.processor.srgs.grammar.RuleReference;
 
 public class JVoiceXmlGrammar implements Grammar {
     private final GrammarManager manager;
     private final URI reference;
+    private URI base;
     private String root;
     private final Map<String, Rule> rules;
     private Map<String, Object> attributes;
 
+    @SuppressWarnings("unchecked")
+    private void processAttributes() throws GrammarException {
+      final String root = (String)attributes.get("root");
+      if (root != null) {
+          setRoot(root);
+          setActivatable(root, true);
+      }
+      String uriStr = (String) attributes.get("base");
+      if (uriStr == null) {
+        if (attributes.containsKey("meta"))
+        for (Meta e : (List<Meta>)attributes.get("meta")) {
+          if (e.key.equals("base")) {
+            uriStr = e.value;
+            break;
+          }
+        }
+      }
+      if (uriStr != null) {
+        try {
+          base = new URI(uriStr);
+          if (! base.isAbsolute()) {
+            base = reference.resolve(base);
+          }
+        } catch (URISyntaxException ex) {
+          throw new GrammarException("Wrong base URI specified: " + uriStr, ex);
+        }
+      } else {
+        base = reference;
+      }
+    }
+    
     public JVoiceXmlGrammar(final GrammarManager grammarManager, final URI ref,
-        List<Rule> rules) {
+        List<Rule> rules, Map<String, Object> attrs) throws GrammarException {
         manager = grammarManager;
         reference = ref;
         this.rules = new java.util.HashMap<String, Rule>();
         for (Rule r : rules) addRule(r);
+        attributes = attrs;
+        if (attributes != null) {
+          processAttributes();
+        }
     }
 
 
@@ -87,10 +129,20 @@ public class JVoiceXmlGrammar implements Grammar {
 
     public RuleReference resolve(RuleReference ruleReference)
             throws GrammarException {
-        final URI uri = ruleReference.getGrammarReference();
-        final String name = ruleReference.getRuleName();
+        URI uri = ruleReference.getGrammarReference();
+        // if it has no rule reference, it belongs to this grammar
         if (uri == null) {
-            return new RuleReference(reference, name);
+          ruleReference.setGrammarReference(reference);
+        } else {
+          // resolve the URI in case it is relative
+          // if the reference is relative the base URI is either
+          // 1. a URI declared by the 'base' header element of this grammar
+          // 2. default: the base URI of the grammar it is referenced by
+          // 3. set by a 'meta' header definition: we don't support that
+          if (! uri.isAbsolute()) {
+            uri = base.resolve(uri);
+            ruleReference.setGrammarReference(uri);
+          }
         }
         return ruleReference;
     }
@@ -107,5 +159,4 @@ public class JVoiceXmlGrammar implements Grammar {
     public Map<String, Object> getAttributes() {
       return attributes;
     }
-
 }
