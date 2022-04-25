@@ -684,7 +684,7 @@ public class SrgsAbnf
       {
           case 12: /* baseDecl: DECL_BASE URI ';'  */
   if (yyn == 12)
-    /* "SrgsAbnf.y":197  */
+    /* "SrgsAbnf.y":186  */
                             { attributes.put("base", ((String[])(yystack.valueAt (1)))[0]);
 /* Additional constraints:
    - A base declaration must not appear more than
@@ -696,7 +696,7 @@ public class SrgsAbnf
 
   case 13: /* languageDecl: DECL_LANG Nmtoken ';'  */
   if (yyn == 13)
-    /* "SrgsAbnf.y":205  */
+    /* "SrgsAbnf.y":194  */
                                     { attributes.put("language", ((String)(yystack.valueAt (1))));
   /* Additional constraints:
      - A language declaration must not appear more than
@@ -709,14 +709,14 @@ public class SrgsAbnf
 
   case 14: /* modeDecl: DECL_MODE ';'  */
   if (yyn == 14)
-    /* "SrgsAbnf.y":214  */
+    /* "SrgsAbnf.y":203  */
                         { attributes.put("mode", ((String)(yystack.valueAt (1)))); };
   break;
 
 
   case 15: /* rootRuleDecl: DECL_ROOT ';'  */
   if (yyn == 15)
-    /* "SrgsAbnf.y":221  */
+    /* "SrgsAbnf.y":210  */
                             { attributes.put("root", ((String)(yystack.valueAt (1))));
   /*Additional constraints:
           - A root rule declaration must not appear more
@@ -729,46 +729,46 @@ public class SrgsAbnf
 
   case 16: /* tagFormatDecl: DECL_TAG_FORMAT URI ';'  */
   if (yyn == 16)
-    /* "SrgsAbnf.y":230  */
+    /* "SrgsAbnf.y":219  */
                                        { attributes.put("tag_format", ((String[])(yystack.valueAt (1)))[0]); };
   break;
 
 
   case 17: /* tagFormatDecl: DECL_TAG_FORMAT QuotedCharacters ';'  */
   if (yyn == 17)
-    /* "SrgsAbnf.y":235  */
+    /* "SrgsAbnf.y":224  */
                                        { attributes.put("tag_format", ((String)(yystack.valueAt (1)))); };
   break;
 
 
   case 18: /* lexiconDecl: DECL_LEXICON URI ';'  */
   if (yyn == 18)
-    /* "SrgsAbnf.y":239  */
+    /* "SrgsAbnf.y":228  */
                                   { addLexicon(new lexicon(((String[])(yystack.valueAt (1)))[0])); };
   break;
 
 
   case 19: /* metaDecl: DECL_HTTP_EQUIV QuotedCharacters DECL_IS QuotedCharacters ';'  */
   if (yyn == 19)
-    /* "SrgsAbnf.y":242  */
+    /* "SrgsAbnf.y":231  */
                                                                         {
-  addMeta(new meta(((String)(yystack.valueAt (3))), ((String)(yystack.valueAt (1))), true));
+  addMeta(new Meta(((String)(yystack.valueAt (3))), ((String)(yystack.valueAt (1))), true));
 };
   break;
 
 
   case 20: /* metaDecl: DECL_META QuotedCharacters DECL_IS QuotedCharacters ';'  */
   if (yyn == 20)
-    /* "SrgsAbnf.y":245  */
+    /* "SrgsAbnf.y":234  */
                                                           {
-  addMeta(new meta(((String)(yystack.valueAt (3))), ((String)(yystack.valueAt (1))), false));
+  addMeta(new Meta(((String)(yystack.valueAt (3))), ((String)(yystack.valueAt (1))), false));
 };
   break;
 
 
   case 23: /* ruleDefinition: scope RuleName '=' ruleExpansion ';'  */
   if (yyn == 23)
-    /* "SrgsAbnf.y":255  */
+    /* "SrgsAbnf.y":244  */
         { /* Additional constraints:
              - The rule name must be unique within a grammar,
                i.e. no rule must be defined more than once
@@ -781,28 +781,28 @@ public class SrgsAbnf
 
   case 24: /* scope: %empty  */
   if (yyn == 24)
-    /* "SrgsAbnf.y":264  */
+    /* "SrgsAbnf.y":253  */
                          { yyval = ""; };
   break;
 
 
   case 25: /* scope: Private  */
   if (yyn == 25)
-    /* "SrgsAbnf.y":265  */
+    /* "SrgsAbnf.y":254  */
                       { yyval = "private"; };
   break;
 
 
   case 26: /* scope: Public  */
   if (yyn == 26)
-    /* "SrgsAbnf.y":266  */
+    /* "SrgsAbnf.y":255  */
                       { yyval = "public"; };
   break;
 
 
   case 27: /* ruleExpansion: sequence  */
   if (yyn == 27)
-    /* "SrgsAbnf.y":269  */
+    /* "SrgsAbnf.y":258  */
                         {
   yyval = ((RuleComponent)(yystack.valueAt (0)));
 };
@@ -811,7 +811,7 @@ public class SrgsAbnf
 
   case 28: /* ruleExpansion: SlashNum sequence  */
   if (yyn == 28)
-    /* "SrgsAbnf.y":272  */
+    /* "SrgsAbnf.y":261  */
                     {
   RuleAlternatives alt = new RuleAlternatives();
   alt.addAlternative(((RuleComponent)(yystack.valueAt (0))), Double.parseDouble(((String)(yystack.valueAt (1)))));
@@ -822,7 +822,7 @@ public class SrgsAbnf
 
   case 29: /* ruleExpansion: ruleExpansion '|' sequence  */
   if (yyn == 29)
-    /* "SrgsAbnf.y":277  */
+    /* "SrgsAbnf.y":266  */
                              {
   if (((RuleComponent)(yystack.valueAt (2))) instanceof RuleAlternatives) {
     ((RuleAlternatives)((RuleComponent)(yystack.valueAt (2)))).addAlternative(((RuleComponent)(yystack.valueAt (0))));
@@ -839,7 +839,7 @@ public class SrgsAbnf
 
   case 30: /* ruleExpansion: ruleExpansion '|' SlashNum sequence  */
   if (yyn == 30)
-    /* "SrgsAbnf.y":288  */
+    /* "SrgsAbnf.y":277  */
                                       {
   if (((RuleComponent)(yystack.valueAt (3))) instanceof RuleAlternatives) {
     ((RuleAlternatives)((RuleComponent)(yystack.valueAt (3)))).addAlternative(((RuleComponent)(yystack.valueAt (0))), Double.parseDouble(((String)(yystack.valueAt (1)))));
@@ -856,14 +856,14 @@ public class SrgsAbnf
 
   case 31: /* sequence: sequenceElement  */
   if (yyn == 31)
-    /* "SrgsAbnf.y":309  */
+    /* "SrgsAbnf.y":298  */
                           { yyval = ((RuleComponent)(yystack.valueAt (0))) ; };
   break;
 
 
   case 32: /* sequence: sequence sequenceElement  */
   if (yyn == 32)
-    /* "SrgsAbnf.y":310  */
+    /* "SrgsAbnf.y":299  */
                            {
   if (((RuleComponent)(yystack.valueAt (1))) instanceof RuleSequence) {
     ((RuleSequence)((RuleComponent)(yystack.valueAt (1)))).addElement(((RuleComponent)(yystack.valueAt (0))));
@@ -880,14 +880,14 @@ public class SrgsAbnf
 
   case 33: /* sequenceElement: subexpansion  */
   if (yyn == 33)
-    /* "SrgsAbnf.y":323  */
+    /* "SrgsAbnf.y":312  */
                               { yyval = ((RuleComponent)(yystack.valueAt (0))); };
   break;
 
 
   case 34: /* sequenceElement: subexpansion '<' repeat '>'  */
   if (yyn == 34)
-    /* "SrgsAbnf.y":324  */
+    /* "SrgsAbnf.y":313  */
                               {
   yyval = new RuleCount(((RuleComponent)(yystack.valueAt (3))), ((repeat)(yystack.valueAt (1))).from, ((repeat)(yystack.valueAt (1))).to, ((repeat)(yystack.valueAt (1))).prob);
 };
@@ -896,21 +896,21 @@ public class SrgsAbnf
 
   case 35: /* repeat: Repeat  */
   if (yyn == 35)
-    /* "SrgsAbnf.y":329  */
+    /* "SrgsAbnf.y":318  */
                { yyval = new repeat(((String)(yystack.valueAt (0)))); };
   break;
 
 
   case 36: /* repeat: Repeat SlashNum  */
   if (yyn == 36)
-    /* "SrgsAbnf.y":330  */
+    /* "SrgsAbnf.y":319  */
                   { yyval = new repeat(((String)(yystack.valueAt (1))), ((String)(yystack.valueAt (0)))); };
   break;
 
 
   case 37: /* subexpansion: Nmtoken  */
   if (yyn == 37)
-    /* "SrgsAbnf.y":345  */
+    /* "SrgsAbnf.y":334  */
                       {
       RuleToken res = new RuleToken(((String)(yystack.valueAt (0))));
       yyval = res;
@@ -920,7 +920,7 @@ public class SrgsAbnf
 
   case 38: /* subexpansion: Nmtoken '!' Nmtoken  */
   if (yyn == 38)
-    /* "SrgsAbnf.y":349  */
+    /* "SrgsAbnf.y":338  */
                           {
       RuleToken res = new RuleToken(((String)(yystack.valueAt (2))), ((String)(yystack.valueAt (0))));
       yyval = res;
@@ -930,7 +930,7 @@ public class SrgsAbnf
 
   case 39: /* subexpansion: QuotedCharacters  */
   if (yyn == 39)
-    /* "SrgsAbnf.y":353  */
+    /* "SrgsAbnf.y":342  */
                        {  // should that be DoubleQuotedCharacters ??
       RuleToken res = new RuleToken(((String)(yystack.valueAt (0))));
       yyval = res;
@@ -940,7 +940,7 @@ public class SrgsAbnf
 
   case 40: /* subexpansion: QuotedCharacters '!' Nmtoken  */
   if (yyn == 40)
-    /* "SrgsAbnf.y":357  */
+    /* "SrgsAbnf.y":346  */
                                    {// should that be DoubleQuotedCharacters ??
       RuleToken res = new RuleToken(((String)(yystack.valueAt (2))), ((String)(yystack.valueAt (0))));
       yyval = res;
@@ -950,7 +950,7 @@ public class SrgsAbnf
 
   case 41: /* subexpansion: RuleName  */
   if (yyn == 41)
-    /* "SrgsAbnf.y":361  */
+    /* "SrgsAbnf.y":350  */
                {
       yyval = new RuleReference(((String)(yystack.valueAt (0))));
     };
@@ -959,7 +959,7 @@ public class SrgsAbnf
 
   case 42: /* subexpansion: RuleName '!' Nmtoken  */
   if (yyn == 42)
-    /* "SrgsAbnf.y":364  */
+    /* "SrgsAbnf.y":353  */
                            {
       RuleReference res = new RuleReference(((String)(yystack.valueAt (2))));
       res.setLanguage(((String)(yystack.valueAt (0))));
@@ -970,7 +970,7 @@ public class SrgsAbnf
 
   case 43: /* subexpansion: URI  */
   if (yyn == 43)
-    /* "SrgsAbnf.y":369  */
+    /* "SrgsAbnf.y":358  */
           {
       yyval = getRuleReference(((String[])(yystack.valueAt (0))));
     };
@@ -979,7 +979,7 @@ public class SrgsAbnf
 
   case 44: /* subexpansion: URI '!' Nmtoken  */
   if (yyn == 44)
-    /* "SrgsAbnf.y":372  */
+    /* "SrgsAbnf.y":361  */
                       {
       RuleReference res = getRuleReference(((String[])(yystack.valueAt (2))));
       res.setLanguage(((String)(yystack.valueAt (0))));
@@ -990,7 +990,7 @@ public class SrgsAbnf
 
   case 45: /* subexpansion: specialRuleReference  */
   if (yyn == 45)
-    /* "SrgsAbnf.y":377  */
+    /* "SrgsAbnf.y":366  */
                            {
       yyval = ((RuleComponent)(yystack.valueAt (0)));
     };
@@ -999,7 +999,7 @@ public class SrgsAbnf
 
   case 46: /* subexpansion: '(' ruleExpansion ')'  */
   if (yyn == 46)
-    /* "SrgsAbnf.y":380  */
+    /* "SrgsAbnf.y":369  */
                             {
       yyval = ((RuleComponent)(yystack.valueAt (1)));
     };
@@ -1008,7 +1008,7 @@ public class SrgsAbnf
 
   case 47: /* subexpansion: '(' ruleExpansion ')' '!' Nmtoken  */
   if (yyn == 47)
-    /* "SrgsAbnf.y":383  */
+    /* "SrgsAbnf.y":372  */
                                         {
       ((RuleComponent)(yystack.valueAt (3))).setLanguage(((String)(yystack.valueAt (0))));
       yyval = ((RuleComponent)(yystack.valueAt (3)));
@@ -1018,7 +1018,7 @@ public class SrgsAbnf
 
   case 48: /* subexpansion: '[' ruleExpansion ']'  */
   if (yyn == 48)
-    /* "SrgsAbnf.y":387  */
+    /* "SrgsAbnf.y":376  */
                             {
       yyval = setOptional(((RuleComponent)(yystack.valueAt (1))));
     };
@@ -1027,7 +1027,7 @@ public class SrgsAbnf
 
   case 49: /* subexpansion: '[' ruleExpansion ']' '!' Nmtoken  */
   if (yyn == 49)
-    /* "SrgsAbnf.y":390  */
+    /* "SrgsAbnf.y":379  */
                                         {
       ((RuleComponent)(yystack.valueAt (3))).setLanguage(((String)(yystack.valueAt (0))));
       yyval = setOptional(((RuleComponent)(yystack.valueAt (3))));
@@ -1037,7 +1037,7 @@ public class SrgsAbnf
 
   case 50: /* subexpansion: '(' ')'  */
   if (yyn == 50)
-    /* "SrgsAbnf.y":394  */
+    /* "SrgsAbnf.y":383  */
               {
       yyval = RuleSpecial.NULL ;
     };
@@ -1046,14 +1046,14 @@ public class SrgsAbnf
 
   case 51: /* subexpansion: TagStart Tag TagEnd  */
   if (yyn == 51)
-    /* "SrgsAbnf.y":398  */
+    /* "SrgsAbnf.y":387  */
                           { yyval = new RuleTag(((String)(yystack.valueAt (1)))) ; };
   break;
 
 
   case 52: /* subexpansion: TagStart TagEnd  */
   if (yyn == 52)
-    /* "SrgsAbnf.y":399  */
+    /* "SrgsAbnf.y":388  */
                       { yyval = new RuleTag("") ; };
   break;
 
@@ -1697,12 +1697,12 @@ private static final byte[] yycheck_ = yycheck_init();
   {
     return new short[]
     {
-       0,   180,   180,   184,   185,   188,   189,   190,   191,   192,
-     193,   194,   197,   205,   214,   221,   230,   235,   239,   242,
-     245,   250,   251,   254,   264,   265,   266,   269,   272,   277,
-     288,   309,   310,   323,   324,   329,   330,   345,   349,   353,
-     357,   361,   364,   369,   372,   377,   380,   383,   387,   390,
-     394,   398,   399
+       0,   169,   169,   173,   174,   177,   178,   179,   180,   181,
+     182,   183,   186,   194,   203,   210,   219,   224,   228,   231,
+     234,   239,   240,   243,   253,   254,   255,   258,   261,   266,
+     277,   298,   299,   312,   313,   318,   319,   334,   338,   342,
+     346,   350,   353,   358,   361,   366,   369,   372,   376,   379,
+     383,   387,   388
     };
   }
 
@@ -1798,9 +1798,9 @@ private static final byte[] yycheck_ = yycheck_init();
                        ? Rule.PUBLIC : Rule.PRIVATE));
   }
 
-  private void addMeta(meta m) {
-    List<meta> metas;
-    metas = (List<meta>) attributes.get("meta");
+  private void addMeta(Meta m) {
+    List<Meta> metas;
+    metas = (List<Meta>) attributes.get("meta");
     if (metas == null) {
       metas = new ArrayList<>();
       attributes.put("meta", metas);
@@ -1829,17 +1829,6 @@ private static final byte[] yycheck_ = yycheck_init();
     public lexicon(String u, String media) {
       uri = u;
       uri_media = media;
-    }
-  }
-
-  class meta {
-    public String s1, s2;
-    boolean http_equiv;
-
-    public meta(String s1, String s2, boolean http_equiv){
-      this.s1 = s1;
-      this.s2 = s2;
-      this.http_equiv = http_equiv;
     }
   }
 
@@ -1891,6 +1880,6 @@ private static final byte[] yycheck_ = yycheck_init();
     return null;
   }
 
-/* "SrgsAbnf.java":1895  */
+/* "SrgsAbnf.java":1884  */
 
 }

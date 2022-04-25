@@ -37,9 +37,9 @@ import org.jvoicexml.processor.srgs.grammar.*;
                        ? Rule.PUBLIC : Rule.PRIVATE));
   }
 
-  private void addMeta(meta m) {
-    List<meta> metas;
-    metas = (List<meta>) attributes.get("meta");
+  private void addMeta(Meta m) {
+    List<Meta> metas;
+    metas = (List<Meta>) attributes.get("meta");
     if (metas == null) {
       metas = new ArrayList<>();
       attributes.put("meta", metas);
@@ -68,17 +68,6 @@ import org.jvoicexml.processor.srgs.grammar.*;
     public lexicon(String u, String media) {
       uri = u;
       uri_media = media;
-    }
-  }
-
-  class meta {
-    public String s1, s2;
-    boolean http_equiv;
-
-    public meta(String s1, String s2, boolean http_equiv){
-      this.s1 = s1;
-      this.s2 = s2;
-      this.http_equiv = http_equiv;
     }
   }
 
@@ -240,10 +229,10 @@ lexiconDecl: DECL_LEXICON URI ';' { addLexicon(new lexicon($2[0])); }
 ;
 
 metaDecl: DECL_HTTP_EQUIV QuotedCharacters DECL_IS QuotedCharacters ';' {
-  addMeta(new meta($2, $4, true));
+  addMeta(new Meta($2, $4, true));
 }
 | DECL_META QuotedCharacters DECL_IS QuotedCharacters ';' {
-  addMeta(new meta($2, $4, false));
+  addMeta(new Meta($2, $4, false));
 }
 ;
 
