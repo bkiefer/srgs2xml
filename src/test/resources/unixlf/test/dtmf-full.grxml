@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN" "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar mode="dtmf" version="1.0"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         root="dtmfkey">
+
+ <!-- meta information -->
+ <meta name='description' content='Implementation Report test -- DTMF grammar with alternatives and sequences' />
+ <meta name='in.1' content='1 2 3 4' />
+ <meta name='out.1' content='$dtmfkey["1","2","3","4"]' />
+
+ <!--  rule declarations -->
+ <rule id="dtmfkey" scope="public">
+  <item repeat="4">
+   <one-of>
+    <item> 0 </item>
+    <item> 1 </item>
+    <item> 2 </item>
+    <item> 3 </item>
+    <item> 4 </item>
+    <item> 5 </item>
+    <item> 6 </item>
+    <item> 7 </item>
+    <item> 8 </item>
+    <item> 9 </item>
+   </one-of>
+  </item>
+ </rule>
+</grammar>
+
+

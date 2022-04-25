@@ -1,0 +1,30 @@
+﻿#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+meta 'description' is 'Grammar with ABNF keywords.';
+meta 'in.1' is 'lexicon and public base';
+meta 'out.1' is '$main[$lpb["lexicon","and",$pb["public base"]]]';
+meta 'in.2' is 'language mode';
+meta 'out.2' is '$main[$other["language","mode"]]';
+
+public $main = $lpb | $other;
+
+$lpb = lexicon and $pb;
+
+$pb = "public base";
+
+$other = language mode | root | "tag-format" | "meta is http-equiv private";

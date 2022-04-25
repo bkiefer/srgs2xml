@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN" 
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar version="1.0"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="zh" mode="voice" root="main">
+         
+         <!-- meta information -->
+	<meta name="description" content="Implementation Report test -- chinese digits (unicode)"/>
+	<meta name="in.1" content="&#22235;"/>
+	<meta name="out.1" content='$main[$digits1_9["&#22235;"]]'/>
+
+
+  <rule id="main" scope="public">
+    <ruleref uri="#digits1_9"/>
+  </rule>
+
+  <rule id="digits1_9" scope="private">
+    <example>&#22235;</example>
+    <one-of>
+      <item>&#19968;</item>
+      <item>&#20108;</item>
+      <item>&#19977;</item>
+      <item>&#22235;</item>
+      <item>&#20116;</item>
+      <item>&#20845;</item>
+      <item>&#19971;</item>
+      <item>&#20843;</item>
+      <item>&#20061;</item>
+    </one-of>
+  </rule>
+</grammar> 

@@ -1,0 +1,26 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+meta 'description' is 'Any number of repitions of NULL is equivalent to a single NULL';
+meta 'spec.reference' is 'http://www.w3.org/TR/speech-grammar/#S2.5';
+
+meta 'in.1' is 'all I want to say';
+meta 'out.1' is '$main["all","I","want","to","say"]';
+meta 'info.1' is "Note the LPS doesn't show that the many NULL occurences should be treated as one";
+
+private $main =  all I want to say  ( $NULL)  <4-8>;

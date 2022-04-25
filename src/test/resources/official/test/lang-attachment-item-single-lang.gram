@@ -1,0 +1,24 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $yes;
+meta 'description' is 'Implementation Report test -- language attachment on item with single language';
+meta 'in.1' is 'oui';
+meta 'out.1' is '$yes["oui"]';
+meta 'in.2' is 'yes';
+meta 'out.2' is '$yes["yes"]';
+public $yes = oui!fr | yes;
+

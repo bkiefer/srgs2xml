@@ -1,0 +1,39 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+// meta information
+meta "description" is "Tags delimited with {!{ }!} can contain { and }  but not }!}";
+meta "spec.reference" is "http://www.w3.org/TR/speech-grammar/#S2.6";
+
+
+meta "in.1" is "is outside the";
+meta "out.1" is '$main[$obintag[{!{tag can contain { so }!},"is","outside","the",{!{tag}!}]]';
+
+meta "in.2" is "is also outside the";
+meta "out.2" is '$main[$cbintag[{!{tag can contain { and also } so }!},"is","also","outside","the",{!{tag}!}]]';
+
+
+// rule declarations
+$main = $obintag | $cbintag;
+
+// opening brace in tag
+$obintag = {!{tag can contain { so }!} is outside the {tag};
+
+// closing brace in tag
+$cbintag = {!{tag can contain { and also } so }!} is also outside the {tag};
+

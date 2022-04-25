@@ -1,0 +1,87 @@
+#ABNF 1.0 ISO-8859-1;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language sv;
+mode voice;
+root $main;
+meta 'description' is 'Implementation Report test -- example 5';
+meta 'in.1' is 'ja det är rätt';
+meta 'out.1' is '$main[$yes_rule["ja",$yes_emphasis["det","är","rätt"]]]';
+
+/** 
+* @example ja det är rätt
+* @example nej det är fel
+*/
+public $main = 
+  
+( ( $yes_rule)       |
+ ( $no_rule) ) ;
+
+
+/** 
+* @example ja det är rätt
+*/
+private $yes_rule = 
+  
+( (exakt)       |
+ (javisst)       |
+ (ja  ( $yes_emphasis)  <0-1>)       |
+ (jepp)       |
+ (korrekt)       |
+ (okej)       |
+ (rätt)       |
+ (si)       |
+ (säkert)       |
+ (visst) ) ;
+
+
+/** 
+* @example det stämmer
+*/
+private $yes_emphasis = 
+  
+( (det gjorde jag)       |
+ ( (det)  <0-1>
+             stämmer
+    )       |
+ (det är rätt)       |
+ (det är korrekt)       |
+ (det är riktigt) ) ;
+
+
+/** 
+* @example nej det är fel
+*/
+private $no_rule = 
+  
+( (icke)       |
+ (fel)       |
+ (nej  ( $no_emphasis)  <0-1>)       |
+ (nix)       |
+ (no) ) ;
+
+
+/** 
+* @example det är fel
+*/
+private $no_emphasis = 
+  
+( (det gjorde jag inte)       |
+ ( (det)  <0-1>
+       stämmer inte
+    )       |
+ (det är fel)       |
+ (absolut inte)       |
+ (inte alls) ) ;
+

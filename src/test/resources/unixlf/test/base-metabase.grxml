@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:base="./test/" xml:lang="en-US" mode="voice" root="main">
+
+    <!-- meta information -->
+    <meta name="description" content="A grammar with two base URI declarations to test precedence."/>
+    <meta name="spec.reference" content="http://www.w3.org/TR/speech-grammar/#S4.9"/>
+    <meta name="base" content="http://www.example.com/spurious/base"/>
+
+    <meta name="in.1" content="My name is Bond James Bond"/>
+    <meta name="out.1" content='$main["My","name","is",$&lt;./test/test.grxml&gt;["Bond","James","Bond"]]'/>
+    <meta name="info.1" content="grammar at ./test/test.grxml should permit the input 'Bond James Bond'" />
+
+
+    <!-- rule declarations -->
+    <rule id="main" scope="public">
+        <item>
+            My name is
+        </item>
+        <ruleref uri="test.grxml"/>
+    </rule>
+
+</grammar>

@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.List;
 
 import org.json.JSONObject;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.processor.srgs.*;
 import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
@@ -21,7 +20,7 @@ public class AbnfParserTest {
   public static URI testURI(String name) {
     return new File(RESOURCE_DIR, name).toURI();
   }
-
+  
   public static String[] pizzainputs = {
       "small pizza",
       "medium pizza",
@@ -215,5 +214,22 @@ public class AbnfParserTest {
     JSONObject o = walker.evaluate(validRule);
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
+  }
+  
+  @Test
+  public void rootruletest() throws GrammarException, IOException, URISyntaxException {
+
+    final GrammarManager manager = new JVoiceXmlGrammarManager();
+    final Grammar ruleGrammar = manager.loadGrammar(testURI("rootrule.gram"));
+    String[] inputs = { 
+        "pizza"
+    };
+    for (String s : inputs) {
+      String[] tokens = s.split(" +");
+      final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
+      final ChartGrammarChecker.ChartNode validRule =
+          checker.parse(ruleGrammar, tokens);
+      assertTrue(validRule != null);
+    }
   }
 }

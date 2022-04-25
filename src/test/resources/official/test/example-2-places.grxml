@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="en" version="1.0" root="city_state" mode="voice">
+
+<!-- meta information -->
+<meta name="description" content="Implementation Report test -- example 2 places"/>
+<meta name="in.1" content='Boston New York'/>
+<meta name="out.1" content='$city_state[$city["Boston"],$state["New York"]]'/>
+
+   <rule id="city" scope="public">
+     <one-of>
+       <item>Boston</item>
+       <item>Philadelphia</item>
+       <item>Fargo</item>
+     </one-of>
+   </rule>
+
+   <rule id="state" scope="public">
+     <one-of>
+       <item>Florida</item>
+       <item>North Dakota</item>
+       <item>"New York"</item>
+     </one-of>
+   </rule>
+
+   <!-- Reference by URI to a local rule -->
+   <!-- Artificial example allows "Boston, Florida"! -->
+   <rule id="city_state" scope="public">
+     <ruleref uri="#city"/> <ruleref uri="#state"/>
+   </rule>
+</grammar>

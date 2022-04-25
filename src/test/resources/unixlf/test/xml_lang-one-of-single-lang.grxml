@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN" "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+
+
+<grammar xml:lang="en-US" version="1.0" mode="voice" root="yes"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd">
+
+
+
+ <!-- meta information -->
+ 
+<meta name="description" content="Implementation Report test -- xml:lang attribute on one-of with single language" />
+
+
+ <meta name='in.1' content='oui' />
+
+ <meta name='out.1' content='$yes[$yes_fr["oui"]]' />
+ 
+
+ <meta name='in.2' content='bien sur' />
+
+ <meta name='out.2' content='$yes[$yes_fr["bien","sur"]]' />
+
+
+ <meta name='in.3' content='yes' />
+
+ <meta name='out.3' content='$yes[$yes_en["yes"]]' />
+
+
+ 
+<!-- rule declarations -->
+ <rule id="yes" scope="public">
+  <one-of>
+   <item>
+    <ruleref uri="#yes_fr" />
+   </item>
+   <item>
+    <ruleref uri="#yes_en" />
+   </item>
+  </one-of>
+ </rule>
+
+ <rule id="yes_fr">
+  <one-of xml:lang="fr">
+   <item> oui </item>
+   <item> bien sur </item>
+  </one-of> 
+ </rule>
+
+ <rule id="yes_en">
+  <one-of>
+   <item> yes </item>
+   <item> of course </item>
+  </one-of> 
+ </rule>
+
+
+</grammar>

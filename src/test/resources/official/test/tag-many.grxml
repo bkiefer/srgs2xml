@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar version="1.0"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="en-US" mode="voice" root="main">
+
+  <!-- meta information -->
+  <meta name="description" content="Any number of tags may be included inline within a rule expansion."/>
+  <meta name="spec.reference" content="http://www.w3.org/TR/speech-grammar/#S2.6"/>
+	
+  <meta name="in.1" content="this is a test"/>
+  <meta name="out.1" content='$main[$tagsandtokens[{!{"before;"}!},"this","is",{!{$+"within;"}!},"a","test",{!{$+"after"}!}]]'/>
+
+	<meta name="in.2" content="small thing"/>
+  <meta name="out.2" content='$main[$tagsanditems[{!{"before;"}!},"small",{!{$+"within;"}!},"thing",{!{$+"after"}!}]]'/>
+	
+	<meta name="in.3" content="small"/>
+  <meta name="out.3" content='$main[$tagsandoneof[{!{"before one-of"}!},{!{"within item"}!},"small",{!{"after one-of"}!}]]'/>
+	
+	<meta name="in.4" content="big big big"/>
+  <meta name="out.4" content='$main[$taginrepeat[{!{"not repeated before"}!},{!{"repeated before"}!},"big",{!{"repeated after"}!},{!{"repeated before"}!},"big",{!{"repeated after"}!},{!{"repeated before"}!},"big",{!{"repeated after"}!},{!{"not repeated after"}!}]]'/>
+	
+	<meta name="in.5" content="testing"/>
+  <meta name="out.5" content='$main[$tagsequence["testing",{!{"one"}!},{!{"two"}!},{!{"three"}!}]]'/>
+
+  <meta name="in.6" content="hello"/>
+  <meta name="out.6" content='$main[$tagandruleref[{!{"before ruleref"}!},$hello["hello"],{!{"before NULL"}!},{!{"before GARBAGE"}!},{!{"after GARBAGE"}!}]]'/>
+  <meta name="info.6" content="'hello' can optionally be followed by words covered by $GARBAGE"/>
+
+																		
+	<!-- rule declarations -->
+	<rule id="main" scope="public">
+	  <one-of>
+		   <item><ruleref uri="#tagsandtokens"/></item>
+		   <item><ruleref uri="#tagsanditems"/></item>
+			 <item><ruleref uri="#tagsandoneof"/></item>
+			 <item><ruleref uri="#taginrepeat"/></item>
+			 <item><ruleref uri="#tagsequence"/></item>
+			 <item><ruleref uri="#tagandruleref"/></item>
+	  </one-of>
+  </rule>
+	
+	<!-- Using tags in combination with other rule expansions -->
+  <rule id="tagsandtokens">
+	<tag>"before;"</tag>this is <tag>$+"within;"</tag>a test<tag>$+"after"</tag>
+  </rule>
+	
+	<rule id="tagsanditems">
+   	<tag>"before;"</tag>
+  	<item>small</item>
+		<tag>$+"within;"</tag>
+		<item>thing</item>
+		<tag>$+"after"</tag>
+	</rule>
+	
+	<rule id="tagsandoneof">
+	  <tag>"before one-of"</tag>
+   	<one-of>
+		   	<!-- tag can't be here <tag>'before items;'</tag> -->
+  			<item> <tag>"within item"</tag> small</item>
+				<item>medium</item>
+				<!-- tag can't be here <tag>'after items'</tag> -->
+		</one-of>
+		<tag>"after one-of"</tag>
+	</rule>
+
+	<rule id="taginrepeat">
+   	<tag>"not repeated before"</tag>
+  	<item repeat="1-10"><tag>"repeated before"</tag>big<tag>"repeated after"</tag></item>
+	  <tag>"not repeated after"</tag>
+	</rule>
+
+	<!-- Using sequences of tags -->
+  <rule id="tagsequence">
+	  testing <tag>"one"</tag><tag>"two"</tag><tag>"three"</tag>
+  </rule>
+	
+
+  <rule id="tagandruleref">
+   	<tag>"before ruleref"</tag>
+  	<ruleref uri="#hello"/>
+    <tag>"before NULL"</tag>
+  	<ruleref special="NULL"/>
+    <tag>"before GARBAGE"</tag>
+    <ruleref special="GARBAGE"/>
+    <tag>"after GARBAGE"</tag>
+  </rule>
+  
+  <rule id="hello">
+    hello
+  </rule>
+
+</grammar>

@@ -1,0 +1,77 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+// meta information
+meta "description" is "ABNF Precedence";
+meta "spec.reference" is "http://www.w3.org/TR/speech-grammar/#S2.8";
+
+meta "in.1" is "a a a da da da da a do a do";
+meta "out.1" is '$main[$repeat["a","a","a","da da",$da["da"],$da["da"],"a","do","a","do"]]';
+
+meta "in.2" is "foo foo bar";
+meta "out.2" is '$main[$repeat2["foo","foo","bar"]]';
+
+meta "in.3" is "foo bar bar";
+meta "out.3" is 'REJECT';
+
+meta "in.4" is "repeat this this";
+meta "out.4" is '$main[$sequence["repeat","this","this"]]';
+
+meta "in.5" is "repeat this repeat this";
+meta "out.5" is 'REJECT';
+
+meta "in.6" is "New York";
+meta "out.6" is '$main[$alt["New","York"]]';
+
+meta "in.7" is "New Amsterdam";
+meta "out.7" is 'REJECT';
+
+meta "in.8" is "New Hampshire";
+meta "out.8" is '$main[$par["New","Hampshire"]]';
+
+meta "in.9" is "small pizza";
+meta "out.9" is '$main[$brackets["small","pizza"]]';
+
+meta "in.10" is "oui";
+meta "out.10" is '$main[$yes["oui"]]';
+
+
+
+// rule declarations
+$main = $repeat | $repeat2 | $sequence | $alt | $par | $brackets | $yes;
+
+
+// repeat applies to the tightest immedately preceding expansion
+$repeat = a<3> "da da"<1> $da<2> (a do<1>)<2>;
+$da = da;
+
+$repeat2 = foo <2>bar;
+
+// sequence has lower precedence than repeat
+$sequence = repeat this<2>;
+
+// alternatives has lower precedence than sequence
+$alt = New York | Amsterdam;
+
+// parenthesis has higher precedence than alternative
+$par = New (Mexico | Hampshire); 
+$brackets = [small | large] pizza;
+
+// language applies to the tightest immediately preceding expansion
+// french applies only to "oui", the default language for this grammar is en-US
+$yes = yes | oui!fr-CA;

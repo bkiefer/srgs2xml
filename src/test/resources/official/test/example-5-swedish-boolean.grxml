@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+<grammar version="1.0"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="sv" mode="voice" root="main">
+	
+	<!-- meta information -->
+	<meta name="description" content="Implementation Report test -- example 5"/>
+	<meta name="in.1" content="ja det är rätt"/>
+	<meta name="out.1" content='$main[$yes_rule["ja",$yes_emphasis["det","är","rätt"]]]'/>
+	
+	<!-- rule declarations -->
+	<rule id="main" scope="public">
+		<example>ja det är rätt</example>
+		<example>nej det är fel</example>
+		<one-of>
+			<item>
+				<ruleref uri="#yes_rule"/>
+			</item>
+			<item>
+				<ruleref uri="#no_rule"/>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="yes_rule">
+		<example>ja det är rätt</example>
+		<one-of>
+			<item>exakt</item>
+			<item>javisst</item>
+			<item>ja <item repeat="0-1">
+					<ruleref uri="#yes_emphasis"/>
+				</item>
+			</item>
+			<item>jepp</item>
+			<item>korrekt</item>
+			<item>okej</item>
+			<item>rätt</item>
+			<item>si</item>
+			<item>säkert</item>
+			<item>visst</item>
+		</one-of>
+	</rule>
+	<rule id="yes_emphasis">
+		<example>det stämmer</example>
+		<one-of>
+			<item>det gjorde jag</item>
+			<item>
+				<item repeat="0-1">det</item>
+             stämmer
+    </item>
+			<item>det är rätt</item>
+			<item>det är korrekt</item>
+			<item>det är riktigt</item>
+		</one-of>
+	</rule>
+	<rule id="no_rule">
+		<example>nej det är fel</example>
+		<one-of>
+			<item>icke</item>
+			<item>fel</item>
+			<item>nej <item repeat="0-1">
+					<ruleref uri="#no_emphasis"/>
+				</item>
+			</item>
+			<item>nix</item>
+			<item>no</item>
+		</one-of>
+	</rule>
+	<rule id="no_emphasis">
+		<example>det är fel</example>
+		<one-of>
+			<item>det gjorde jag inte</item>
+			<item>
+				<item repeat="0-1">det</item>
+       stämmer inte
+    </item>
+			<item>det är fel</item>
+			<item>absolut inte</item>
+			<item>inte alls</item>
+		</one-of>
+	</rule>
+</grammar>

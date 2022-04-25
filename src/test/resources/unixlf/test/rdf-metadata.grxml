@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar version="1.0"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="en-US" mode="voice" root="main">
+
+    <!-- meta information -->
+    <meta name="description" content="An XML grammar with RDF metadata."/>
+    <meta name="spec.reference" content="http://www.w3.org/TR/speech-grammar/#S4"/>
+
+    <meta name="in.1" content="test"/>
+    <meta name="out.1" content='$main["test"]'/>
+     <meta name="info.1" content="Since this grammar contains elements and attributes in a non-grammar namespace, a grammar processor  may (i) ignore the non-standard elements and/or attributes, or (ii) process the non-standard elements and/or attributes, or (iii) reject the document" />
+
+    <metadata>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                 xmlns:rdfs="http://www.w3.org/TR/1999/PR-rdf-schema-19990303#"
+                 xmlns:dc="http://purl.org/metadata/dublin_core#">
+
+            <!-- metadata about the grammar document -->
+           <rdf:Description about="http://www.example.com/rdf-metadata.grxml"
+                            dc:Title="RDF metadata test grammar"
+                            dc:Description="test grammar in W3C XML Form"
+                            dc:Publisher="W3C"
+                            dc:Date="2002-03-22"
+                            dc:Format="application/srgs+xml">
+            </rdf:Description>
+        </rdf:RDF>
+    </metadata>
+
+    <!-- rule declarations -->
+    <rule id="main">
+        <item>test</item>
+    </rule>
+
+</grammar>

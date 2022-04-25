@@ -1,0 +1,67 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+meta 'description' is 'Repetitions that can only occur 0 times are as if not there';
+meta 'spec.reference' is 'http://www.w3.org/TR/speech-grammar/#S2.5';
+
+meta 'in.1' is 'way back';
+meta 'out.1' is '$main[$zerotokens["way","back"]]';
+meta 'info.1' is "Repetitions with count zero on tokens: these tokens can't be in input";
+
+meta 'in.2' is 'the way to go back';
+meta 'out.2' is 'REJECT';
+meta 'info.2' is "Repetitions with count zero on tokens: these tokens can't be in input";
+
+meta 'in.3' is 'all I want to say';
+meta 'out.3' is '$main[$zeroNULL["all","I","want","to","say"]]';
+meta 'info.3' is 'Repetition of NULL: no influence';
+
+meta 'in.4' is 'sure I can say this';
+meta 'out.4' is '$main[$zeroVOID["sure","I","can","say","this"]]';
+meta 'info.4' is "Repetition of VOID exactly zero times: as if VOID wasn't there";
+
+meta 'in.5' is 'dont interrupt this';
+meta 'out.5' is '$main[$zeroGARBAGE["dont","interrupt","this"]]';
+meta 'info.5' is 'Zero repetition of GARBAGE: no garbage can be in input';
+
+meta 'in.6' is 'dont you dare to interrupt this';
+meta 'out.6' is 'REJECT';
+meta 'info.6' is '"you dare to" in this input may be replaced by other words covered by $GARBAGE';
+
+meta 'in.7' is 'there will be no tags';
+meta 'out.7' is '$main[$zerotags["there","will","be","no","tags"]]';
+meta 'info.7' is "repetition of tag with count zero: the tag doesn't produce output to LPS";
+
+
+private $main = 
+( ( $zerotokens)       |
+ ( $zeroNULL)       |
+ ( $zeroVOID)       |
+ ( $zeroGARBAGE)       |
+ ( $zerotags) ) ;
+
+
+private $zerotokens =  (the) <0>  way   (to go) <0-0>   back  ;
+
+private $zeroNULL =  all I want to say  ( $NULL)  <0>;
+
+private $zeroVOID =  sure I can say this  ( $VOID)  <0>;
+
+private $zeroGARBAGE = dont  ( $GARBAGE)  <0>  interrupt this ;
+
+private $zerotags =  there will be no tags  ( {"foo"} )  <0>;

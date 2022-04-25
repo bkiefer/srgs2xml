@@ -1,0 +1,28 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+meta 'description' is 'Any non-zero number of repetitions of a tag is equivalent to single occurence of the tags, see section 2.5';
+meta 'spec.reference' is 'http://www.w3.org/TR/speech-grammar/#S2.5';
+
+meta 'in.1' is 'bar';
+meta 'out.1' is '$main[$repeatedtag["bar",{!{"foo"}!}]]';
+
+
+public $main = $repeatedtag;
+
+private $repeatedtag =   bar  ( {"foo"} )  <2->;

@@ -1,0 +1,84 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $sequence;
+
+meta 'description' is 'Example using examples';
+meta 'in.1' is 'sunny Yorktown Heights New York United States';
+meta 'out.1' is '$sequence[$repeat[$alternatives["sunny"]],$ruleref[$token["Yorktown Heights"]],$Token["New","York"],$TOKEN["United States"]]';
+
+
+/** 
+* @example "Yorktown Heights"
+*/
+
+private $token =     "Yorktown Heights"  ;
+
+/** 
+* @example New York
+*/
+
+private $Token =     New York  ;
+
+/** 
+* @example "United States"
+*/
+
+private $TOKEN =  ("United States");
+
+
+/** 
+* @example "Yorktown Heights"
+*/
+
+private $ruleref =  $token;
+
+/** 
+* @example sunny
+* @example cloudy
+* @example warm
+* @example cold
+*/
+
+private $alternatives = 
+( ( sunny )       |
+ ( cloudy )       |
+ ( warm )       |
+ ( cold ) ) ;
+
+/** 
+* @example 
+* @example warm
+* @example warm sunny cloudy
+*/
+/* first example is empty, is for count=0 */
+
+private $repeat =  ( $alternatives)  <0-3>;
+
+/** 
+* @example       warm sunny cloudy "Yorktown Heights" New York "United States"
+
+* @example       warm sunny cloudy   Yorktown   Heights   New York United
+	 		States
+	 		
+* @example 
+
+      warm sunny cloudy "Yorktown   Heights" New York "United States"
+
+*/
+/* the last example is actually wrong but that is legal */
+
+private $sequence = $repeat $ruleref $Token $TOKEN;

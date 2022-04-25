@@ -1,0 +1,24 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+meta 'description' is 'A language declaration can be applied to a sequence.';
+meta 'spec.reference' is 'http://www.w3.org/TR/speech-grammar/#S2.7';
+meta 'in.1' is 'my name is André Dubois';
+meta 'out.1' is '$main["my","name","is","André","Dubois"]';
+public $main = 
+ (my name is)  (André Dubois) !fr-CA;
+

@@ -1,0 +1,35 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+// meta information
+meta "description" is 
+     "Implementation Report test -- parenthesis for explicit boundaries";
+meta "in.1" is "fly to san jose";
+meta "out.1" is '$main["fly","to",$city["san jose"]]';
+meta "in.2" is "call bob smith at home";
+meta "out.2" is '$main["call","bob","smith","at","home"]';
+
+// rule declarations
+/**
+  @example fly to san jose
+  @example call bob smith at home
+*/
+public $main = (fly to $city)
+               | (call|dial) (bob smith|jane doe) [at (home|work|cell)];
+
+$city = ("san jose"|boston|"new york"|philadelphia|munich|montreal);

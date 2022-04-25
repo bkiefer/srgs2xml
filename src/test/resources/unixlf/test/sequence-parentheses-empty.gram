@@ -1,0 +1,29 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+// meta information
+meta "description" is "Implementation Report test -- empty parens";
+meta "in.1" is "phone home";
+meta "out.1" is '$main["phone","home"]';
+
+// rule declarations
+/**
+  from the spec
+  @example phone home
+*/
+public $main = phone () home;

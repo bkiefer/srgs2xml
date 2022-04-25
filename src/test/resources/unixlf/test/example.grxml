@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar version="1.0"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="en-US" mode="voice" root="sequence">
+
+  <meta name='description' content='Example using examples'/>
+
+  <meta name='in.1' content='sunny Yorktown Heights New York United States'/>
+  <meta name='out.1' content='$sequence[$repeat[$alternatives["sunny"]],$ruleref[$token["Yorktown Heights"]],$Token["New","York"],$TOKEN["United States"]]'/>
+
+  <rule id="token">
+    <example>"Yorktown Heights"</example>
+    "Yorktown Heights"
+  </rule>
+  
+  <rule id="Token">
+    <example>New York</example>
+    New York
+  </rule>
+  
+  <rule id="TOKEN">
+    <example>"United States"</example>
+    <token>United States</token>
+  </rule>
+  
+  <rule id="ruleref">
+    <example>"Yorktown Heights"</example>
+    <ruleref uri="#token"/>
+  </rule>
+  
+  <rule id="alternatives">
+    <example>sunny</example>
+    <example>cloudy</example>
+    <example>warm</example>
+    <example>cold</example>
+    <one-of>
+      <item> sunny </item>
+      <item> cloudy </item>
+      <item> warm </item>
+      <item> cold </item>
+    </one-of>
+  </rule>
+  
+  <rule id="repeat">
+   <example></example> <!-- for count=0 -->
+   <example>warm</example>
+   <example>warm sunny cloudy</example>
+   <item repeat="0-3">
+      <ruleref uri="#alternatives"/>
+   </item>
+  </rule>
+  
+  <rule id="sequence">
+    <example>
+      warm sunny cloudy "Yorktown Heights" New York "United States"
+    </example>
+    <example>
+      warm sunny cloudy   Yorktown   Heights   New York United
+	 		States
+    </example>
+    <example> <!-- this example is actually wrong but that is legal -->
+      warm sunny cloudy "Yorktown   Heights" New York "United States"
+    </example>
+
+    <ruleref uri="#repeat"/> <ruleref uri="#ruleref"/>
+    <ruleref uri="#Token"/> <ruleref uri="#TOKEN"/>    
+  </rule>
+
+</grammar>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar version="1.0"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+         xml:lang="en-US" mode="voice" root="main">
+
+	  <!-- meta information -->
+  <meta name="description" content="Repetitions that can only occur 0 times are as if not there"/>
+  <meta name="spec.reference" content="http://www.w3.org/TR/speech-grammar/#S2.5"/>
+	
+  <meta name="in.1" content="way back"/>
+  <meta name="out.1" content='$main[$zerotokens["way","back"]]'/>
+  <meta name="info.1" content="Repetitions with count zero on tokens: these tokens can't be in input"/>
+	
+  <meta name="in.2" content="the way to go back"/>
+  <meta name="out.2" content="REJECT"/>
+  <meta name="info.2" content="Repetitions with count zero on tokens: these tokens can't be in input"/>
+
+  <meta name="in.3" content="all I want to say"/>
+  <meta name="out.3" content='$main[$zeroNULL["all","I","want","to","say"]]'/>
+  <meta name="info.3" content="Repetition of NULL: no influence"/>
+		
+  <meta name="in.4" content="sure I can say this"/>
+  <meta name="out.4" content='$main[$zeroVOID["sure","I","can","say","this"]]'/>
+  <meta name="info.4" content="Repetition of VOID exactly zero times: as if VOID wasn't there"/>
+	
+  <meta name="in.5" content="dont interrupt this"/>
+  <meta name="out.5" content='$main[$zeroGARBAGE["dont","interrupt","this"]]'/>
+  <meta name="info.5" content="Zero repetition of GARBAGE: no garbage can be in input"/>
+	
+  <meta name="in.6" content="dont you dare to interrupt this"/>
+  <meta name="out.6" content="REJECT"/>
+  <meta name="info.6" content="'you dare to' in this input may be replaced by other words covered by $GARBAGE"/>
+		
+  <meta name="in.7" content="there will be no tags"/>
+  <meta name="out.7" content='$main[$zerotags["there","will","be","no","tags"]]'/>
+  <meta name="info.7" content="repetition of tag with count zero: the tag doesn't produce output to LPS"/>
+
+ 
+	<!-- rule declarations -->
+
+  <rule id="main">
+    <one-of>
+      <item><ruleref uri="#zerotokens"/></item>
+      <item><ruleref uri="#zeroNULL"/></item>
+      <item><ruleref uri="#zeroVOID"/></item>
+      <item><ruleref uri="#zeroGARBAGE"/></item>
+      <item><ruleref uri="#zerotags"/></item>
+    </one-of>
+  </rule>
+
+  <rule id="zerotokens">
+    <item repeat="0">the</item>
+    way
+    <item repeat="0-0">to go</item>
+    back
+  </rule>
+
+  <rule id="zeroNULL">
+    all I want to say
+   <item repeat="0"><ruleref special="NULL"/></item>
+  </rule>
+
+  <rule id="zeroVOID">
+    sure I can say this
+    <item repeat="0"><ruleref special="VOID"/></item>
+  </rule>
+
+  <rule id="zeroGARBAGE">
+    dont
+    <item repeat="0"><ruleref special="GARBAGE"/></item>
+    interrupt this
+  </rule>
+
+  <rule id="zerotags">
+    there will be no tags
+   <item repeat="0"><tag>"foo"</tag></item>
+  </rule>
+
+
+</grammar>

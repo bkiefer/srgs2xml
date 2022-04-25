@@ -1,0 +1,41 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+
+language en;
+mode voice;
+root $basicCmd;
+
+meta 'description' is 'Implementation Report test -- example 1';
+meta 'in.1' is 'open a file please';
+meta 'out.1' is '$basicCmd[$command[$action["open",{!{TAG-CONTENT-1}!}],$object["a","file"]],$<./politeness.gram#endPolite>["please"]]';
+
+meta "author" is "Stephanie Williams";
+
+/**
+ * Basic command.
+ * @example please move the window
+ * @example open a file please
+ */
+
+public $basicCmd = 
+          [$<./politeness.gram#startPolite>]
+          $command
+          [$<./politeness.gram#endPolite>];
+
+
+$command = $action $object;
+$action = /10/ open {TAG-CONTENT-1} | /2/ close {TAG-CONTENT-2} 
+                 | /1/ delete {TAG-CONTENT-3} | /1/ move {TAG-CONTENT-4};
+$object = [the | a] (window | file | menu);

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+-->
+
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN" 
+                  "http://www.w3.org/TR/speech-grammar/grammar.dtd">
+
+<grammar xml:lang="en-US" version="1.0" mode="voice" root="main"
+         xmlns="http://www.w3.org/2001/06/grammar"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.w3.org/2001/06/grammar 
+                             http://www.w3.org/TR/speech-grammar/grammar.xsd"
+>
+<!-- meta information -->
+<meta name="description" content="Implementation Report test -- a set of alternatives with a legal weight on one or many but not all alternatives"/>
+<meta name="in.1" content="stick"/>
+<meta name="out.1" content='$main["stick"]'/>
+
+<!-- rule declarations -->
+<!-- hockey equipment for a store. -->
+<rule id="main" scope="public">
+<example>stick</example>
+<example>puck</example>
+<example>shoulder pads</example>
+<one-of>
+  <item weight="10">stick</item>
+  <item weight="5">puck</item>
+  <item weight="2">jersey</item>
+  <item>gloves</item>
+  <item>shoulder pads</item>
+  <item weight="0.5">elbow pads</item>
+  <item weight="0.5">shin guards</item>
+</one-of>
+</rule>
+</grammar>

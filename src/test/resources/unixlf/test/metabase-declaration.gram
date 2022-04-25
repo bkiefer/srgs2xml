@@ -1,0 +1,27 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+meta 'description' is 'A grammar with declaration of a base URI given by meta.';
+meta 'spec.reference' is 'http://www.w3.org/TR/speech-grammar/#S4.9';
+meta 'base' is './test/';
+meta 'in.1' is 'My name is Bond James Bond';
+meta 'out.1' is '$main["My","name","is",$<./test/test.gram>["Bond","James","Bond"]]';
+meta 'info.1' is 'grammar at ./test/test.gram should permit the input "Bond James Bond"';
+public $main = 
+ (My name is)
+ $<test.gram> ;
+

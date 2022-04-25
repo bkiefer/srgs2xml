@@ -1,0 +1,28 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+meta 'description' is 'A language attachment to a rule reference on external grammars of a proprietary format which does not self-identify its language.';
+meta 'spec.reference' is 'http://www.w3.org/TR/speech-grammar/#S2.7';
+meta 'in.1' is 'Jose in the US and Jose in Mexico';
+meta 'out.1' is '$main[$<http://www.example.com/multilingual1.grx>["Jose"],"in","the","US","and",$<http://www.example.com/multilingual2.grx>["Jose"],"in","Mexico"]]';
+meta 'info.1' is 'The referenced external grammars should permit the input "Jose" in different languages.';
+
+// The test grammars should allow the matching of 'Jose' in different languages -->
+// Testers are expected to replace the example URI with their own proprietary grammar to be tested. -->
+public $main = 
+ $<http://www.example.com/multilingual1.grx> !en-US ( (in the US and)) !en-US $<http://www.example.com/multilingual2.grx> !es-MX ( (in Mexico)) !en-US;
+

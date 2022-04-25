@@ -1,0 +1,49 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+meta 'description' is 'Repeat probabilities.';
+meta 'spec.reference' is 'http://www.w3.org/TR/speech-grammar/#S2.5';
+
+meta 'in.1' is 'flight one two';
+meta 'out.1' is '$main["flight",$digit["one"],$digit["two"]]';
+
+meta 'in.2' is 'flight oh oh zero five six';
+meta 'out.2' is '$main["flight",$digit["oh"],$digit["oh"],$digit["zero"],$digit["five"],$digit["six"]]';
+
+meta 'in.3' is 'eight nine';
+meta 'out.3' is '$main[$digit["eight"],$digit["nine"]]';
+
+
+/* NOTE: repeat-prob is affecting performance of an engine, not acceptance of a grammar.*/
+ 
+private $main =  (flight)  <0-1  /0.6/> ( $digit)  <2-5  /.8/>;
+
+
+
+private $digit = 
+( ( oh )       |
+ ( zero )       |
+ ( one )       |
+ ( two )       |
+ ( three )       |
+ ( four )       |
+ ( five )       |
+ ( six )       |
+ ( seven )       |
+ ( eight )       |
+ ( nine ) ) ;

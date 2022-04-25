@@ -1,0 +1,62 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+meta 'description' is 'Any number of tags may be included inline within a rule expansion.';
+meta 'spec.reference' is 'http://www.w3.org/TR/speech-grammar/#S2.6';
+
+meta 'in.1' is 'this is a test';
+meta 'out.1' is '$main[$tagsandtokens[{!{"before;"}!},"this","is",{!{$+"within;"}!},"a","test",{!{$+"after"}!}]]';
+
+meta 'in.2' is 'small thing';
+meta 'out.2' is '$main[$tagsanditems[{!{"before;"}!},"small",{!{$+"within;"}!},"thing",{!{$+"after"}!}]]';
+
+meta 'in.3' is 'small';
+meta 'out.3' is '$main[$tagsandoneof[{!{"before one-of"}!},{!{"within item"}!},"small",{!{"after one-of"}!}]]';
+
+meta 'in.4' is 'big big big';
+meta 'out.4' is '$main[$taginrepeat[{!{"not repeated before"}!},{!{"repeated before"}!},"big",{!{"repeated after"}!},{!{"repeated before"}!},"big",{!{"repeated after"}!},{!{"repeated before"}!},"big",{!{"repeated after"}!},{!{"not repeated after"}!}]]';
+
+meta 'in.5' is 'testing';
+meta 'out.5' is '$main[$tagsequence["testing",{!{"one"}!},{!{"two"}!},{!{"three"}!}]]';
+
+meta 'in.6' is 'hello';
+meta 'out.6' is '$main[$tagandruleref[{!{"before ruleref"}!},$hello["hello"],{!{"before NULL"}!},{!{"before GARBAGE"}!},{!{"after GARBAGE"}!}]]';
+meta 'info.6' is '"hello" can optionally be followed by words covered by $GARBAGE';
+
+public $main = 
+( ( $tagsandtokens)       |
+ ( $tagsanditems)       |
+ ( $tagsandoneof)       |
+ ( $taginrepeat)       |
+ ( $tagsequence)       |
+ ( $tagandruleref) ) ;
+
+private $tagsandtokens =  {"before;"} this is  {$+"within;"} a test {$+"after"} ;
+
+private $tagsanditems =  {"before;"}  (small)  {$+"within;"}  (thing)  {$+"after"} ;
+
+private $tagsandoneof =  {"before one-of"}   ( ( {"within item"}  small) |  (medium)  )  {"after one-of"} ;
+
+private $taginrepeat = 
+	{"not repeated before"}  ( {"repeated before"} big {"repeated after"} )  <1-10> {"not repeated after"} ;
+
+private $tagsequence = 	  testing  {"one"}  {"two"}  {"three"} ;
+
+private $tagandruleref =  {"before ruleref"}  $hello {"before NULL"}  $NULL {"before GARBAGE"}  $GARBAGE {"after GARBAGE"} ;
+
+private $hello =   hello ;

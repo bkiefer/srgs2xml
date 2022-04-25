@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system-report name="SYSTEM-NAME-HERE">
+<testimonial>
+   <html>
+    HTML-CONTENT-HERE
+   </html>
+</testimonial>
+   <feature id="token-basic.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="token-quoted.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="token-unicode.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="token-element.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-nonexistent-local.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="duplicated-rulenames.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="duplicated-special-rulenames.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-local.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-rule.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-root.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-rule-mediatype.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-root-mediatype.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-mismatch-modes.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-mismatch-mediatype.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="special-null.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="special-void.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="special-garbage.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-token.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-ruleref.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-ruleref-token.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-item-empty.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-item-whitespace.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-no-weights.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-all-weights.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-some-weights.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-one-with-weight.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-one-no-weight.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternative-null.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternative-one-tag.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternative-one-item.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-n-exact.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-m-n-times.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-m-or-more.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-optional.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-with-probs.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-optional-void.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-many-null.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-0-times.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-many.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-repetition.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-standalone.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="xml_lang-token-single-lang.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="xml_lang-item-single-lang.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="xml_lang-one-of-single-lang.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lang-ruleref.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lang-sequence.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-basic-def.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-no-empty.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-tag.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-empty-item.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-null.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-private.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-public.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-private-root.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-private-rule.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-rules.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-version.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-namespace.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-doctype.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="doctype.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="korean-yesno-utf16-le.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="korean-yesno-utf16-be.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="header-encoding-none.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="korean-yesno-utf8.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="language-missing.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="language-en-us.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="language-other.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="language-dtmf-ignore.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-language-no-mode.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="mode-none.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="mode-voice.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="mode-dtmf.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="root-rule-decl.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="root-rule-decl-missing.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="uri-ref-undefined-root-referenced.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="uri-ref-undefined-root-referring.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="undefined-root.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-format-decl.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-format-decl-missing.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="base-declaration.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="metabase-declaration.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="base-metabase.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lexicon-none.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lexicon-one.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lexicon-many.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="meta.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="meta-http.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rdf-metadata.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="comment-xml.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-1.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-2.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-3.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-4.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-5.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="recursion.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-6.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-7.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-sequence.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-full.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-pound-star.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-simple.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-1.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-2-booking.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-2-places.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-3-korean-yesno-unicode.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-3-korean-yesno-utf8.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-4-chinese-digits-unicode.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-4-chinese-digits-utf8.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-5-swedish-boolean.grxml" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="token-basic.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="token-quoted.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="token-unicode.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="token-element.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-nonexistent-local.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="duplicated-rulenames.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="duplicated-special-rulenames.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-local.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-rule.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-root.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-rule-mediatype.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-root-mediatype.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-mismatch-modes.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-mismatch-mediatype.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="special-null.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="special-void.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="special-garbage.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-token.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-ruleref.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-ruleref-token.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-parentheses-empty.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="sequence-parentheses.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-no-weights.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-all-weights.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-some-weights.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternatives-one-with-weight.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternative-null.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternative-empty-paren.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="alternative-one-tag.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-abnf-symbols.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="wrong-repeat-abnf-symbols.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-n-exact.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-m-n-times.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-m-or-more.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-optional.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-with-probs.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-optional-void.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-many-null.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="repeat-0-times.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-many.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-repetition.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-standalone.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-delimit-1.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="wrong-tag-delimit-1.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-delimit-2.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="wrong-tag-delimit-2.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lang-attachment-token-single-lang.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lang-attachment-item-single-lang.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lang-attachment-one-of-single-lang.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lang-ruleref.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lang-sequence.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="abnf-precedence.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-basic-def.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-no-empty.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-tag.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-empty-item.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-null.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-private.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="rule-public.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-private-root.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="ruleref-ext-private-rule.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-end.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-rules.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-version.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="unrecognized-header.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="multiple-header.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="korean-yesno-utf16-le.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="korean-yesno-utf16-be.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="byte-order-mark.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="byte-order-mark-unicode.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-abnf-sih-header.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="wrong-abnf-sih-version.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-abnf-sih-version.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="abnf-sih-header-no-newline.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="header-encoding-none.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="korean-yesno-utf8.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="language-missing.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="language-en-us.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="language-other.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="language-dtmf-ignore.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="no-language-no-mode.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="mode-none.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="mode-voice.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="mode-dtmf.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="root-rule-decl.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="root-rule-decl-missing.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="uri-ref-undefined-root-referenced.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="uri-ref-undefined-root-referring.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="undefined-root.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-format-decl.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="tag-format-decl-missing.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="base-declaration.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="metabase-declaration.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="base-metabase.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lexicon-none.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lexicon-one.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="lexicon-many.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="meta.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="meta-http.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="comment-abnf.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="comment-interspersed.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="abnf-keywords.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-1.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-2.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-3.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-4.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-5.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="recursion.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="conformance-6.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-simple.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-sequence.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-full.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-pound-star-text.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-pound-and-star.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="dtmf-star-no-quotes.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-1.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-2-booking.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-2-places.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-3-korean-yesno-utf8.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-4-chinese-digits-utf8.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+   <feature id="example-5-swedish-boolean.gram" res="pass|fail|no-lang">
+      OPTIONAL-NOTES-HERE
+    </feature>
+</system-report>

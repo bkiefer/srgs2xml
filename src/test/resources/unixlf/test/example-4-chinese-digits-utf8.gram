@@ -1,0 +1,40 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+   
+ language zh;
+  
+ mode voice;
+  
+ root $main;
+  
+meta 'description' is 'Implementation Report test -- chinese digits (UTF8)';
+
+meta 'in.1' is '四';
+
+meta 'out.1' is '$main[$digits1_9["四"]]';
+
+public $main = 
+  
+          $digits1_9
+  ;
+
+    /**
+    * @example 四
+    */
+    private $digits1_9 = 
+    
+   (一|二|三|四|五|六|七|八|九) 
+   
+  ;

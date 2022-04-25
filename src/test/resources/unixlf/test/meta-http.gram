@@ -1,0 +1,27 @@
+#ABNF 1.0;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $x;
+meta 'description' is 'Implementation Report Test -- Http-equiv meta elements may be used';
+meta 'in.1' is 'placeholder';
+meta 'out.1' is '$x["placeholder"]';
+http-equiv 'Expires' is '0';
+http-equiv 'Date' is 'Thu, 12 DEC 2000 23:27:21 GMT';
+public $x = 
+
+    placeholder
+  ;
+

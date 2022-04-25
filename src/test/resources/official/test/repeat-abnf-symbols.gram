@@ -1,0 +1,38 @@
+#ABNF 1.0 UTF-8;
+/* 
+Copyright 1998-2002 W3C (MIT, INRIA, Keio), All Rights Reserved. 
+
+Permission to use, copy, modify and distribute this SRGS grammar
+and its accompanying documentation for any purpose and without fee
+is hereby granted in perpetuity, provided that the above copyright 
+notice and this paragraph appear in all copies.  
+
+The copyright holders make no representation about the suitability 
+of the grammar for any purpose. It is provided "as is" without expressed 
+or implied warranty.
+*/
+
+language en-US;
+mode voice;
+root $main;
+
+// meta information
+meta "description" is "Don't use reserved symbols in ABNF";
+meta "spec.reference" is "http://www.w3.org/TR/speech-grammar/#S2.5";
+
+
+// following inputs should match
+meta "in.1" is "but many many";
+meta "out.1" is '$main["but",$goodrule["many","many"]]';
+
+meta "in.2" is "but";
+meta "out.2" is '$main["but",$goodrule[]]';
+
+meta "in.3" is "but multiple";
+meta "out.3" is '$main["but",$goodrule["multiple","multiple"]]';
+
+// rule declarations
+$main = but $goodrule;
+
+// this is the correct way for repeated expansions in ABNF
+$goodrule = many<0-> | [any] | multiple<1->;
