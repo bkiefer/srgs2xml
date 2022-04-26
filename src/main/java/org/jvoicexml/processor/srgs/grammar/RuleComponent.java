@@ -29,6 +29,8 @@ package org.jvoicexml.processor.srgs.grammar;
 //Comp 2.0.6
 
 public abstract class RuleComponent {
+    protected static boolean PRINT_COMPACT = true;
+  
     protected String lang;
 
     /**

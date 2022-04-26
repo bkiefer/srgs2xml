@@ -100,7 +100,7 @@ public final class ChartGrammarChecker {
       sb.append("> ").append(rule).append(')');
       return sb.toString();
     }
-
+    
     public void printTree(String indent) {
       System.out.println(indent + this);
       for (ChartNode child : children) {
@@ -128,6 +128,10 @@ public final class ChartGrammarChecker {
     public List<ChartNode> getChildren() { return children; }
 
     public int getId() { return id; }
+    
+    public int getStart() { return start; }
+    
+    public int getEnd() { return end; }
   }
 
   private final GrammarManager manager;
@@ -457,5 +461,15 @@ public final class ChartGrammarChecker {
     // add complete epsilon item
     add(new ChartNode(current.start, current.end, tag, -1));
   }
+  
+  /********************** For displaying the chart **********************/
+  
+  public int chartSize() {
+    return chartOut.length;
+  }
 
+  public List<ChartNode> getOutEdges(int i) {
+    return chartOut[i];
+  }
+  
 }

@@ -79,17 +79,22 @@ public class RuleReference extends RuleComponent {
     }
 
     void appendStartTag(StringBuffer str) {
-        str.append("<ruleref uri=\"");
+        str.append(PRINT_COMPACT ? "[" : "<ruleref uri=\"");
 
         if (grammarReference != null) {
-            str.append(grammarReference);
+            String gref = grammarReference.toString();
+            int lastSlash = gref.lastIndexOf('/');
+            if (lastSlash < 0) {
+              lastSlash = Math.max(gref.length() - 5, 0);
+            }
+            str.append(PRINT_COMPACT ? gref.substring(lastSlash) : gref);
         }
         str.append("#");
         str.append(ruleName);
         str.append("\"");
 
         if (mediaType != null) {
-            str.append(" type=\"");
+            str.append(PRINT_COMPACT ? "|\"" : " type=\"");
             str.append(mediaType);
             str.append("\"");
         }
@@ -99,7 +104,7 @@ public class RuleReference extends RuleComponent {
         StringBuffer str = new StringBuffer();
         appendStartTag(str);
         appendLang(str); // handle optional language attachment
-        str.append("/>");
+        str.append(PRINT_COMPACT ? "]" : "/>");
 
         return str.toString();
     }

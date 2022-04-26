@@ -1,7 +1,10 @@
 package de.dfki.mlt.srgsparser;
 
 import static de.dfki.mlt.srgsparser.AbnfParserTest.RESOURCE_DIR;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,9 +28,18 @@ import org.jvoicexml.processor.srgs.grammar.GrammarException;
 import org.jvoicexml.processor.srgs.grammar.GrammarManager;
 import org.jvoicexml.processor.srgs.grammar.Meta;
 
+
 @RunWith(Parameterized.class)
 public class OfficialTest {
   private Path path;
+  
+  public static void logOff() {
+    System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "off");
+  }
+  
+  public static void logOn() {
+    System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
+  }
   
   @Parameterized.Parameters
   public static Collection<Path> official() throws IOException {
@@ -135,6 +147,8 @@ public class OfficialTest {
   static void parseGrammar(Path p) {
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     String name = p.getFileName().toString();
+    //if (toReject.contains(name)) 
+    logOff();
     try {
       final Grammar ruleGrammar = manager.loadGrammar(p.toUri());
       assertNotNull(ruleGrammar);
@@ -146,6 +160,7 @@ public class OfficialTest {
       //System.out.println(e);
       assertTrue(name, toReject.contains(name));
     }
+    logOn();
   }
   
   @Test 

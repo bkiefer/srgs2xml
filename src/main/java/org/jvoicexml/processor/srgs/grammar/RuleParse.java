@@ -102,14 +102,10 @@ public class RuleParse extends RuleComponent {
         if (ruleReference != null) {
             ruleReference.appendStartTag(str);
             appendLang(str);
-            str.append('>');
+            str.append(PRINT_COMPACT ? ']' : '>');
         }
 
         str.append(parse.toString());
-
-        if (ruleReference != null) {
-            str.append("</ruleref>");
-        }
 
         return str.toString();
     }
