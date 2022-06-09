@@ -13,7 +13,7 @@
       </item>
       <item>
         <item repeat="0-1">a</item>
-        <item repeat="0-1">pizza with</item>
+        <item repeat="0-1"><item>pizza</item> <item>with</item></item>
         <item>ham</item>
       </item>
     </one-of>

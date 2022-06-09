@@ -43,18 +43,6 @@ public class RuleSequence extends RuleComponent {
         this.ruleComponents = ruleComponents;
     }
 
-    public RuleSequence(String[] tokens) throws IllegalArgumentException {
-        if (tokens == null) {
-            throw new IllegalArgumentException("Tokens must not be null!");
-        }
-        ruleComponents = new ArrayList<RuleComponent>(tokens.length);
-
-        for (int i = 0; i < tokens.length; i++) {
-            final String token = tokens[i];
-            ruleComponents.add(new RuleToken(token));
-        }
-    }
-
     public RuleSequence() {
       ruleComponents = new ArrayList<>();
     }
@@ -67,24 +55,41 @@ public class RuleSequence extends RuleComponent {
         return ruleComponents;
     }
 
-    public String toString() {
+    public String toStringXML() {
         if (ruleComponents == null) {
             return "";
         }
-
         final StringBuffer str = new StringBuffer();
-        for (int i = 0; i < ruleComponents.size(); i++) {
-            final RuleComponent component = ruleComponents.get(i);
-            if (component == null) {
-                str.append(RuleSpecial.NULL.toString());
-            } else {
-                str.append(component.toString());
-            }
+        if (ruleComponents.size() != -101) {
+          str.append("<item");
+          appendLangXML(str);
+          str.append('>');
         }
-
+        for (int i = 0; i < ruleComponents.size(); i++) {
+            str.append(RuleComponent.toStringXML(ruleComponents.get(i)));
+        }
+        if (ruleComponents.size() != -101) {
+          str.append("</item>");
+        }
         return str.toString();
     }
 
+    public String toStringABNF() {
+        if (ruleComponents == null) {
+            return "";
+        }
+        
+        final StringBuffer str = new StringBuffer();
+        str.append('(');
+        for (int i = 0; i < ruleComponents.size(); i++) {
+            str.append(RuleComponent.toStringABNF(ruleComponents.get(i))).append(' ');
+        }
+        appendLangABNF(str);
+        str.append(')');
+        
+        return str.toString();
+    }
+    
     @Override
     public boolean looksFor(RuleComponent r, int i) {
       // check the i'th element of the sequence

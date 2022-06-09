@@ -189,19 +189,50 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         }
         return new RuleToken(text);
     }
-
+    
     private RuleComponent evalOneOf(final Node node) throws URISyntaxException {
-        final List<RuleComponent> components = evalChildNodes(node);
-        final List<RuleComponent> alternatives =
-            new ArrayList<RuleComponent>(components);
-        return new RuleAlternatives(alternatives);
+        final RuleAlternatives res = new RuleAlternatives();
+        final NodeList children = node.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            final RuleComponent component = evalNode(child);
+            if (component != null) {  
+                final String weightStr = getAttribute(child.getAttributes(), "weight");
+                if (weightStr == null) { 
+                    res.addAlternative(component);
+                } else {
+                    res.addAlternative(component, Double.parseDouble(weightStr));
+                }
+            }
+        }
+        
+        return setLanguage(res, node.getAttributes());
     }
 
+    private RuleComponent setLanguage(RuleComponent c, final NamedNodeMap attributes) {
+      final String langStr = getAttribute(attributes, "xml:lang");
+      if (langStr != null) 
+        c.setLanguage(langStr);
+      return c;
+    }
+      
+    
     private RuleComponent evalItem(final Node node) throws URISyntaxException {
+        final NamedNodeMap attributes = node.getAttributes();
+        
+        final List<RuleComponent> components = evalChildNodes(node);
+        RuleComponent component;
+        if (components.size() == 1) {
+            component = components.get(0);
+        } else {
+            final List<RuleComponent> sequenceComponents =
+                new ArrayList<RuleComponent>(components);
+            component = new RuleSequence(sequenceComponents);
+        }
+
         int repeatMin = -1;
         int repeatMax = -1;
         double repeatProb = -1;
-        final NamedNodeMap attributes = node.getAttributes();
         final String repeatStr = getAttribute(attributes, "repeat");
         if (repeatStr != null) {
             int toIndex = repeatStr.indexOf('-');
@@ -224,32 +255,21 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         if (repeatProbStr != null) {
             repeatProb = Double.parseDouble(repeatProbStr);
         }
-
-        final List<RuleComponent> components = evalChildNodes(node);
-        final RuleComponent component;
-        if (components.size() == 1) {
-            component = components.get(0);
-        } else {
-            final List<RuleComponent> sequenceComponents =
-                new ArrayList<RuleComponent>(components);
-            component = new RuleSequence(sequenceComponents);
-        }
+        
         if ((repeatMin != -1) && (repeatMax != -1) && (repeatProb != -1)) {
-            return new RuleCount(component, repeatMin, repeatMax,
-                    (int) (repeatProb * RuleCount.MAX_PROBABILITY));
+            component = new RuleCount(component, repeatMin, repeatMax, repeatProb);
         } else if ((repeatMin != -1) && (repeatMax != -1)) {
-            return new RuleCount(component, repeatMin, repeatMax);
+            component = new RuleCount(component, repeatMin, repeatMax);
         } else if (repeatMin != -1) {
             if (repeatProb != -1) {
-                return new RuleCount(component, repeatMin,
-                        RuleCount.REPEAT_INDEFINITELY,
-                        (int) (repeatProb * RuleCount.MAX_PROBABILITY));
+                component = new RuleCount(component, repeatMin,
+                    RuleCount.REPEAT_INDEFINITELY, repeatProb);
             } else {
-                return new RuleCount(component, repeatMin);
+                component = new RuleCount(component, repeatMin);
             }
-        } else {
-            return component;
         }
+
+        return setLanguage(component, attributes);
     }
 
     private RuleComponent evalReference(final Node node) throws URISyntaxException {
@@ -268,11 +288,9 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
             if (uriStr != null && uriStr.indexOf("#") == -1) {
                 return new RuleReference(uriStr);
             } else if (uriStr != null) {
-                final String ruleName = uriStr.substring(
-                        uriStr.indexOf("#") + 1).trim();
-                ;
-                final String grammarName = uriStr.substring(0,
-                        uriStr.indexOf("#"));
+                final String ruleName = 
+                    uriStr.substring(uriStr.indexOf("#") + 1).trim();
+                final String grammarName = uriStr.substring(0, uriStr.indexOf("#"));
                 final String typeStr = getAttribute(attributes, "type");
                 if (grammarName.isEmpty()) {
                     return new RuleReference(ruleName);
@@ -281,13 +299,15 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
                     return new RuleReference(uri, ruleName);
                 } else {
                     final URI uri = new URI(grammarName);
-                    return new RuleReference(uri, typeStr.trim());
+                    RuleReference res = new RuleReference(uri, ruleName);
+                    res.setMediaType(typeStr.trim());
+                    return res;
                 }
             }
         }
         return null;
     }
-
+    
     private RuleComponent evalNode(final Node node) throws URISyntaxException {
         final String nodeName = node.getNodeName();
         if (nodeName.equalsIgnoreCase("#text")) {
@@ -301,7 +321,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
             return evalReference(node);
         } else if (nodeName.equalsIgnoreCase("token")) {
             String tokenText = node.getTextContent();
-            return new RuleToken(tokenText);
+            return setLanguage(new RuleToken(tokenText), node.getAttributes());
         } else if (nodeName.equalsIgnoreCase("tag")) {
             Object tagObject = node.getTextContent();
             return new RuleTag(tagObject);

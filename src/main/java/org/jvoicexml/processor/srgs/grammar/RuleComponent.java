@@ -64,6 +64,10 @@ public abstract class RuleComponent {
         }
     }
 
+    public static void printCompact(boolean val) {
+      PRINT_COMPACT = val;
+    }
+    
     static boolean isLetter(char ch) {
         return isUpperCase(ch)
                 || isLowerCase(ch)
@@ -88,13 +92,30 @@ public abstract class RuleComponent {
         }
     }
 
-    protected void appendLang(StringBuffer str) {
+    protected void appendLangXML(StringBuffer str) {
       if (lang != null)
         str.append(" xml:lang=\"").append(lang).append('"');
     }
 
+    protected void appendLangABNF(StringBuffer str) {
+      if (lang != null)
+        str.append("!").append(lang);
+    }
+
+    public abstract String toStringXML();
+
+    public abstract String toStringABNF();
+    
+    public static String toStringXML(RuleComponent c) {
+      return (c == null) ? RuleSpecial.NULL.toStringXML() : c.toStringXML();
+    }
+
+    public static String toStringABNF(RuleComponent c) {
+      return (c == null) ? RuleSpecial.NULL.toStringABNF() : c.toStringABNF();
+    }
+    
     public String toString() {
-      throw new UnsupportedOperationException();
+      return PRINT_COMPACT ? toStringABNF() : toStringXML();
     }
 
   /** Test, for every subclass, if the given RuleComponent is the one required in

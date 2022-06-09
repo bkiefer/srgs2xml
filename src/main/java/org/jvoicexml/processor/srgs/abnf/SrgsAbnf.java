@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.7.6.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Skeleton implementation for Bison LALR(1) parsers in Java
 
-   Copyright (C) 2007-2015, 2018-2021 Free Software Foundation, Inc.
+   Copyright (C) 2007-2015, 2018-2020 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -30,15 +30,10 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
-   especially those whose name start with YY_ or yy_.  They are
-   private implementation details that can be changed or removed.  */
-
 package org.jvoicexml.processor.srgs.abnf;
 
 
 
-import java.text.MessageFormat;
 /* "%code imports" blocks.  */
 /* "SrgsAbnf.y":3  */
 
@@ -52,7 +47,7 @@ import org.jvoicexml.processor.srgs.grammar.*;
 
 @SuppressWarnings({"unused", "unchecked"})
 
-/* "SrgsAbnf.java":56  */
+/* "SrgsAbnf.java":51  */
 
 /**
  * A Bison parser, automatically generated from <tt>SrgsAbnf.y</tt>.
@@ -61,12 +56,11 @@ import org.jvoicexml.processor.srgs.grammar.*;
  */
 public class SrgsAbnf
 {
-  /** Version number for the Bison executable that generated this parser.  */
-  public static final String bisonVersion = "3.7.6";
+    /** Version number for the Bison executable that generated this parser.  */
+  public static final String bisonVersion = "3.5.1";
 
   /** Name of the skeleton that generated this parser.  */
   public static final String bisonSkeleton = "lalr1.java";
-
 
 
   /**
@@ -94,7 +88,7 @@ public class SrgsAbnf
    * Locations represent a part of the input through the beginning
    * and ending positions.
    */
-  public static class Location {
+  public class Location {
     /**
      * The first, inclusive, position in the range.
      */
@@ -137,297 +131,97 @@ public class SrgsAbnf
     }
   }
 
-  private Location yylloc(YYStack rhs, int n)
+
+
+
+  private Location yylloc (YYStack rhs, int n)
   {
     if (0 < n)
-      return new Location(rhs.locationAt(n-1).begin, rhs.locationAt(0).end);
+      return new Location (rhs.locationAt (n-1).begin, rhs.locationAt (0).end);
     else
-      return new Location(rhs.locationAt(0).end);
+      return new Location (rhs.locationAt (0).end);
   }
-
-  public enum SymbolKind
-  {
-    S_YYEOF(0),                    /* "end of file"  */
-    S_YYerror(1),                  /* error  */
-    S_YYUNDEF(2),                  /* "invalid token"  */
-    S_ERR(3),                      /* ERR  */
-    S_DECL_LANG(4),                /* DECL_LANG  */
-    S_DECL_BASE(5),                /* DECL_BASE  */
-    S_DECL_ROOT(6),                /* DECL_ROOT  */
-    S_DECL_TAG_FORMAT(7),          /* DECL_TAG_FORMAT  */
-    S_DECL_MODE(8),                /* DECL_MODE  */
-    S_DECL_LEXICON(9),             /* DECL_LEXICON  */
-    S_DECL_HTTP_EQUIV(10),         /* DECL_HTTP_EQUIV  */
-    S_DECL_META(11),               /* DECL_META  */
-    S_DECL_IS(12),                 /* DECL_IS  */
-    S_IllegalCharacter(13),        /* IllegalCharacter  */
-    S_URI(14),                     /* URI  */
-    S_SelfIdentHeader(15),         /* SelfIdentHeader  */
-    S_Nmtoken(16),                 /* Nmtoken  */
-    S_SlashNum(17),                /* SlashNum  */
-    S_Repeat(18),                  /* Repeat  */
-    S_QuotedCharacters(19),        /* QuotedCharacters  */
-    S_SimpleToken(20),             /* SimpleToken  */
-    S_Private(21),                 /* Private  */
-    S_Public(22),                  /* Public  */
-    S_RuleName(23),                /* RuleName  */
-    S_specialRuleReference(24),    /* specialRuleReference  */
-    S_TagStart(25),                /* TagStart  */
-    S_TagEnd(26),                  /* TagEnd  */
-    S_Path(27),                    /* Path  */
-    S_Tag(28),                     /* Tag  */
-    S_29_(29),                     /* ';'  */
-    S_30_(30),                     /* '='  */
-    S_31_(31),                     /* '|'  */
-    S_32_(32),                     /* '<'  */
-    S_33_(33),                     /* '>'  */
-    S_34_(34),                     /* '!'  */
-    S_35_(35),                     /* '('  */
-    S_36_(36),                     /* ')'  */
-    S_37_(37),                     /* '['  */
-    S_38_(38),                     /* ']'  */
-    S_YYACCEPT(39),                /* $accept  */
-    S_grammar(40),                 /* grammar  */
-    S_declarations(41),            /* declarations  */
-    S_declaration(42),             /* declaration  */
-    S_baseDecl(43),                /* baseDecl  */
-    S_languageDecl(44),            /* languageDecl  */
-    S_modeDecl(45),                /* modeDecl  */
-    S_rootRuleDecl(46),            /* rootRuleDecl  */
-    S_tagFormatDecl(47),           /* tagFormatDecl  */
-    S_lexiconDecl(48),             /* lexiconDecl  */
-    S_metaDecl(49),                /* metaDecl  */
-    S_ruleDefinitions(50),         /* ruleDefinitions  */
-    S_ruleDefinition(51),          /* ruleDefinition  */
-    S_scope(52),                   /* scope  */
-    S_ruleExpansion(53),           /* ruleExpansion  */
-    S_sequence(54),                /* sequence  */
-    S_sequenceElement(55),         /* sequenceElement  */
-    S_repeat(56),                  /* repeat  */
-    S_subexpansion(57);            /* subexpansion  */
-
-
-    private final int yycode_;
-
-    SymbolKind (int n) {
-      this.yycode_ = n;
-    }
-
-    private static final SymbolKind[] values_ = {
-      SymbolKind.S_YYEOF,
-      SymbolKind.S_YYerror,
-      SymbolKind.S_YYUNDEF,
-      SymbolKind.S_ERR,
-      SymbolKind.S_DECL_LANG,
-      SymbolKind.S_DECL_BASE,
-      SymbolKind.S_DECL_ROOT,
-      SymbolKind.S_DECL_TAG_FORMAT,
-      SymbolKind.S_DECL_MODE,
-      SymbolKind.S_DECL_LEXICON,
-      SymbolKind.S_DECL_HTTP_EQUIV,
-      SymbolKind.S_DECL_META,
-      SymbolKind.S_DECL_IS,
-      SymbolKind.S_IllegalCharacter,
-      SymbolKind.S_URI,
-      SymbolKind.S_SelfIdentHeader,
-      SymbolKind.S_Nmtoken,
-      SymbolKind.S_SlashNum,
-      SymbolKind.S_Repeat,
-      SymbolKind.S_QuotedCharacters,
-      SymbolKind.S_SimpleToken,
-      SymbolKind.S_Private,
-      SymbolKind.S_Public,
-      SymbolKind.S_RuleName,
-      SymbolKind.S_specialRuleReference,
-      SymbolKind.S_TagStart,
-      SymbolKind.S_TagEnd,
-      SymbolKind.S_Path,
-      SymbolKind.S_Tag,
-      SymbolKind.S_29_,
-      SymbolKind.S_30_,
-      SymbolKind.S_31_,
-      SymbolKind.S_32_,
-      SymbolKind.S_33_,
-      SymbolKind.S_34_,
-      SymbolKind.S_35_,
-      SymbolKind.S_36_,
-      SymbolKind.S_37_,
-      SymbolKind.S_38_,
-      SymbolKind.S_YYACCEPT,
-      SymbolKind.S_grammar,
-      SymbolKind.S_declarations,
-      SymbolKind.S_declaration,
-      SymbolKind.S_baseDecl,
-      SymbolKind.S_languageDecl,
-      SymbolKind.S_modeDecl,
-      SymbolKind.S_rootRuleDecl,
-      SymbolKind.S_tagFormatDecl,
-      SymbolKind.S_lexiconDecl,
-      SymbolKind.S_metaDecl,
-      SymbolKind.S_ruleDefinitions,
-      SymbolKind.S_ruleDefinition,
-      SymbolKind.S_scope,
-      SymbolKind.S_ruleExpansion,
-      SymbolKind.S_sequence,
-      SymbolKind.S_sequenceElement,
-      SymbolKind.S_repeat,
-      SymbolKind.S_subexpansion
-    };
-
-    static final SymbolKind get(int code) {
-      return values_[code];
-    }
-
-    public final int getCode() {
-      return this.yycode_;
-    }
-
-    /* Return YYSTR after stripping away unnecessary quotes and
-       backslashes, so that it's suitable for yyerror.  The heuristic is
-       that double-quoting is unnecessary unless the string contains an
-       apostrophe, a comma, or backslash (other than backslash-backslash).
-       YYSTR is taken from yytname.  */
-    private static String yytnamerr_(String yystr)
-    {
-      if (yystr.charAt (0) == '"')
-        {
-          StringBuffer yyr = new StringBuffer();
-          strip_quotes: for (int i = 1; i < yystr.length(); i++)
-            switch (yystr.charAt(i))
-              {
-              case '\'':
-              case ',':
-                break strip_quotes;
-
-              case '\\':
-                if (yystr.charAt(++i) != '\\')
-                  break strip_quotes;
-                /* Fall through.  */
-              default:
-                yyr.append(yystr.charAt(i));
-                break;
-
-              case '"':
-                return yyr.toString();
-              }
-        }
-      return yystr;
-    }
-
-    /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
-       First, the terminals, then, starting at \a YYNTOKENS_, nonterminals.  */
-    private static final String[] yytname_ = yytname_init();
-  private static final String[] yytname_init()
-  {
-    return new String[]
-    {
-  "\"end of file\"", "error", "\"invalid token\"", "ERR", "DECL_LANG",
-  "DECL_BASE", "DECL_ROOT", "DECL_TAG_FORMAT", "DECL_MODE", "DECL_LEXICON",
-  "DECL_HTTP_EQUIV", "DECL_META", "DECL_IS", "IllegalCharacter", "URI",
-  "SelfIdentHeader", "Nmtoken", "SlashNum", "Repeat", "QuotedCharacters",
-  "SimpleToken", "Private", "Public", "RuleName", "specialRuleReference",
-  "TagStart", "TagEnd", "Path", "Tag", "';'", "'='", "'|'", "'<'", "'>'",
-  "'!'", "'('", "')'", "'['", "']'", "$accept", "grammar", "declarations",
-  "declaration", "baseDecl", "languageDecl", "modeDecl", "rootRuleDecl",
-  "tagFormatDecl", "lexiconDecl", "metaDecl", "ruleDefinitions",
-  "ruleDefinition", "scope", "ruleExpansion", "sequence",
-  "sequenceElement", "repeat", "subexpansion", null
-    };
-  }
-
-    /* The user-facing name of this symbol.  */
-    public final String getName() {
-      return yytnamerr_(yytname_[yycode_]);
-    }
-
-  };
-
 
   /**
    * Communication interface between the scanner and the Bison-generated
    * parser <tt>SrgsAbnf</tt>.
    */
   public interface Lexer {
-    /* Token kinds.  */
-    /** Token "end of file", to be returned by the scanner.  */
-    static final int YYEOF = 0;
-    /** Token error, to be returned by the scanner.  */
-    static final int YYerror = 256;
-    /** Token "invalid token", to be returned by the scanner.  */
-    static final int YYUNDEF = 257;
-    /** Token ERR, to be returned by the scanner.  */
+    /** Token returned by the scanner to signal the end of its input.  */
+    public static final int EOF = 0;
+
+/* Tokens.  */
+    /** Token number,to be returned by the scanner.  */
     static final int ERR = 258;
-    /** Token DECL_LANG, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_LANG = 259;
-    /** Token DECL_BASE, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_BASE = 260;
-    /** Token DECL_ROOT, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_ROOT = 261;
-    /** Token DECL_TAG_FORMAT, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_TAG_FORMAT = 262;
-    /** Token DECL_MODE, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_MODE = 263;
-    /** Token DECL_LEXICON, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_LEXICON = 264;
-    /** Token DECL_HTTP_EQUIV, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_HTTP_EQUIV = 265;
-    /** Token DECL_META, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_META = 266;
-    /** Token DECL_IS, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int DECL_IS = 267;
-    /** Token IllegalCharacter, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int IllegalCharacter = 268;
-    /** Token URI, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int URI = 269;
-    /** Token SelfIdentHeader, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int SelfIdentHeader = 270;
-    /** Token Nmtoken, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int Nmtoken = 271;
-    /** Token SlashNum, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int SlashNum = 272;
-    /** Token Repeat, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int Repeat = 273;
-    /** Token QuotedCharacters, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int QuotedCharacters = 274;
-    /** Token SimpleToken, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int SimpleToken = 275;
-    /** Token Private, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int Private = 276;
-    /** Token Public, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int Public = 277;
-    /** Token RuleName, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int RuleName = 278;
-    /** Token specialRuleReference, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int specialRuleReference = 279;
-    /** Token TagStart, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int TagStart = 280;
-    /** Token TagEnd, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int TagEnd = 281;
-    /** Token Path, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int Path = 282;
-    /** Token Tag, to be returned by the scanner.  */
+    /** Token number,to be returned by the scanner.  */
     static final int Tag = 283;
 
-    /** Deprecated, use YYEOF instead.  */
-    public static final int EOF = YYEOF;
 
     /**
      * Method to retrieve the beginning position of the last scanned token.
      * @return the position at which the last scanned token starts.
      */
-    Position getStartPos();
+    Position getStartPos ();
 
     /**
      * Method to retrieve the ending position of the last scanned token.
      * @return the first position beyond the last scanned token.
      */
-    Position getEndPos();
+    Position getEndPos ();
 
     /**
      * Method to retrieve the semantic value of the last scanned token.
      * @return the semantic value of the last scanned token.
      */
-    Object getLVal();
+    Object getLVal ();
 
     /**
      * Entry point for the scanner.  Returns the token identifier corresponding
@@ -435,27 +229,25 @@ public class SrgsAbnf
      * and beginning/ending positions of the token.
      * @return the token identifier corresponding to the next token.
      */
-    int yylex() throws java.io.IOException;
+    int yylex () throws java.io.IOException;
 
     /**
-     * Emit an error referring to the given locationin a user-defined way.
+     * Entry point for error reporting.  Emits an error
+     * referring to the given location in a user-defined way.
      *
      * @param loc The location of the element to which the
-     *                error message is related.
+     *                error message is related
      * @param msg The string for the error message.
      */
-     void yyerror(Location loc, String msg);
-
-
+     void yyerror (Location loc, String msg);
   }
 
-
-  /**
+/**
    * The object doing lexical analysis for us.
    */
   private Lexer yylexer;
 
-
+  
 
 
 
@@ -463,11 +255,11 @@ public class SrgsAbnf
    * Instantiates the Bison-generated parser.
    * @param yylexer The scanner that will supply tokens to the parser.
    */
-  public SrgsAbnf (Lexer yylexer)
+  public SrgsAbnf (Lexer yylexer) 
   {
-
+    
     this.yylexer = yylexer;
-
+    
   }
 
 
@@ -482,7 +274,7 @@ public class SrgsAbnf
    * Set the <tt>PrintStream</tt> on which the debug output is printed.
    * @param s The stream that is used for debugging output.
    */
-  public final void setDebugStream (java.io.PrintStream s) { yyDebugStream = s; }
+  public final void setDebugStream(java.io.PrintStream s) { yyDebugStream = s; }
 
   private int yydebug = 0;
 
@@ -490,30 +282,24 @@ public class SrgsAbnf
    * Answer the verbosity of the debugging output; 0 means that all kinds of
    * output from the parser are suppressed.
    */
-  public final int getDebugLevel () { return yydebug; }
+  public final int getDebugLevel() { return yydebug; }
 
   /**
    * Set the verbosity of the debugging output; 0 means that all kinds of
    * output from the parser are suppressed.
    * @param level The verbosity level for debugging output.
    */
-  public final void setDebugLevel (int level) { yydebug = level; }
+  public final void setDebugLevel(int level) { yydebug = level; }
 
-
-  private int yynerrs = 0;
-
-  /**
-   * The number of syntax errors so far.
-   */
-  public final int getNumberOfErrors () { return yynerrs; }
 
   /**
    * Print an error message via the lexer.
    * Use a <code>null</code> location.
    * @param msg The error message.
    */
-  public final void yyerror(String msg) {
-      yylexer.yyerror((Location)null, msg);
+  public final void yyerror (String msg)
+  {
+    yylexer.yyerror ((Location)null, msg);
   }
 
   /**
@@ -521,8 +307,9 @@ public class SrgsAbnf
    * @param loc The location associated with the message.
    * @param msg The error message.
    */
-  public final void yyerror(Location loc, String msg) {
-      yylexer.yyerror(loc, msg);
+  public final void yyerror (Location loc, String msg)
+  {
+    yylexer.yyerror (loc, msg);
   }
 
   /**
@@ -530,8 +317,9 @@ public class SrgsAbnf
    * @param pos The position associated with the message.
    * @param msg The error message.
    */
-  public final void yyerror(Position pos, String msg) {
-      yylexer.yyerror(new Location (pos), msg);
+  public final void yyerror (Position pos, String msg)
+  {
+    yylexer.yyerror (new Location (pos), msg);
   }
 
   protected final void yycdebug (String s) {
@@ -547,13 +335,14 @@ public class SrgsAbnf
     public int size = 16;
     public int height = -1;
 
-    public final void push (int state, Object value, Location loc) {
+    public final void push (int state, Object value                            , Location loc) {
       height++;
       if (size == height)
         {
           int[] newStateStack = new int[size * 2];
           System.arraycopy (stateStack, 0, newStateStack, 0, height);
           stateStack = newStateStack;
+          
           Location[] newLocStack = new Location[size * 2];
           System.arraycopy (locStack, 0, newLocStack, 0, height);
           locStack = newLocStack;
@@ -586,7 +375,6 @@ public class SrgsAbnf
     public final int stateAt (int i) {
       return stateStack[height - i];
     }
-
 
     public final Location locationAt (int i) {
       return locStack[height - i];
@@ -660,14 +448,14 @@ public class SrgsAbnf
    */
   private int yyLRGotoState (int yystate, int yysym)
   {
-    int yyr = yypgoto_[yysym - YYNTOKENS_] + yystate;
-    if (0 <= yyr && yyr <= YYLAST_ && yycheck_[yyr] == yystate)
+    int yyr = yypgoto_[yysym - yyntokens_] + yystate;
+    if (0 <= yyr && yyr <= yylast_ && yycheck_[yyr] == yystate)
       return yytable_[yyr];
     else
-      return yydefgoto_[yysym - YYNTOKENS_];
+      return yydefgoto_[yysym - yyntokens_];
   }
 
-  private int yyaction(int yyn, YYStack yystack, int yylen)
+  private int yyaction (int yyn, YYStack yystack, int yylen) 
   {
     /* If YYLEN is nonzero, implement the default value of the action:
        '$$ = $1'.  Otherwise, use the top of the stack.
@@ -675,16 +463,16 @@ public class SrgsAbnf
        Otherwise, the following line sets YYVAL to garbage.
        This behavior is undocumented and Bison
        users should not rely upon it.  */
-    Object yyval = (0 < yylen) ? yystack.valueAt(yylen - 1) : yystack.valueAt(0);
-    Location yyloc = yylloc(yystack, yylen);
+    Object yyval = (0 < yylen) ? yystack.valueAt (yylen - 1) : yystack.valueAt (0);
+    Location yyloc = yylloc (yystack, yylen);
 
-    yyReducePrint(yyn, yystack);
+    yyReducePrint (yyn, yystack);
 
     switch (yyn)
       {
-          case 12: /* baseDecl: DECL_BASE URI ';'  */
+          case 12:
   if (yyn == 12)
-    /* "SrgsAbnf.y":186  */
+    /* "SrgsAbnf.y":187  */
                             { attributes.put("base", ((String[])(yystack.valueAt (1)))[0]);
 /* Additional constraints:
    - A base declaration must not appear more than
@@ -692,11 +480,11 @@ public class SrgsAbnf
 */
 };
   break;
+    
 
-
-  case 13: /* languageDecl: DECL_LANG Nmtoken ';'  */
+  case 13:
   if (yyn == 13)
-    /* "SrgsAbnf.y":194  */
+    /* "SrgsAbnf.y":195  */
                                     { attributes.put("language", ((String)(yystack.valueAt (1))));
   /* Additional constraints:
      - A language declaration must not appear more than
@@ -705,18 +493,18 @@ public class SrgsAbnf
      grammar mode is "voice".
   */ };
   break;
+    
 
-
-  case 14: /* modeDecl: DECL_MODE ';'  */
+  case 14:
   if (yyn == 14)
-    /* "SrgsAbnf.y":203  */
+    /* "SrgsAbnf.y":204  */
                         { attributes.put("mode", ((String)(yystack.valueAt (1)))); };
   break;
+    
 
-
-  case 15: /* rootRuleDecl: DECL_ROOT ';'  */
+  case 15:
   if (yyn == 15)
-    /* "SrgsAbnf.y":210  */
+    /* "SrgsAbnf.y":211  */
                             { attributes.put("root", ((String)(yystack.valueAt (1))));
   /*Additional constraints:
           - A root rule declaration must not appear more
@@ -725,50 +513,50 @@ public class SrgsAbnf
             within the grammar.
         */};
   break;
+    
 
-
-  case 16: /* tagFormatDecl: DECL_TAG_FORMAT URI ';'  */
+  case 16:
   if (yyn == 16)
-    /* "SrgsAbnf.y":219  */
+    /* "SrgsAbnf.y":220  */
                                        { attributes.put("tag_format", ((String[])(yystack.valueAt (1)))[0]); };
   break;
+    
 
-
-  case 17: /* tagFormatDecl: DECL_TAG_FORMAT QuotedCharacters ';'  */
+  case 17:
   if (yyn == 17)
-    /* "SrgsAbnf.y":224  */
+    /* "SrgsAbnf.y":225  */
                                        { attributes.put("tag_format", ((String)(yystack.valueAt (1)))); };
   break;
+    
 
-
-  case 18: /* lexiconDecl: DECL_LEXICON URI ';'  */
+  case 18:
   if (yyn == 18)
-    /* "SrgsAbnf.y":228  */
+    /* "SrgsAbnf.y":229  */
                                   { addLexicon(new lexicon(((String[])(yystack.valueAt (1)))[0])); };
   break;
+    
 
-
-  case 19: /* metaDecl: DECL_HTTP_EQUIV QuotedCharacters DECL_IS QuotedCharacters ';'  */
+  case 19:
   if (yyn == 19)
-    /* "SrgsAbnf.y":231  */
+    /* "SrgsAbnf.y":232  */
                                                                         {
   addMeta(new Meta(((String)(yystack.valueAt (3))), ((String)(yystack.valueAt (1))), true));
 };
   break;
+    
 
-
-  case 20: /* metaDecl: DECL_META QuotedCharacters DECL_IS QuotedCharacters ';'  */
+  case 20:
   if (yyn == 20)
-    /* "SrgsAbnf.y":234  */
+    /* "SrgsAbnf.y":235  */
                                                           {
   addMeta(new Meta(((String)(yystack.valueAt (3))), ((String)(yystack.valueAt (1))), false));
 };
   break;
+    
 
-
-  case 23: /* ruleDefinition: scope RuleName '=' ruleExpansion ';'  */
+  case 23:
   if (yyn == 23)
-    /* "SrgsAbnf.y":244  */
+    /* "SrgsAbnf.y":245  */
         { /* Additional constraints:
              - The rule name must be unique within a grammar,
                i.e. no rule must be defined more than once
@@ -777,52 +565,52 @@ public class SrgsAbnf
           addRuleDef(((String)(yystack.valueAt (3))), ((String)(yystack.valueAt (4))), ((RuleComponent)(yystack.valueAt (1))));
         };
   break;
+    
 
-
-  case 24: /* scope: %empty  */
+  case 24:
   if (yyn == 24)
-    /* "SrgsAbnf.y":253  */
+    /* "SrgsAbnf.y":254  */
                          { yyval = ""; };
   break;
+    
 
-
-  case 25: /* scope: Private  */
+  case 25:
   if (yyn == 25)
-    /* "SrgsAbnf.y":254  */
+    /* "SrgsAbnf.y":255  */
                       { yyval = "private"; };
   break;
+    
 
-
-  case 26: /* scope: Public  */
+  case 26:
   if (yyn == 26)
-    /* "SrgsAbnf.y":255  */
+    /* "SrgsAbnf.y":256  */
                       { yyval = "public"; };
   break;
+    
 
-
-  case 27: /* ruleExpansion: sequence  */
+  case 27:
   if (yyn == 27)
-    /* "SrgsAbnf.y":258  */
+    /* "SrgsAbnf.y":259  */
                         {
   yyval = ((RuleComponent)(yystack.valueAt (0)));
 };
   break;
+    
 
-
-  case 28: /* ruleExpansion: SlashNum sequence  */
+  case 28:
   if (yyn == 28)
-    /* "SrgsAbnf.y":261  */
+    /* "SrgsAbnf.y":262  */
                     {
   RuleAlternatives alt = new RuleAlternatives();
   alt.addAlternative(((RuleComponent)(yystack.valueAt (0))), Double.parseDouble(((String)(yystack.valueAt (1)))));
   yyval = alt;
 };
   break;
+    
 
-
-  case 29: /* ruleExpansion: ruleExpansion '|' sequence  */
+  case 29:
   if (yyn == 29)
-    /* "SrgsAbnf.y":266  */
+    /* "SrgsAbnf.y":267  */
                              {
   if (((RuleComponent)(yystack.valueAt (2))) instanceof RuleAlternatives) {
     ((RuleAlternatives)((RuleComponent)(yystack.valueAt (2)))).addAlternative(((RuleComponent)(yystack.valueAt (0))));
@@ -835,11 +623,11 @@ public class SrgsAbnf
   }
 };
   break;
+    
 
-
-  case 30: /* ruleExpansion: ruleExpansion '|' SlashNum sequence  */
+  case 30:
   if (yyn == 30)
-    /* "SrgsAbnf.y":277  */
+    /* "SrgsAbnf.y":278  */
                                       {
   if (((RuleComponent)(yystack.valueAt (3))) instanceof RuleAlternatives) {
     ((RuleAlternatives)((RuleComponent)(yystack.valueAt (3)))).addAlternative(((RuleComponent)(yystack.valueAt (0))), Double.parseDouble(((String)(yystack.valueAt (1)))));
@@ -852,18 +640,18 @@ public class SrgsAbnf
   }
 };
   break;
+    
 
-
-  case 31: /* sequence: sequenceElement  */
+  case 31:
   if (yyn == 31)
-    /* "SrgsAbnf.y":298  */
+    /* "SrgsAbnf.y":299  */
                           { yyval = ((RuleComponent)(yystack.valueAt (0))) ; };
   break;
+    
 
-
-  case 32: /* sequence: sequence sequenceElement  */
+  case 32:
   if (yyn == 32)
-    /* "SrgsAbnf.y":299  */
+    /* "SrgsAbnf.y":300  */
                            {
   if (((RuleComponent)(yystack.valueAt (1))) instanceof RuleSequence) {
     ((RuleSequence)((RuleComponent)(yystack.valueAt (1)))).addElement(((RuleComponent)(yystack.valueAt (0))));
@@ -876,202 +664,241 @@ public class SrgsAbnf
   }
 };
   break;
+    
 
-
-  case 33: /* sequenceElement: subexpansion  */
+  case 33:
   if (yyn == 33)
-    /* "SrgsAbnf.y":312  */
+    /* "SrgsAbnf.y":313  */
                               { yyval = ((RuleComponent)(yystack.valueAt (0))); };
   break;
+    
 
-
-  case 34: /* sequenceElement: subexpansion '<' repeat '>'  */
+  case 34:
   if (yyn == 34)
-    /* "SrgsAbnf.y":313  */
+    /* "SrgsAbnf.y":314  */
                               {
-  yyval = new RuleCount(((RuleComponent)(yystack.valueAt (3))), ((repeat)(yystack.valueAt (1))).from, ((repeat)(yystack.valueAt (1))).to, ((repeat)(yystack.valueAt (1))).prob);
+  yyval = ((repeat)(yystack.valueAt (1))).prob < 0 ? new RuleCount(((RuleComponent)(yystack.valueAt (3))), ((repeat)(yystack.valueAt (1))).from, ((repeat)(yystack.valueAt (1))).to)
+                   : new RuleCount(((RuleComponent)(yystack.valueAt (3))), ((repeat)(yystack.valueAt (1))).from, ((repeat)(yystack.valueAt (1))).to, ((repeat)(yystack.valueAt (1))).prob);
 };
   break;
+    
 
-
-  case 35: /* repeat: Repeat  */
+  case 35:
   if (yyn == 35)
-    /* "SrgsAbnf.y":318  */
+    /* "SrgsAbnf.y":320  */
                { yyval = new repeat(((String)(yystack.valueAt (0)))); };
   break;
+    
 
-
-  case 36: /* repeat: Repeat SlashNum  */
+  case 36:
   if (yyn == 36)
-    /* "SrgsAbnf.y":319  */
+    /* "SrgsAbnf.y":321  */
                   { yyval = new repeat(((String)(yystack.valueAt (1))), ((String)(yystack.valueAt (0)))); };
   break;
+    
 
-
-  case 37: /* subexpansion: Nmtoken  */
+  case 37:
   if (yyn == 37)
-    /* "SrgsAbnf.y":334  */
+    /* "SrgsAbnf.y":336  */
                       {
       RuleToken res = new RuleToken(((String)(yystack.valueAt (0))));
       yyval = res;
     };
   break;
+    
 
-
-  case 38: /* subexpansion: Nmtoken '!' Nmtoken  */
+  case 38:
   if (yyn == 38)
-    /* "SrgsAbnf.y":338  */
+    /* "SrgsAbnf.y":340  */
                           {
       RuleToken res = new RuleToken(((String)(yystack.valueAt (2))), ((String)(yystack.valueAt (0))));
       yyval = res;
     };
   break;
+    
 
-
-  case 39: /* subexpansion: QuotedCharacters  */
+  case 39:
   if (yyn == 39)
-    /* "SrgsAbnf.y":342  */
+    /* "SrgsAbnf.y":344  */
                        {  // should that be DoubleQuotedCharacters ??
       RuleToken res = new RuleToken(((String)(yystack.valueAt (0))));
       yyval = res;
     };
   break;
+    
 
-
-  case 40: /* subexpansion: QuotedCharacters '!' Nmtoken  */
+  case 40:
   if (yyn == 40)
-    /* "SrgsAbnf.y":346  */
+    /* "SrgsAbnf.y":348  */
                                    {// should that be DoubleQuotedCharacters ??
       RuleToken res = new RuleToken(((String)(yystack.valueAt (2))), ((String)(yystack.valueAt (0))));
       yyval = res;
     };
   break;
+    
 
-
-  case 41: /* subexpansion: RuleName  */
+  case 41:
   if (yyn == 41)
-    /* "SrgsAbnf.y":350  */
+    /* "SrgsAbnf.y":352  */
                {
       yyval = new RuleReference(((String)(yystack.valueAt (0))));
     };
   break;
+    
 
-
-  case 42: /* subexpansion: RuleName '!' Nmtoken  */
+  case 42:
   if (yyn == 42)
-    /* "SrgsAbnf.y":353  */
+    /* "SrgsAbnf.y":355  */
                            {
       RuleReference res = new RuleReference(((String)(yystack.valueAt (2))));
       res.setLanguage(((String)(yystack.valueAt (0))));
       yyval = res;
     };
   break;
+    
 
-
-  case 43: /* subexpansion: URI  */
+  case 43:
   if (yyn == 43)
-    /* "SrgsAbnf.y":358  */
+    /* "SrgsAbnf.y":360  */
           {
       yyval = getRuleReference(((String[])(yystack.valueAt (0))));
     };
   break;
+    
 
-
-  case 44: /* subexpansion: URI '!' Nmtoken  */
+  case 44:
   if (yyn == 44)
-    /* "SrgsAbnf.y":361  */
+    /* "SrgsAbnf.y":363  */
                       {
       RuleReference res = getRuleReference(((String[])(yystack.valueAt (2))));
       res.setLanguage(((String)(yystack.valueAt (0))));
       yyval = res;
     };
   break;
+    
 
-
-  case 45: /* subexpansion: specialRuleReference  */
+  case 45:
   if (yyn == 45)
-    /* "SrgsAbnf.y":366  */
+    /* "SrgsAbnf.y":368  */
                            {
       yyval = ((RuleComponent)(yystack.valueAt (0)));
     };
   break;
+    
 
-
-  case 46: /* subexpansion: '(' ruleExpansion ')'  */
+  case 46:
   if (yyn == 46)
-    /* "SrgsAbnf.y":369  */
+    /* "SrgsAbnf.y":371  */
                             {
       yyval = ((RuleComponent)(yystack.valueAt (1)));
     };
   break;
+    
 
-
-  case 47: /* subexpansion: '(' ruleExpansion ')' '!' Nmtoken  */
+  case 47:
   if (yyn == 47)
-    /* "SrgsAbnf.y":372  */
+    /* "SrgsAbnf.y":374  */
                                         {
       ((RuleComponent)(yystack.valueAt (3))).setLanguage(((String)(yystack.valueAt (0))));
       yyval = ((RuleComponent)(yystack.valueAt (3)));
     };
   break;
+    
 
-
-  case 48: /* subexpansion: '[' ruleExpansion ']'  */
+  case 48:
   if (yyn == 48)
-    /* "SrgsAbnf.y":376  */
+    /* "SrgsAbnf.y":378  */
                             {
       yyval = setOptional(((RuleComponent)(yystack.valueAt (1))));
     };
   break;
+    
 
-
-  case 49: /* subexpansion: '[' ruleExpansion ']' '!' Nmtoken  */
+  case 49:
   if (yyn == 49)
-    /* "SrgsAbnf.y":379  */
+    /* "SrgsAbnf.y":381  */
                                         {
-      ((RuleComponent)(yystack.valueAt (3))).setLanguage(((String)(yystack.valueAt (0))));
-      yyval = setOptional(((RuleComponent)(yystack.valueAt (3))));
+      RuleComponent opt = setOptional(((RuleComponent)(yystack.valueAt (3))));
+      opt.setLanguage(((String)(yystack.valueAt (0))));
+      yyval = opt;
     };
   break;
+    
 
-
-  case 50: /* subexpansion: '(' ')'  */
+  case 50:
   if (yyn == 50)
-    /* "SrgsAbnf.y":383  */
+    /* "SrgsAbnf.y":386  */
               {
       yyval = RuleSpecial.NULL ;
     };
   break;
+    
 
-
-  case 51: /* subexpansion: TagStart Tag TagEnd  */
+  case 51:
   if (yyn == 51)
-    /* "SrgsAbnf.y":387  */
+    /* "SrgsAbnf.y":390  */
                           { yyval = new RuleTag(((String)(yystack.valueAt (1)))) ; };
   break;
+    
 
-
-  case 52: /* subexpansion: TagStart TagEnd  */
+  case 52:
   if (yyn == 52)
-    /* "SrgsAbnf.y":388  */
+    /* "SrgsAbnf.y":391  */
                       { yyval = new RuleTag("") ; };
   break;
+    
 
 
-
-/* "SrgsAbnf.java":1063  */
+/* "SrgsAbnf.java":853  */
 
         default: break;
       }
 
-    yySymbolPrint("-> $$ =", SymbolKind.get(yyr1_[yyn]), yyval, yyloc);
+    yySymbolPrint ("-> $$ =", yyr1_[yyn], yyval, yyloc);
 
-    yystack.pop(yylen);
+    yystack.pop (yylen);
     yylen = 0;
+
     /* Shift the result of the reduction.  */
-    int yystate = yyLRGotoState(yystack.stateAt(0), yyr1_[yyn]);
-    yystack.push(yystate, yyval, yyloc);
+    int yystate = yyLRGotoState (yystack.stateAt (0), yyr1_[yyn]);
+    yystack.push (yystate, yyval, yyloc);
     return YYNEWSTATE;
+  }
+
+
+  /* Return YYSTR after stripping away unnecessary quotes and
+     backslashes, so that it's suitable for yyerror.  The heuristic is
+     that double-quoting is unnecessary unless the string contains an
+     apostrophe, a comma, or backslash (other than backslash-backslash).
+     YYSTR is taken from yytname.  */
+  private final String yytnamerr_ (String yystr)
+  {
+    if (yystr.charAt (0) == '"')
+      {
+        StringBuffer yyr = new StringBuffer ();
+        strip_quotes: for (int i = 1; i < yystr.length (); i++)
+          switch (yystr.charAt (i))
+            {
+            case '\'':
+            case ',':
+              break strip_quotes;
+
+            case '\\':
+              if (yystr.charAt(++i) != '\\')
+                break strip_quotes;
+              /* Fall through.  */
+            default:
+              yyr.append (yystr.charAt (i));
+              break;
+
+            case '"':
+              return yyr.toString ();
+            }
+      }
+    else if (yystr.equals ("$end"))
+      return "end of input";
+
+    return yystr;
   }
 
 
@@ -1079,15 +906,13 @@ public class SrgsAbnf
   | Print this symbol on YYOUTPUT.  |
   `--------------------------------*/
 
-  private void yySymbolPrint(String s, SymbolKind yykind,
-                             Object yyvalue, Location yylocation) {
-      if (0 < yydebug) {
-          yycdebug(s
-                   + (yykind.getCode() < YYNTOKENS_ ? " token " : " nterm ")
-                   + yykind.getName() + " ("
-                   + yylocation + ": "
-                   + (yyvalue == null ? "(null)" : yyvalue.toString()) + ")");
-      }
+  private void yySymbolPrint (String s, int yytype,
+                             Object yyvaluep                              , Object yylocationp)
+  {
+    yycdebug (s + (yytype < yyntokens_ ? " token " : " nterm ")
+              + yytname_[yytype] + " ("
+              + yylocationp + ": "
+              + (yyvaluep == null ? "(null)" : yyvaluep.toString ()) + ")");
   }
 
 
@@ -1098,17 +923,16 @@ public class SrgsAbnf
    * @return <tt>true</tt> if the parsing succeeds.  Note that this does not
    *          imply that there were no syntax errors.
    */
-  public boolean parse() throws java.io.IOException
+  public boolean parse () throws java.io.IOException
 
   {
     /* @$.  */
     Location yyloc;
 
 
-    /* Lookahead token kind.  */
-    int yychar = YYEMPTY_;
-    /* Lookahead symbol kind.  */
-    SymbolKind yytoken = null;
+    /* Lookahead and lookahead in internal form.  */
+    int yychar = yyempty_;
+    int yytoken = 0;
 
     /* State.  */
     int yyn = 0;
@@ -1117,7 +941,8 @@ public class SrgsAbnf
     YYStack yystack = new YYStack ();
     int label = YYNEWSTATE;
 
-
+    /* Error handling.  */
+    int yynerrs_ = 0;
     /* The location where the error started.  */
     Location yyerrloc = null;
 
@@ -1127,12 +952,11 @@ public class SrgsAbnf
     /* Semantic value of the lookahead.  */
     Object yylval = null;
 
-    yycdebug ("Starting parse");
+    yycdebug ("Starting parse\n");
     yyerrstatus_ = 0;
-    yynerrs = 0;
 
     /* Initialize the stack.  */
-    yystack.push (yystate, yylval, yylloc);
+    yystack.push (yystate, yylval , yylloc);
 
 
 
@@ -1142,12 +966,12 @@ public class SrgsAbnf
         /* New state.  Unlike in the C/C++ skeletons, the state is already
            pushed when we come here.  */
       case YYNEWSTATE:
-        yycdebug ("Entering state " + yystate);
+        yycdebug ("Entering state " + yystate + "\n");
         if (0 < yydebug)
           yystack.print (yyDebugStream);
 
         /* Accept?  */
-        if (yystate == YYFINAL_)
+        if (yystate == yyfinal_)
           return true;
 
         /* Take a decision.  First try without lookahead.  */
@@ -1159,71 +983,57 @@ public class SrgsAbnf
           }
 
         /* Read a lookahead token.  */
-        if (yychar == YYEMPTY_)
+        if (yychar == yyempty_)
           {
 
-            yycdebug ("Reading a token");
+            yycdebug ("Reading a token: ");
             yychar = yylexer.yylex ();
-            yylval = yylexer.getLVal();
-            yylloc = new Location(yylexer.getStartPos(),
-                                          yylexer.getEndPos());
+            yylval = yylexer.getLVal ();
+            yylloc = new Location (yylexer.getStartPos (),
+                            yylexer.getEndPos ());
 
           }
 
         /* Convert token to internal form.  */
         yytoken = yytranslate_ (yychar);
-        yySymbolPrint("Next token is", yytoken,
-                      yylval, yylloc);
+        yySymbolPrint ("Next token is", yytoken,
+                       yylval, yylloc);
 
-        if (yytoken == SymbolKind.S_YYerror)
+        /* If the proper action on seeing token YYTOKEN is to reduce or to
+           detect an error, take that action.  */
+        yyn += yytoken;
+        if (yyn < 0 || yylast_ < yyn || yycheck_[yyn] != yytoken)
+          label = YYDEFAULT;
+
+        /* <= 0 means reduce or error.  */
+        else if ((yyn = yytable_[yyn]) <= 0)
           {
-            // The scanner already issued an error message, process directly
-            // to error recovery.  But do not keep the error token as
-            // lookahead, it is too special and may lead us to an endless
-            // loop in error recovery. */
-            yychar = Lexer.YYUNDEF;
-            yytoken = SymbolKind.S_YYUNDEF;
-            yyerrloc = yylloc;
-            label = YYERRLAB1;
-          }
-        else
-          {
-            /* If the proper action on seeing token YYTOKEN is to reduce or to
-               detect an error, take that action.  */
-            yyn += yytoken.getCode();
-            if (yyn < 0 || YYLAST_ < yyn || yycheck_[yyn] != yytoken.getCode())
-              label = YYDEFAULT;
-
-            /* <= 0 means reduce or error.  */
-            else if ((yyn = yytable_[yyn]) <= 0)
-              {
-                if (yyTableValueIsError (yyn))
-                  label = YYERRLAB;
-                else
-                  {
-                    yyn = -yyn;
-                    label = YYREDUCE;
-                  }
-              }
-
+            if (yyTableValueIsError (yyn))
+              label = YYERRLAB;
             else
               {
-                /* Shift the lookahead token.  */
-                yySymbolPrint("Shifting", yytoken,
-                              yylval, yylloc);
-
-                /* Discard the token being shifted.  */
-                yychar = YYEMPTY_;
-
-                /* Count tokens shifted since error; after three, turn off error
-                   status.  */
-                if (yyerrstatus_ > 0)
-                  --yyerrstatus_;
-
-                yystate = yyn;
-                yystack.push (yystate, yylval, yylloc);
-                label = YYNEWSTATE;
+                yyn = -yyn;
+                label = YYREDUCE;
               }
+          }
+
+        else
+          {
+            /* Shift the lookahead token.  */
+            yySymbolPrint ("Shifting", yytoken,
+                           yylval, yylloc);
+
+            /* Discard the token being shifted.  */
+            yychar = yyempty_;
+
+            /* Count tokens shifted since error; after three, turn off error
+               status.  */
+            if (yyerrstatus_ > 0)
+              --yyerrstatus_;
+
+            yystate = yyn;
+            yystack.push (yystate, yylval, yylloc);
+            label = YYNEWSTATE;
           }
         break;
 
@@ -1243,7 +1053,7 @@ public class SrgsAbnf
       `-----------------------------*/
       case YYREDUCE:
         yylen = yyr2_[yyn];
-        label = yyaction(yyn, yystack, yylen);
+        label = yyaction (yyn, yystack, yylen);
         yystate = yystack.stateAt (0);
         break;
 
@@ -1254,10 +1064,10 @@ public class SrgsAbnf
         /* If not already recovering from an error, report this error.  */
         if (yyerrstatus_ == 0)
           {
-            ++yynerrs;
-            if (yychar == YYEMPTY_)
-              yytoken = null;
-            yyreportSyntaxError (new Context (yystack, yytoken, yylloc));
+            ++yynerrs_;
+            if (yychar == yyempty_)
+              yytoken = yyempty_;
+            yyerror (yylloc, yysyntax_error (yystate, yytoken));
           }
 
         yyerrloc = yylloc;
@@ -1266,14 +1076,14 @@ public class SrgsAbnf
             /* If just tried and failed to reuse lookahead token after an
                error, discard it.  */
 
-            if (yychar <= Lexer.YYEOF)
+            if (yychar <= Lexer.EOF)
               {
                 /* Return failure if at end of input.  */
-                if (yychar == Lexer.YYEOF)
+                if (yychar == Lexer.EOF)
                   return false;
               }
             else
-              yychar = YYEMPTY_;
+              yychar = yyempty_;
           }
 
         /* Else will try to reuse lookahead token after shifting the error
@@ -1300,15 +1110,13 @@ public class SrgsAbnf
       case YYERRLAB1:
         yyerrstatus_ = 3;       /* Each real token shifted decrements this.  */
 
-        // Pop stack until we find a state that shifts the error token.
         for (;;)
           {
             yyn = yypact_[yystate];
             if (!yyPactValueIsDefault (yyn))
               {
-                yyn += SymbolKind.S_YYerror.getCode();
-                if (0 <= yyn && yyn <= YYLAST_
-                    && yycheck_[yyn] == SymbolKind.S_YYerror.getCode())
+                yyn += yy_error_token_;
+                if (0 <= yyn && yyn <= yylast_ && yycheck_[yyn] == yy_error_token_)
                   {
                     yyn = yytable_[yyn];
                     if (0 < yyn)
@@ -1321,7 +1129,6 @@ public class SrgsAbnf
             if (yystack.height == 0)
               return false;
 
-
             yyerrloc = yystack.locationAt (0);
             yystack.pop ();
             yystate = yystack.stateAt (0);
@@ -1330,8 +1137,8 @@ public class SrgsAbnf
           }
 
         if (label == YYABORT)
-          /* Leave the switch.  */
-          break;
+            /* Leave the switch.  */
+            break;
 
 
         /* Muck with the stack to setup for yylloc.  */
@@ -1341,8 +1148,8 @@ public class SrgsAbnf
         yystack.pop (2);
 
         /* Shift the error token.  */
-        yySymbolPrint("Shifting", SymbolKind.get(yystos_[yyn]),
-                      yylval, yyloc);
+        yySymbolPrint ("Shifting", yystos_[yyn],
+                       yylval, yyloc);
 
         yystate = yyn;
         yystack.push (yyn, yylval, yyloc);
@@ -1362,155 +1169,77 @@ public class SrgsAbnf
 
 
 
-  /**
-   * Information needed to get the list of expected tokens and to forge
-   * a syntax error diagnostic.
-   */
-  public static final class Context
+  // Generate an error message.
+  private String yysyntax_error (int yystate, int tok)
   {
-    Context (YYStack stack, SymbolKind token, Location loc)
-    {
-      yystack = stack;
-      yytoken = token;
-      yylocation = loc;
-    }
-
-    private YYStack yystack;
-
-
-    /**
-     * The symbol kind of the lookahead token.
-     */
-    public final SymbolKind getToken ()
-    {
-      return yytoken;
-    }
-
-    private SymbolKind yytoken;
-
-    /**
-     * The location of the lookahead.
-     */
-    public final Location getLocation ()
-    {
-      return yylocation;
-    }
-
-    private Location yylocation;
-    static final int NTOKENS = SrgsAbnf.YYNTOKENS_;
-
-    /**
-     * Put in YYARG at most YYARGN of the expected tokens given the
-     * current YYCTX, and return the number of tokens stored in YYARG.  If
-     * YYARG is null, return the number of expected tokens (guaranteed to
-     * be less than YYNTOKENS).
-     */
-    int getExpectedTokens (SymbolKind yyarg[], int yyargn)
-    {
-      return getExpectedTokens (yyarg, 0, yyargn);
-    }
-
-    int getExpectedTokens (SymbolKind yyarg[], int yyoffset, int yyargn)
-    {
-      int yycount = yyoffset;
-      int yyn = yypact_[this.yystack.stateAt (0)];
-      if (!yyPactValueIsDefault (yyn))
-        {
-          /* Start YYX at -YYN if negative to avoid negative
-             indexes in YYCHECK.  In other words, skip the first
-             -YYN actions for this state because they are default
-             actions.  */
-          int yyxbegin = yyn < 0 ? -yyn : 0;
-          /* Stay within bounds of both yycheck and yytname.  */
-          int yychecklim = YYLAST_ - yyn + 1;
-          int yyxend = yychecklim < NTOKENS ? yychecklim : NTOKENS;
-          for (int yyx = yyxbegin; yyx < yyxend; ++yyx)
-            if (yycheck_[yyx + yyn] == yyx && yyx != SymbolKind.S_YYerror.getCode()
-                && !yyTableValueIsError(yytable_[yyx + yyn]))
-              {
-                if (yyarg == null)
-                  yycount += 1;
-                else if (yycount == yyargn)
-                  return 0; // FIXME: this is incorrect.
-                else
-                  yyarg[yycount++] = SymbolKind.get(yyx);
-              }
-        }
-      if (yyarg != null && yycount == yyoffset && yyoffset < yyargn)
-        yyarg[yycount] = null;
-      return yycount - yyoffset;
-    }
-  }
-
-
-  private int yysyntaxErrorArguments (Context yyctx, SymbolKind[] yyarg, int yyargn)
-  {
-    /* There are many possibilities here to consider:
-       - If this state is a consistent state with a default action,
-         then the only way this function was invoked is if the
-         default action is an error action.  In that case, don't
-         check for expected tokens because there are none.
-       - The only way there can be no lookahead present (in tok) is
-         if this state is a consistent state with a default action.
-         Thus, detecting the absence of a lookahead is sufficient to
-         determine that there is no unexpected or expected token to
-         report.  In that case, just report a simple "syntax error".
-       - Don't assume there isn't a lookahead just because this
-         state is a consistent state with a default action.  There
-         might have been a previous inconsistent state, consistent
-         state with a non-default action, or user semantic action
-         that manipulated yychar.  (However, yychar is currently out
-         of scope during semantic actions.)
-       - Of course, the expected token list depends on states to
-         have correct lookahead information, and it depends on the
-         parser not to perform extra reductions after fetching a
-         lookahead from the scanner and before detecting a syntax
-         error.  Thus, state merging (from LALR or IELR) and default
-         reductions corrupt the expected token list.  However, the
-         list is correct for canonical LR with one exception: it
-         will still contain any token that will not be accepted due
-         to an error action in a later state.
-    */
-    int yycount = 0;
-    if (yyctx.getToken() != null)
+    if (yyErrorVerbose)
       {
-        if (yyarg != null)
-          yyarg[yycount] = yyctx.getToken();
-        yycount += 1;
-        yycount += yyctx.getExpectedTokens(yyarg, 1, yyargn);
-      }
-    return yycount;
-  }
-
-
-  /**
-   * Build and emit a "syntax error" message in a user-defined way.
-   *
-   * @param ctx  The context of the error.
-   */
-  private void yyreportSyntaxError(Context yyctx) {
-      if (yyErrorVerbose) {
-          final int argmax = 5;
-          SymbolKind[] yyarg = new SymbolKind[argmax];
-          int yycount = yysyntaxErrorArguments(yyctx, yyarg, argmax);
-          String[] yystr = new String[yycount];
-          for (int yyi = 0; yyi < yycount; ++yyi) {
-              yystr[yyi] = yyarg[yyi].getName();
+        /* There are many possibilities here to consider:
+           - If this state is a consistent state with a default action,
+             then the only way this function was invoked is if the
+             default action is an error action.  In that case, don't
+             check for expected tokens because there are none.
+           - The only way there can be no lookahead present (in tok) is
+             if this state is a consistent state with a default action.
+             Thus, detecting the absence of a lookahead is sufficient to
+             determine that there is no unexpected or expected token to
+             report.  In that case, just report a simple "syntax error".
+           - Don't assume there isn't a lookahead just because this
+             state is a consistent state with a default action.  There
+             might have been a previous inconsistent state, consistent
+             state with a non-default action, or user semantic action
+             that manipulated yychar.  (However, yychar is currently out
+             of scope during semantic actions.)
+           - Of course, the expected token list depends on states to
+             have correct lookahead information, and it depends on the
+             parser not to perform extra reductions after fetching a
+             lookahead from the scanner and before detecting a syntax
+             error.  Thus, state merging (from LALR or IELR) and default
+             reductions corrupt the expected token list.  However, the
+             list is correct for canonical LR with one exception: it
+             will still contain any token that will not be accepted due
+             to an error action in a later state.
+        */
+        if (tok != yyempty_)
+          {
+            /* FIXME: This method of building the message is not compatible
+               with internationalization.  */
+            StringBuffer res =
+              new StringBuffer ("syntax error, unexpected ");
+            res.append (yytnamerr_ (yytname_[tok]));
+            int yyn = yypact_[yystate];
+            if (!yyPactValueIsDefault (yyn))
+              {
+                /* Start YYX at -YYN if negative to avoid negative
+                   indexes in YYCHECK.  In other words, skip the first
+                   -YYN actions for this state because they are default
+                   actions.  */
+                int yyxbegin = yyn < 0 ? -yyn : 0;
+                /* Stay within bounds of both yycheck and yytname.  */
+                int yychecklim = yylast_ - yyn + 1;
+                int yyxend = yychecklim < yyntokens_ ? yychecklim : yyntokens_;
+                int count = 0;
+                for (int x = yyxbegin; x < yyxend; ++x)
+                  if (yycheck_[x + yyn] == x && x != yy_error_token_
+                      && !yyTableValueIsError (yytable_[x + yyn]))
+                    ++count;
+                if (count < 5)
+                  {
+                    count = 0;
+                    for (int x = yyxbegin; x < yyxend; ++x)
+                      if (yycheck_[x + yyn] == x && x != yy_error_token_
+                          && !yyTableValueIsError (yytable_[x + yyn]))
+                        {
+                          res.append (count++ == 0 ? ", expecting " : " or ");
+                          res.append (yytnamerr_ (yytname_[x]));
+                        }
+                  }
+              }
+            return res.toString ();
           }
-          String yyformat;
-          switch (yycount) {
-              default:
-              case 0: yyformat = "syntax error"; break;
-              case 1: yyformat = "syntax error, unexpected {0}"; break;
-              case 2: yyformat = "syntax error, unexpected {0}, expecting {1}"; break;
-              case 3: yyformat = "syntax error, unexpected {0}, expecting {1} or {2}"; break;
-              case 4: yyformat = "syntax error, unexpected {0}, expecting {1} or {2} or {3}"; break;
-              case 5: yyformat = "syntax error, unexpected {0}, expecting {1} or {2} or {3} or {4}"; break;
-          }
-          yyerror(yyctx.yylocation, new MessageFormat(yyformat).format(yystr));
-      } else {
-          yyerror(yyctx.yylocation, "syntax error");
       }
+
+    return "syntax error";
   }
 
   /**
@@ -1535,9 +1264,9 @@ public class SrgsAbnf
   private static final byte yypact_ninf_ = -58;
   private static final byte yytable_ninf_ = -25;
 
-/* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
+  /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-  private static final byte[] yypact_ = yypact_init();
+  private static final byte yypact_[] = yypact_init();
   private static final byte[] yypact_init()
   {
     return new byte[]
@@ -1558,7 +1287,7 @@ public class SrgsAbnf
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
    Performed when YYTABLE does not specify something else to do.  Zero
    means the default is an error.  */
-  private static final byte[] yydefact_ = yydefact_init();
+  private static final byte yydefact_[] = yydefact_init();
   private static final byte[] yydefact_init()
   {
     return new byte[]
@@ -1577,7 +1306,7 @@ public class SrgsAbnf
   }
 
 /* YYPGOTO[NTERM-NUM].  */
-  private static final byte[] yypgoto_ = yypgoto_init();
+  private static final byte yypgoto_[] = yypgoto_init();
   private static final byte[] yypgoto_init()
   {
     return new byte[]
@@ -1588,12 +1317,12 @@ public class SrgsAbnf
   }
 
 /* YYDEFGOTO[NTERM-NUM].  */
-  private static final byte[] yydefgoto_ = yydefgoto_init();
+  private static final byte yydefgoto_[] = yydefgoto_init();
   private static final byte[] yydefgoto_init()
   {
     return new byte[]
     {
-       0,     2,     3,    13,    14,    15,    16,    17,    18,    19,
+      -1,     2,     3,    13,    14,    15,    16,    17,    18,    19,
       20,    21,    33,    34,    57,    58,    59,    85,    60
     };
   }
@@ -1601,7 +1330,7 @@ public class SrgsAbnf
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
    positive, shift that token.  If negative, reduce the rule whose
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
-  private static final byte[] yytable_ = yytable_init();
+  private static final byte yytable_[] = yytable_init();
   private static final byte[] yytable_init()
   {
     return new byte[]
@@ -1620,7 +1349,7 @@ public class SrgsAbnf
     };
   }
 
-private static final byte[] yycheck_ = yycheck_init();
+private static final byte yycheck_[] = yycheck_init();
   private static final byte[] yycheck_init()
   {
     return new byte[]
@@ -1641,7 +1370,7 @@ private static final byte[] yycheck_ = yycheck_init();
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
-  private static final byte[] yystos_ = yystos_init();
+  private static final byte yystos_[] = yystos_init();
   private static final byte[] yystos_init()
   {
     return new byte[]
@@ -1660,7 +1389,7 @@ private static final byte[] yycheck_ = yycheck_init();
   }
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
-  private static final byte[] yyr1_ = yyr1_init();
+  private static final byte yyr1_[] = yyr1_init();
   private static final byte[] yyr1_init()
   {
     return new byte[]
@@ -1675,7 +1404,7 @@ private static final byte[] yycheck_ = yycheck_init();
   }
 
 /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
-  private static final byte[] yyr2_ = yyr2_init();
+  private static final byte yyr2_[] = yyr2_init();
   private static final byte[] yyr2_init()
   {
     return new byte[]
@@ -1690,19 +1419,40 @@ private static final byte[] yycheck_ = yycheck_init();
   }
 
 
+  /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
+     First, the terminals, then, starting at \a yyntokens_, nonterminals.  */
+  private static final String yytname_[] = yytname_init();
+  private static final String[] yytname_init()
+  {
+    return new String[]
+    {
+  "$end", "error", "$undefined", "ERR", "DECL_LANG", "DECL_BASE",
+  "DECL_ROOT", "DECL_TAG_FORMAT", "DECL_MODE", "DECL_LEXICON",
+  "DECL_HTTP_EQUIV", "DECL_META", "DECL_IS", "IllegalCharacter", "URI",
+  "SelfIdentHeader", "Nmtoken", "SlashNum", "Repeat", "QuotedCharacters",
+  "SimpleToken", "Private", "Public", "RuleName", "specialRuleReference",
+  "TagStart", "TagEnd", "Path", "Tag", "';'", "'='", "'|'", "'<'", "'>'",
+  "'!'", "'('", "')'", "'['", "']'", "$accept", "grammar", "declarations",
+  "declaration", "baseDecl", "languageDecl", "modeDecl", "rootRuleDecl",
+  "tagFormatDecl", "lexiconDecl", "metaDecl", "ruleDefinitions",
+  "ruleDefinition", "scope", "ruleExpansion", "sequence",
+  "sequenceElement", "repeat", "subexpansion", null
+    };
+  }
+
 
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-  private static final short[] yyrline_ = yyrline_init();
+  private static final short yyrline_[] = yyrline_init();
   private static final short[] yyrline_init()
   {
     return new short[]
     {
-       0,   169,   169,   173,   174,   177,   178,   179,   180,   181,
-     182,   183,   186,   194,   203,   210,   219,   224,   228,   231,
-     234,   239,   240,   243,   253,   254,   255,   258,   261,   266,
-     277,   298,   299,   312,   313,   318,   319,   334,   338,   342,
-     346,   350,   353,   358,   361,   366,   369,   372,   376,   379,
-     383,   387,   388
+       0,   170,   170,   174,   175,   178,   179,   180,   181,   182,
+     183,   184,   187,   195,   204,   211,   220,   225,   229,   232,
+     235,   240,   241,   244,   254,   255,   256,   259,   262,   267,
+     278,   299,   300,   313,   314,   320,   321,   336,   340,   344,
+     348,   352,   355,   360,   363,   368,   371,   374,   378,   381,
+     386,   390,   391
     };
   }
 
@@ -1717,30 +1467,31 @@ private static final byte[] yycheck_ = yycheck_init();
     int yynrhs = yyr2_[yyrule];
     /* Print the symbols being reduced, and their result.  */
     yycdebug ("Reducing stack by rule " + (yyrule - 1)
-              + " (line " + yylno + "):");
+              + " (line " + yylno + "), ");
 
     /* The symbols being reduced.  */
     for (int yyi = 0; yyi < yynrhs; yyi++)
-      yySymbolPrint("   $" + (yyi + 1) + " =",
-                    SymbolKind.get(yystos_[yystack.stateAt (yynrhs - (yyi + 1))]),
-                    yystack.valueAt ((yynrhs) - (yyi + 1)),
-                    yystack.locationAt ((yynrhs) - (yyi + 1)));
+      yySymbolPrint ("   $" + (yyi + 1) + " =",
+                     yystos_[yystack.stateAt(yynrhs - (yyi + 1))],
+                     yystack.valueAt ((yynrhs) - (yyi + 1)),
+                     yystack.locationAt ((yynrhs) - (yyi + 1)));
   }
 
   /* YYTRANSLATE_(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
      as returned by yylex, with out-of-bounds checking.  */
-  private static final SymbolKind yytranslate_(int t)
+  private static final byte yytranslate_ (int t)
   {
-    // Last valid token kind.
-    int code_max = 283;
+    int user_token_number_max_ = 283;
+    byte undef_token_ = 2;
+
     if (t <= 0)
-      return SymbolKind.S_YYEOF;
-    else if (t <= code_max)
-      return SymbolKind.get(yytranslate_table_[t]);
+      return Lexer.EOF;
+    else if (t <= user_token_number_max_)
+      return yytranslate_table_[t];
     else
-      return SymbolKind.S_YYUNDEF;
+      return undef_token_;
   }
-  private static final byte[] yytranslate_table_ = yytranslate_table_init();
+  private static final byte yytranslate_table_[] = yytranslate_table_init();
   private static final byte[] yytranslate_table_init()
   {
     return new byte[]
@@ -1778,13 +1529,17 @@ private static final byte[] yycheck_ = yycheck_init();
   }
 
 
-  private static final int YYLAST_ = 105;
-  private static final int YYEMPTY_ = -2;
-  private static final int YYFINAL_ = 4;
-  private static final int YYNTOKENS_ = 39;
+  private static final byte yy_error_token_ = 1;
 
+  private static final int yylast_ = 105;
+  private static final int yynnts_ = 19;
+  private static final int yyempty_ = -2;
+  private static final int yyfinal_ = 4;
+  private static final int yyntokens_ = 39;
+
+/* User implementation code.  */
 /* Unqualified %code blocks.  */
-/* "SrgsAbnf.y":27  */
+/* "SrgsAbnf.y":28  */
 
   List<Rule> rules = new ArrayList<>();
   Map<String, Object> attributes = new HashMap<>();
@@ -1834,7 +1589,7 @@ private static final byte[] yycheck_ = yycheck_init();
 
   public static class repeat {
     public int from, to;
-    public double prob;
+    public double prob = -1;
 
     public repeat(String repeat) {
       int index = repeat.indexOf("-");
@@ -1880,6 +1635,7 @@ private static final byte[] yycheck_ = yycheck_init();
     return null;
   }
 
-/* "SrgsAbnf.java":1884  */
+/* "SrgsAbnf.java":1639  */
 
 }
+

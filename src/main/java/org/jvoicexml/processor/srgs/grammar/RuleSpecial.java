@@ -41,7 +41,11 @@ public class RuleSpecial extends RuleComponent {
         this.special = special;
     }
 
-    public String toString() {
+    public String toStringXML() {
         return "<ruleref special=\"" + special + "\"/>";
+    }
+    
+    public String toStringABNF() {
+      return "$" + special;
     }
 }

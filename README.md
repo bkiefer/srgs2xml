@@ -14,12 +14,12 @@ The support for the ABNF form of SRGS grammars, i.e, the parser compiling these 
 sudo apt install bison jflex
 ```
 
-The current version used `jflex` version 1.7.0 and `bison` version 3.7.6 to create the java files.
+The current version used `jflex` version 1.7.0 and `bison` version 3.5.1 to create the java files. If the bison version is bigger than 3.7, check the SrgsAbnf.y file for a necessary modification.
 
 You can also try to run it on a small example which is included (after building the project):
 
 ```
-java -jar target/srgs-parser-0.99-jar-with-dependencies.jar src/test/resources/hysoc.xml src/test/resources/hyxamples.txt
+java -jar target/srgs-parser-1.0-jar-with-dependencies.jar src/test/resources/hysoc.xml src/test/resources/hyxamples.txt
 ```
 
 # Unsupported Features / Deviation from the Standard
@@ -33,6 +33,7 @@ java -jar target/srgs-parser-0.99-jar-with-dependencies.jar src/test/resources/h
 ## Features to be possibly added in a future version
 - the private attribute to prevent external rule access does not lead to rejection
 - the GARBAGE special rule does not work
+- weights and probabilities are currently not handled by the parser
 
 # Extensions in the Semantic Interpretation
 

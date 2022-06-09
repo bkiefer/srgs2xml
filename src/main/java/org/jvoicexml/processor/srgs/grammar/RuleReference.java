@@ -78,33 +78,46 @@ public class RuleReference extends RuleComponent {
         return ruleName;
     }
 
-    void appendStartTag(StringBuffer str) {
-        str.append(PRINT_COMPACT ? "[" : "<ruleref uri=\"");
+    public String toStringXML() {
+        StringBuffer str = new StringBuffer();
+        str.append("<ruleref uri=\"");
 
         if (grammarReference != null) {
-            String gref = grammarReference.toString();
-            int lastSlash = gref.lastIndexOf('/');
-            if (lastSlash < 0) {
-              lastSlash = Math.max(gref.length() - 5, 0);
-            }
-            str.append(PRINT_COMPACT ? gref.substring(lastSlash) : gref);
+            str.append(grammarReference.toString());
         }
-        str.append("#");
-        str.append(ruleName);
-        str.append("\"");
+        if (ruleName != null) {
+            str.append("#").append(ruleName).append("\"");
+        }
 
         if (mediaType != null) {
-            str.append(PRINT_COMPACT ? "|\"" : " type=\"");
-            str.append(mediaType);
-            str.append("\"");
+            str.append(" type=\"").append(mediaType).append("\"");
         }
-    }
+        appendLangXML(str); // handle optional language attachment
+        str.append("/>");
 
-    public String toString() {
+        return str.toString();
+    }
+    
+    
+    public String toStringABNF() {
         StringBuffer str = new StringBuffer();
-        appendStartTag(str);
-        appendLang(str); // handle optional language attachment
-        str.append(PRINT_COMPACT ? "]" : "/>");
+
+        if (grammarReference != null) {
+          str.append("$<");
+          str.append(grammarReference.toString());
+          if (ruleName != null) {
+            str.append("#").append(ruleName);
+          }
+          str.append(">");
+        } else {
+          // rulename can not be null: local reference
+          str.append('$').append(ruleName);
+        }
+        
+        if (mediaType != null) {
+            str.append("~<").append(mediaType).append(">");;
+        } 
+        appendLangABNF(str); // handle optional language attachment
 
         return str.toString();
     }

@@ -48,53 +48,12 @@ public class RuleAlternatives extends RuleComponent {
       this.weight = weight;
       this.component = ruleComponent;
     }
-
-    public RuleAlternative(String token) { component = new RuleToken(token); }
   }
 
   private List<RuleAlternative> ruleComponents;
 
   public RuleAlternatives() {
     ruleComponents = new ArrayList<>();
-  }
-
-  public RuleAlternatives(List<RuleComponent> ruleComponents)
-      throws IllegalArgumentException {
-    if (ruleComponents == null) {
-      throw new IllegalArgumentException("Rule components must not be null!");
-    }
-    this.ruleComponents = new ArrayList<>(ruleComponents.size());
-    for (RuleComponent c : ruleComponents) {
-      this.ruleComponents.add(new RuleAlternative(c, NORM_WEIGHT));
-    }
-  }
-
-  public RuleAlternatives(List<RuleComponent> ruleComponents, double[] weights)
-      throws IllegalArgumentException {
-    if (ruleComponents == null) {
-      throw new IllegalArgumentException("Rule components must not be null!");
-    }
-    this.ruleComponents = new ArrayList<>(ruleComponents.size());
-    if (weights == null || ruleComponents.size() != weights.length) {
-      for (RuleComponent c : ruleComponents) {
-        this.ruleComponents.add(new RuleAlternative(c, NORM_WEIGHT));
-      }
-    } else {
-      int i = 0;
-      for (RuleComponent c : ruleComponents) {
-        this.ruleComponents.add(new RuleAlternative(c, weights[i++]));
-      }
-    }
-  }
-
-  public RuleAlternatives(String[] tokens) {
-    if (tokens != null) {
-      ruleComponents = new ArrayList<>();
-      for (int i = 0; i < tokens.length; i++) {
-        final String token = tokens[i];
-        ruleComponents.add(new RuleAlternative(token));
-      }
-    }
   }
 
   public void addAlternative(RuleComponent c) {
@@ -114,30 +73,24 @@ public class RuleAlternatives extends RuleComponent {
     return ruleComponents.size();
   }
 
-  public String toString() {
+  public String toStringXML() {
     if ((ruleComponents == null) || (ruleComponents.size() == 0)) {
-      return RuleSpecial.VOID.toString();
+      return RuleSpecial.VOID.toStringXML();
     }
 
     final StringBuffer str = new StringBuffer();
-    str.append("<one-of>");
+    str.append("<one-of");
+    appendLangXML(str);
+    str.append(">");
     for (RuleAlternative alt : ruleComponents) {
       str.append("<item");
       if (alt.weight != NORM_WEIGHT) {
         // TODO we should divide by NORM_WEIGHT but this is not
         // supported in CLDC 1.0
-        str.append(" weight=\"");
-        str.append(Double.toString(alt.weight));
-        str.append("\"");
+        str.append(" weight=\"").append(Double.toString(alt.weight)).append("\"");
       }
-      appendLang(str);
       str.append('>');
-      RuleComponent component = alt.component;
-      if (component == null) {
-        str.append(RuleSpecial.NULL.toString());
-      } else {
-        str.append(component.toString());
-      }
+      str.append(RuleComponent.toStringXML(alt.component));
       str.append("</item>");
     }
     str.append("</one-of>");
@@ -145,6 +98,30 @@ public class RuleAlternatives extends RuleComponent {
     return str.toString();
   }
 
+
+  public String toStringABNF() {
+    if ((ruleComponents == null) || (ruleComponents.size() == 0)) {
+      return RuleSpecial.VOID.toStringABNF();
+    }
+
+    final StringBuffer str = new StringBuffer();
+    str.append("(");
+    for (RuleAlternative alt : ruleComponents) {
+      if (alt.weight != NORM_WEIGHT) {
+        // TODO we should divide by NORM_WEIGHT but this is not
+        // supported in CLDC 1.0
+        str.append("/").append(Double.toString(alt.weight)).append("/");
+      }
+      str.append(RuleComponent.toStringABNF(alt.component));
+      str.append(" | ");
+    }
+    str.delete(str.length() - 3, str.length());
+    str.append(")");
+    appendLangABNF(str);
+
+    return str.toString();
+  }
+  
   @Override
   public boolean looksFor(RuleComponent r, int i) {
     // r must be equal to the ith alternative. Because we're using the

@@ -64,11 +64,21 @@ public class RuleToken extends RuleComponent {
     return lang;
   }
 
-  public String toString() {
-    return (lang != null)
-        ? "<item xml:lang=\"" + lang + "\">" + text + "</item>" : " " + text;
+  public String toStringXML() {
+    StringBuffer str = new StringBuffer();
+    str.append("<item");
+    appendLangXML(str);
+    str.append('>').append(text).append("</item>");
+    return str.toString();
   }
 
+  public String toStringABNF() {
+    StringBuffer str = new StringBuffer();
+    str.append('"').append(text).append('"');
+    appendLangABNF(str);
+    return str.toString();
+  }
+  
   public int hashCode() {
     final int prime = 31;
     int result = 1;

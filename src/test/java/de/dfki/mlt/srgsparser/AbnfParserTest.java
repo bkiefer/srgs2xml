@@ -163,6 +163,7 @@ public class AbnfParserTest {
     url = grammarReference.toURL();
     SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
     List<Rule> xmlrules = s.load(url.openStream());
+    RuleComponent.printCompact(false);
 
     for (Rule r : rules) {
       Rule xmlrule = null;

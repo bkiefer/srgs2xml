@@ -92,7 +92,7 @@ public class RuleParse extends RuleComponent {
         return ruleReference;
     }
 
-    public String toString() {
+    public String toStringXML() {
         if (parse == null) {
             return "";
         }
@@ -100,16 +100,30 @@ public class RuleParse extends RuleComponent {
         StringBuffer str = new StringBuffer();
 
         if (ruleReference != null) {
-            ruleReference.appendStartTag(str);
-            appendLang(str);
-            str.append(PRINT_COMPACT ? ']' : '>');
+            str.append(ruleReference.toStringXML());
         }
 
-        str.append(parse.toString());
+        str.append(parse.toStringXML());
 
         return str.toString();
     }
 
+    public String toStringABNF() {
+        if (parse == null) {
+            return "";
+        }
+
+        StringBuffer str = new StringBuffer();
+
+        if (ruleReference != null) {
+            str.append(ruleReference.toStringABNF());
+        }
+
+        str.append(parse.toStringABNF());
+
+        return str.toString();
+    }
+    
     @Override
     public boolean looksFor(RuleComponent r, int dot) {
       // TODO Auto-generated method stub

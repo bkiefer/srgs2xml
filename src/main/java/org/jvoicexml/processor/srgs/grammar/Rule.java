@@ -72,7 +72,7 @@ public class Rule {
         return scope;
     }
 
-    public String toString() {
+    public String toStringXML() {
         StringBuffer str = new StringBuffer();
 
         str.append("<rule id=\"");
@@ -84,8 +84,27 @@ public class Rule {
             str.append("public");
         }
         str.append("\">");
-        str.append(ruleComponent);
+        str.append(RuleComponent.toStringXML(ruleComponent));
         str.append("</rule>");
         return str.toString();
+    }
+    
+
+    public String toStringABNF() {
+        StringBuffer str = new StringBuffer();
+ 
+        if (scope == PUBLIC) {
+          str.append("public ");
+        }
+        
+        str.append("$").append(ruleName)
+        .append(" = ")
+        .append(ruleComponent.toStringABNF())
+        .append(";");
+        return str.toString();
+    }
+    
+    public String toString() {
+      return (RuleComponent.PRINT_COMPACT) ? toStringABNF() : toStringXML();
     }
 }

@@ -39,7 +39,7 @@ public class RuleTag extends RuleComponent {
         return tag;
     }
 
-    public String toString() {
+    public String toStringXML() {
         if (tag == null) {
             throw new IllegalArgumentException(
                     "null can not be represented in XML");
@@ -48,6 +48,18 @@ public class RuleTag extends RuleComponent {
         str.append("<tag>");
         str.append(tag);
         str.append("</tag>");
+
+        return str.toString();
+    }
+    
+
+    public String toStringABNF() {
+        if (tag == null) return "";
+
+        final StringBuffer str = new StringBuffer();
+        str.append("{");
+        str.append(tag);
+        str.append("}");
 
         return str.toString();
     }

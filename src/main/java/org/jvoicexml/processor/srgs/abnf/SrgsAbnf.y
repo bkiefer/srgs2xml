@@ -14,7 +14,8 @@ import org.jvoicexml.processor.srgs.grammar.*;
 
 %locations
 
-%define api.package "org.jvoicexml.processor.srgs.abnf"
+// replace package by api.package if bison version >= 3.7
+%define package "org.jvoicexml.processor.srgs.abnf"
 
 %define api.parser.public
 
@@ -73,7 +74,7 @@ import org.jvoicexml.processor.srgs.grammar.*;
 
   public static class repeat {
     public int from, to;
-    public double prob;
+    public double prob = -1;
 
     public repeat(String repeat) {
       int index = repeat.indexOf("-");
@@ -311,7 +312,8 @@ sequence: sequenceElement { $$ = $1 ; }
 
 sequenceElement: subexpansion { $$ = $1; } // subexpansion returns ruleexp obj
 | subexpansion '<' repeat '>' {
-  $$ = new RuleCount($1, $3.from, $3.to, $3.prob);
+  $$ = $3.prob < 0 ? new RuleCount($1, $3.from, $3.to)
+                   : new RuleCount($1, $3.from, $3.to, $3.prob);
 }
 ;
 
@@ -377,8 +379,9 @@ subexpansion: Nmtoken {
       $$ = setOptional($2);
     }
     | '[' ruleExpansion ']' '!' Nmtoken {
-      $2.setLanguage($5);
-      $$ = setOptional($2);
+      RuleComponent opt = setOptional($2);
+      opt.setLanguage($5);
+      $$ = opt;
     }
     | '(' ')' {
       $$ = RuleSpecial.NULL ;

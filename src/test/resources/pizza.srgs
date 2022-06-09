@@ -7,7 +7,7 @@
     tag-format="semantics/1.0">
 	<rule id="politeness1">
 		<item repeat="0-1">
-			I want
+			<item>I</item> <item>want</item>
 		</item>
 	</rule>
 
@@ -65,7 +65,9 @@
 			</item>
 			<item>
 				<item repeat="0-1">a</item>
-				<item repeat="0-1">pizza with</item>
+				<item repeat="0-1">
+                                  <item>pizza</item> <item>with</item>
+                                </item>
 				<ruleref uri="#topping" />
                                 <tag>out.order.topping = rules.topping;</tag>
 			</item>
@@ -73,7 +75,7 @@
 				<item repeat="0-1">a</item>
 				<ruleref uri="#size" />
                                 <tag>out.order.size = rules.size;</tag>
-				pizza with
+				<item>pizza</item> <item>with</item>
 				<ruleref uri="#topping" />
                                 <tag>out.order.topping = rules.topping;</tag>
 			</item>
