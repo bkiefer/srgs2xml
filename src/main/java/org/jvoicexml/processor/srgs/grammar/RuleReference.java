@@ -104,7 +104,7 @@ public class RuleReference extends RuleComponent {
 
         if (grammarReference != null) {
           str.append("$<");
-          str.append(grammarReference.toString());
+          str.append(shortUrl(grammarReference));
           if (ruleName != null) {
             str.append("#").append(ruleName);
           }

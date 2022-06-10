@@ -3,7 +3,10 @@ package de.dfki.mlt.srgsparser;
 
 import static org.junit.Assert.*;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -17,8 +20,9 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.jvoicexml.processor.srgs.*;
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
+import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
+import org.jvoicexml.processor.srgs.grammar.Rule;
 
 @RunWith(Parameterized.class)
 public class PrinterTest {
@@ -92,7 +96,6 @@ public class PrinterTest {
   public void printTestXML(Path name) throws URISyntaxException, IOException {
     URI grammarReference = name.toUri();
     URL url = grammarReference.toURL();
-    System.out.println(name);
     AbnfRuleGrammarParser s = new AbnfRuleGrammarParser(url.toString());
     List<Rule> inrules = s.load(url.openStream());
     StringBuffer sb = new StringBuffer();
@@ -104,11 +107,9 @@ public class PrinterTest {
     sb.append(XML_FOOTER);
 
     String xml = sb.toString();
-    System.out.println(xml);
+    //System.out.println(xml);
     
     InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
-    String fileName = name.getFileName().toString().replace("gram", "grxml");
-    Path out = name.getParent().resolve(fileName);
     SrgsRuleGrammarParser p = new SrgsRuleGrammarParser();
     List<Rule> outrules = p.load(in);
     checkRules(inrules, outrules);

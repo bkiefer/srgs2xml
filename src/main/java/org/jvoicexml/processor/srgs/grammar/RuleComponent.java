@@ -26,11 +26,15 @@
 
 package org.jvoicexml.processor.srgs.grammar;
 
+import java.net.URI;
+import java.util.HashMap;
+
 //Comp 2.0.6
 
 public abstract class RuleComponent {
     protected static boolean PRINT_COMPACT = true;
-  
+    public static boolean SHORTEN_URLS = false;
+
     protected String lang;
 
     /**
@@ -67,7 +71,21 @@ public abstract class RuleComponent {
     public static void printCompact(boolean val) {
       PRINT_COMPACT = val;
     }
-    
+
+    private static int nsNo = 0;
+    private static HashMap<String, String> url2ns = new HashMap<>();
+
+    public static String shortUrl(URI grammarRef) {
+      String name = grammarRef.toString();
+      if (SHORTEN_URLS) {
+        if (! url2ns.containsKey(name)) {
+          url2ns.put(name, "ref" + (nsNo++));
+        }
+        return url2ns.get(name);
+      }
+      return name;
+    }
+
     static boolean isLetter(char ch) {
         return isUpperCase(ch)
                 || isLowerCase(ch)
@@ -105,7 +123,7 @@ public abstract class RuleComponent {
     public abstract String toStringXML();
 
     public abstract String toStringABNF();
-    
+
     public static String toStringXML(RuleComponent c) {
       return (c == null) ? RuleSpecial.NULL.toStringXML() : c.toStringXML();
     }
@@ -113,7 +131,7 @@ public abstract class RuleComponent {
     public static String toStringABNF(RuleComponent c) {
       return (c == null) ? RuleSpecial.NULL.toStringABNF() : c.toStringABNF();
     }
-    
+
     public String toString() {
       return PRINT_COMPACT ? toStringABNF() : toStringXML();
     }

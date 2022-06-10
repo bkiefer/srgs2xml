@@ -24,9 +24,14 @@
  *
  */
 
-package org.jvoicexml.processor.srgs;
+package org.jvoicexml.processor.srgs.abnf;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -34,8 +39,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.input.BOMInputStream;
-import org.jvoicexml.processor.srgs.abnf.SrgsAbnf;
-import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
+import org.jvoicexml.processor.srgs.RuleGrammarParser;
 import org.jvoicexml.processor.srgs.grammar.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +54,8 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
 
   Logger logger = LoggerFactory.getLogger(AbnfRuleGrammarParser.class);
 
+  private PrintStream err;
+
   private Map<String, Object> attributes;
 
   private String description;
@@ -58,13 +64,18 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
   private Pattern HEADERPAT =
       Pattern.compile("(?:\\xef\\xbb\\xbf)?#ABNF ([0-9.]+)\\s*( [^;]+)?\\s*;.*");
 
-  public AbnfRuleGrammarParser(String desc) {
+  public AbnfRuleGrammarParser(String desc, PrintStream ps) {
     String pwd = new File(".").getAbsolutePath();
     pwd = pwd.substring(0, pwd.length() - 1);
-    description = desc.startsWith("file:") ? desc.substring(5) : desc;
+    description = desc.startsWith("file:") ? desc.substring(7) : desc;
     if (description.startsWith(pwd)) {
       description = description.substring(pwd.length());
     }
+    err = ps;
+  }
+
+  public AbnfRuleGrammarParser(String desc) {
+    this(desc, System.err);
   }
 
   public List<Rule> load(final InputStream is) {
@@ -85,7 +96,7 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
         String s = sb.toString();
         Matcher m = HEADERPAT.matcher(s);
         if (!m.matches()) {
-          logger.error("Wrong ABNF Header: " + sb.toString());
+          err.println(description +":1: error: Wrong ABNF Header: " + s);
           return null;
         }
         stream.reset();
@@ -103,7 +114,7 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
   }
 
   private List<Rule> parseGrammar(Reader r) throws IOException {
-    SrgsLexer lexer = new SrgsLexer(r);
+    SrgsLexer lexer = new SrgsLexer(r, System.err);
     lexer.setOrigin(description);
     SrgsAbnf grammar = new SrgsAbnf(lexer);
     if (DEBUG_GRAMMAR) {

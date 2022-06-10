@@ -1,10 +1,10 @@
 package de.dfki.mlt.srgsparser;
 
-import static de.dfki.mlt.srgsparser.AbnfParserTest.RESOURCE_DIR;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.RESOURCE_DIR;
 
 import java.io.IOException;
 import java.nio.file.Files;

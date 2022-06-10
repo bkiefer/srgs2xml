@@ -8,17 +8,14 @@
 
 package org.jvoicexml.processor.srgs.abnf;
 
-//import static de.dfki.mlt.rudimant.common.ErrorInfo.ErrorType.*;
-
-import java.util.*;
+import java.io.PrintStream;
+import java.io.Reader;
+import java.util.LinkedList;
 
 import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 %%
 
-%public
 %class SrgsLexer
 %implements SrgsAbnf.Lexer
 %function yylex_internal
@@ -32,8 +29,6 @@ import org.slf4j.LoggerFactory;
 %byaccj
 
 %{
-  private static final Logger logger = LoggerFactory.getLogger(SrgsLexer.class);
-
   private String origin;
 
   private Object yylval;
@@ -41,6 +36,13 @@ import org.slf4j.LoggerFactory;
   private LinkedList<Token> commentTokens = new LinkedList<>();
 
   private LinkedList<Token> tokens = new LinkedList<>();
+
+  private PrintStream err;
+
+  public SrgsLexer(Reader r, PrintStream ps) {
+    this(r);
+    err = ps;
+  }
 
   /**
    * Method to retrieve the beginning position of the last scanned token.
@@ -95,8 +97,7 @@ import org.slf4j.LoggerFactory;
    * @param msg The string for the error message.
    */
   public void yyerror (SrgsAbnf.Location loc, String msg) {
-    logger.error(loc.begin + ": " + msg);
-    //registerError(msg, new Location(loc.begin, loc.end), PARSE_ERROR);
+    err.println(loc.begin + ": error: " + msg);
   }
 
   public void setOrigin(String s) { origin = s; }

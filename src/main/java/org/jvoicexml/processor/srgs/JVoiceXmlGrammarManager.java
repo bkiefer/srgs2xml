@@ -9,7 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
+import org.jvoicexml.processor.srgs.grammar.Grammar;
+import org.jvoicexml.processor.srgs.grammar.GrammarException;
+import org.jvoicexml.processor.srgs.grammar.GrammarManager;
+import org.jvoicexml.processor.srgs.grammar.Rule;
+import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
+import org.jvoicexml.processor.srgs.grammar.RuleComponent;
+import org.jvoicexml.processor.srgs.grammar.RuleCount;
+import org.jvoicexml.processor.srgs.grammar.RuleReference;
+import org.jvoicexml.processor.srgs.grammar.RuleSequence;
 
 public class JVoiceXmlGrammarManager implements GrammarManager {
 
@@ -41,7 +50,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
         in = url.openStream();
         final RuleGrammarParser parser = c == '<'
             ? new SrgsRuleGrammarParser()
-                : new AbnfRuleGrammarParser(grammarReference.toString());
+            : new AbnfRuleGrammarParser(grammarReference.toString());
 
         List<Rule> rules = null;
         try {

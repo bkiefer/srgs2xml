@@ -1,7 +1,7 @@
 package de.dfki.mlt.srgsparser;
 
-import static de.dfki.mlt.srgsparser.AbnfParserTest.RESOURCE_DIR;
 import static de.dfki.mlt.srgsparser.OfficialTest.parseGrammar;
+import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.RESOURCE_DIR;
 
 import java.io.IOException;
 import java.nio.file.Files;

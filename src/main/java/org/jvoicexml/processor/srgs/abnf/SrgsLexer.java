@@ -10,13 +10,11 @@
 
 package org.jvoicexml.processor.srgs.abnf;
 
-//import static de.dfki.mlt.rudimant.common.ErrorInfo.ErrorType.*;
-
-import java.util.*;
+import java.io.PrintStream;
+import java.io.Reader;
+import java.util.LinkedList;
 
 import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * <a href="http://www.jflex.de/">JFlex</a> 1.7.0
  * from the specification file <tt>SrgsLexer.flex</tt>
  */
-public class SrgsLexer implements SrgsAbnf.Lexer {
+class SrgsLexer implements SrgsAbnf.Lexer {
 
   /** This character denotes the end of file */
   public static final int YYEOF = -1;
@@ -749,8 +747,6 @@ public class SrgsLexer implements SrgsAbnf.Lexer {
   private boolean [] zzFin = new boolean [ZZ_BUFFERSIZE+1];
 
   /* user code: */
-  private static final Logger logger = LoggerFactory.getLogger(SrgsLexer.class);
-
   private String origin;
 
   private Object yylval;
@@ -758,6 +754,13 @@ public class SrgsLexer implements SrgsAbnf.Lexer {
   private LinkedList<Token> commentTokens = new LinkedList<>();
 
   private LinkedList<Token> tokens = new LinkedList<>();
+
+  private PrintStream err;
+
+  public SrgsLexer(Reader r, PrintStream ps) {
+    this(r);
+    err = ps;
+  }
 
   /**
    * Method to retrieve the beginning position of the last scanned token.
@@ -812,8 +815,7 @@ public class SrgsLexer implements SrgsAbnf.Lexer {
    * @param msg The string for the error message.
    */
   public void yyerror (SrgsAbnf.Location loc, String msg) {
-    logger.error(loc.begin + ": " + msg);
-    //registerError(msg, new Location(loc.begin, loc.end), PARSE_ERROR);
+    err.println(loc.begin + ": error: " + msg);
   }
 
   public void setOrigin(String s) { origin = s; }
@@ -854,7 +856,7 @@ public class SrgsLexer implements SrgsAbnf.Lexer {
    *
    * @param   in  the java.io.Reader to read input from.
    */
-  public SrgsLexer(java.io.Reader in) {
+  SrgsLexer(java.io.Reader in) {
     this.zzReader = in;
   }
 

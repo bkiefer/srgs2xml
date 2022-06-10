@@ -81,7 +81,7 @@ public class Position implements Comparable<Position> {
 
   @Override
   public String toString() {
-    return origin + ":" + (line + 1) + ":" + (column + 1);
+    return origin + ":" + (line + 1) + (column != 0 ? ":" + column : "");
   }
 
   @Override

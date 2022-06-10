@@ -25,10 +25,27 @@
  */
 package org.jvoicexml.processor.srgs;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.srgs.grammar.Grammar;
+import org.jvoicexml.processor.srgs.grammar.GrammarException;
+import org.jvoicexml.processor.srgs.grammar.GrammarManager;
+import org.jvoicexml.processor.srgs.grammar.Rule;
+import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
+import org.jvoicexml.processor.srgs.grammar.RuleComponent;
+import org.jvoicexml.processor.srgs.grammar.RuleCount;
+import org.jvoicexml.processor.srgs.grammar.RuleParse;
+import org.jvoicexml.processor.srgs.grammar.RuleReference;
+import org.jvoicexml.processor.srgs.grammar.RuleSequence;
+import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
+import org.jvoicexml.processor.srgs.grammar.RuleTag;
+import org.jvoicexml.processor.srgs.grammar.RuleToken;
 
 /**
  * This class provides a means to perform evaluations on a parsed grammar.

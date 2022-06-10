@@ -1,9 +1,15 @@
-package de.dfki.mlt.srgsparser;
+package org.jvoicexml.processor.srgs.abnf;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,9 +17,16 @@ import java.util.List;
 
 import org.json.JSONObject;
 import org.junit.Test;
-import org.jvoicexml.processor.srgs.*;
-import org.jvoicexml.processor.srgs.abnf.SrgsLexer;
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.srgs.ChartGrammarChecker;
+import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
+import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
+import org.jvoicexml.processor.srgs.grammar.Grammar;
+import org.jvoicexml.processor.srgs.grammar.GrammarException;
+import org.jvoicexml.processor.srgs.grammar.GrammarManager;
+import org.jvoicexml.processor.srgs.grammar.Rule;
+import org.jvoicexml.processor.srgs.grammar.RuleComponent;
+
+import de.dfki.mlt.srgsparser.JSInterpreter;
 
 public class AbnfParserTest {
   public static final String RESOURCE_DIR = "src/test/resources/";

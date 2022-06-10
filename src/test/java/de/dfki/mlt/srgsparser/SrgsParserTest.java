@@ -14,7 +14,10 @@ import org.junit.Test;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.srgs.grammar.Grammar;
+import org.jvoicexml.processor.srgs.grammar.GrammarException;
+import org.jvoicexml.processor.srgs.grammar.GrammarManager;
+import org.jvoicexml.processor.srgs.grammar.Rule;
 
 public class SrgsParserTest {
 

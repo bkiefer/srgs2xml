@@ -11,7 +11,9 @@ import java.util.regex.Pattern;
 
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker.ChartNode;
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
+import org.jvoicexml.processor.srgs.grammar.RuleParse;
+import org.jvoicexml.processor.srgs.grammar.RuleTag;
 
 /** Interprets the JavaScript tags as the processor for the Microsoft Speech
  *  API does (could not find "official" specification, so do it looking at
