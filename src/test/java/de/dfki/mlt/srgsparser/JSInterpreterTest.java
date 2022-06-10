@@ -1,7 +1,7 @@
 package de.dfki.mlt.srgsparser;
 
 
-import static de.dfki.mlt.srgsparser.AbnfParserTest.*;
+import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
