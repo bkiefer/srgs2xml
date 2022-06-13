@@ -56,9 +56,9 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
         try {
             rules = parser.load(in);
         } catch (URISyntaxException e) {
-            throw new GrammarException(e.getMessage(), e);
+            throw new GrammarException(e.getMessage() + "loading " + grammarReference, e);
         } catch (Exception e) {
-            throw new GrammarException(e.getMessage(), e);
+            throw new GrammarException(e.getMessage() + "loading " + grammarReference, e);
         }
         if (rules == null || rules.isEmpty()) {
           throw new GrammarException("Failure in parsing '" + grammarReference
@@ -72,6 +72,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
         grammars.put(grammar.getReference(), grammar);
 
         grammarStack.push(grammar);
+
         loadExternalGrammars(rules, grammar);
         grammarStack.pop();
 
@@ -125,7 +126,8 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
         }
         // now it must be possible to resolve the reference!
         if (resolve(ref) == null) {
-          throw new GrammarException("Unresolvable rule reference: "
+          throw new GrammarException("Unresolvable rule reference loading "
+              + grammarStack.peek().getReference() + ": "
               + ref.getRepresentation());
         }
       }
