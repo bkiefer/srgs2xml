@@ -60,14 +60,15 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
 
   private String description;
   public static boolean DEBUG_GRAMMAR = false;
-  
+
   private Pattern HEADERPAT =
       Pattern.compile("(?:\\xef\\xbb\\xbf)?#ABNF ([0-9.]+)\\s*( [^;]+)?\\s*;.*");
 
   public AbnfRuleGrammarParser(String desc, PrintStream ps) {
     String pwd = new File(".").getAbsolutePath();
     pwd = pwd.substring(0, pwd.length() - 1);
-    description = desc.startsWith("file:") ? desc.substring(7) : desc;
+    description = desc.startsWith("file:") ? desc.substring(5) : desc;
+    description = description.replaceAll("//+", "/");
     if (description.startsWith(pwd)) {
       description = description.substring(pwd.length());
     }
@@ -79,13 +80,13 @@ public class AbnfRuleGrammarParser implements RuleGrammarParser {
   }
 
   public List<Rule> load(final InputStream is) {
-    try (BOMInputStream stream = new BOMInputStream(is, ByteOrderMark.UTF_8, 
+    try (BOMInputStream stream = new BOMInputStream(is, ByteOrderMark.UTF_8,
         ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE,
         ByteOrderMark.UTF_32LE)) {
-      ByteOrderMark bom = stream.getBOM();            
+      ByteOrderMark bom = stream.getBOM();
       int c;
       StringBuffer sb = new StringBuffer();
-      Reader r = null;      
+      Reader r = null;
       if (bom != null) {
         r = new InputStreamReader(stream, bom.getCharsetName());
       } else {

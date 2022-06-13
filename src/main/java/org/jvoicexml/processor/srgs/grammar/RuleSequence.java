@@ -78,18 +78,25 @@ public class RuleSequence extends RuleComponent {
         if (ruleComponents == null) {
             return "";
         }
-        
+
+        if (ruleComponents.isEmpty()) {
+          return "$NULL";
+        }
+
         final StringBuffer str = new StringBuffer();
         str.append('(');
         for (int i = 0; i < ruleComponents.size(); i++) {
-            str.append(RuleComponent.toStringABNF(ruleComponents.get(i))).append(' ');
+            if (i > 0) {
+              str.append(' ');
+            }
+            str.append(RuleComponent.toStringABNF(ruleComponents.get(i)));
         }
-        appendLangABNF(str);
         str.append(')');
-        
+        appendLangABNF(str);
+
         return str.toString();
     }
-    
+
     @Override
     public boolean looksFor(RuleComponent r, int i) {
       // check the i'th element of the sequence

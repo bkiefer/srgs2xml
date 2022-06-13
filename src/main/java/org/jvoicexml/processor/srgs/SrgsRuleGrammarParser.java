@@ -40,6 +40,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jvoicexml.processor.srgs.grammar.GrammarException;
 import org.jvoicexml.processor.srgs.grammar.Rule;
 import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
 import org.jvoicexml.processor.srgs.grammar.RuleComponent;
@@ -81,12 +82,12 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         attributes = new java.util.HashMap<>();
     }
 
-    public List<Rule> load(final Reader reader) throws URISyntaxException {
+    public List<Rule> load(final Reader reader) throws URISyntaxException, GrammarException {
         final InputSource source = new InputSource(reader);
         return load(source);
     }
 
-    public List<Rule> load(final InputStream stream) throws URISyntaxException {
+    public List<Rule> load(final InputStream stream) throws URISyntaxException, GrammarException {
         final InputSource source = new InputSource(stream);
         return load(source);
     }
@@ -118,7 +119,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
     }
 
     private List<Rule> load(final InputSource inputSource)
-            throws URISyntaxException {
+            throws URISyntaxException, GrammarException {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
@@ -127,8 +128,28 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
 
             final Document document = builder.parse(inputSource);
             Node grammarNode = document.getFirstChild();
-            while(! grammarNode.getNodeName().equalsIgnoreCase("grammar")) {
+            while(! grammarNode.getNodeName().equalsIgnoreCase("grammar")
+                || ! grammarNode.hasAttributes()
+                || grammarNode.getAttributes().getNamedItem("version") == null) {
               grammarNode = grammarNode.getNextSibling();
+            }
+
+            // version attribute has been checked, now comes mode etc.
+            String mode = null;
+            Node modeNode = grammarNode.getAttributes().getNamedItem("mode");
+            if (modeNode == null || (mode = modeNode.getTextContent()).equals("voice")) {
+              mode = "voice";
+              if (grammarNode.getAttributes().getNamedItem("xml:lang") == null) {
+                throw new GrammarException("No language for mode voice specified.");
+              }
+            }
+            /*
+            if (grammarNode.getAttributes().getNamedItem("root") == null) {
+              throw new GrammarException("No root rule specified.");
+            }
+            */
+            if (grammarNode.getAttributes().getNamedItem("xmlns") == null) {
+              throw new GrammarException("No namespace specified.");
             }
 
             final List<Rule> rules = parseGrammar(grammarNode);
@@ -199,39 +220,50 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         if (text.length() == 0) {
             return null;
         }
-        return new RuleToken(text);
+        if (text.charAt(0) == '"') {
+          return new RuleToken(text);
+        }
+        String[] tokens = text.split("\\s+");
+        if (tokens.length == 1) {
+          return new RuleToken(text);
+        }
+        List<RuleComponent> toks = new ArrayList<>();
+        for (String t : tokens) {
+          toks.add(new RuleToken(t));
+        }
+        return new RuleSequence(toks);
     }
-    
+
     private RuleComponent evalOneOf(final Node node) throws URISyntaxException {
         final RuleAlternatives res = new RuleAlternatives();
         final NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             final RuleComponent component = evalNode(child);
-            if (component != null) {  
+            if (component != null) {
                 final String weightStr = getAttribute(child.getAttributes(), "weight");
-                if (weightStr == null) { 
+                if (weightStr == null) {
                     res.addAlternative(component);
                 } else {
                     res.addAlternative(component, Double.parseDouble(weightStr));
                 }
             }
         }
-        
+
         return setLanguage(res, node.getAttributes());
     }
 
     private RuleComponent setLanguage(RuleComponent c, final NamedNodeMap attributes) {
       final String langStr = getAttribute(attributes, "xml:lang");
-      if (langStr != null) 
+      if (langStr != null)
         c.setLanguage(langStr);
       return c;
     }
-      
-    
+
+
     private RuleComponent evalItem(final Node node) throws URISyntaxException {
         final NamedNodeMap attributes = node.getAttributes();
-        
+
         final List<RuleComponent> components = evalChildNodes(node);
         RuleComponent component;
         if (components.size() == 1) {
@@ -267,7 +299,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         if (repeatProbStr != null) {
             repeatProb = Double.parseDouble(repeatProbStr);
         }
-        
+
         if ((repeatMin != -1) && (repeatMax != -1) && (repeatProb != -1)) {
             component = new RuleCount(component, repeatMin, repeatMax, repeatProb);
         } else if ((repeatMin != -1) && (repeatMax != -1)) {
@@ -298,9 +330,9 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         } else {
             final String uriStr = getAttribute(attributes, "uri");
             if (uriStr != null && uriStr.indexOf("#") == -1) {
-                return new RuleReference(uriStr);
+                return new RuleReference(new URI(uriStr));
             } else if (uriStr != null) {
-                final String ruleName = 
+                final String ruleName =
                     uriStr.substring(uriStr.indexOf("#") + 1).trim();
                 final String grammarName = uriStr.substring(0, uriStr.indexOf("#"));
                 final String typeStr = getAttribute(attributes, "type");
@@ -319,7 +351,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         }
         return null;
     }
-    
+
     private RuleComponent evalNode(final Node node) throws URISyntaxException {
         final String nodeName = node.getNodeName();
         if (nodeName.equalsIgnoreCase("#text")) {

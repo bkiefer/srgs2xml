@@ -612,7 +612,7 @@ public class SrgsAbnf
   if (yyn == 29)
     /* "SrgsAbnf.y":267  */
                              {
-  if (((RuleComponent)(yystack.valueAt (2))) instanceof RuleAlternatives) {
+  if (((RuleComponent)(yystack.valueAt (2))) instanceof RuleAlternatives && !((RuleAlternatives)((RuleComponent)(yystack.valueAt (2)))).parenthesized) {
     ((RuleAlternatives)((RuleComponent)(yystack.valueAt (2)))).addAlternative(((RuleComponent)(yystack.valueAt (0))));
     yyval = ((RuleComponent)(yystack.valueAt (2)));
   } else {
@@ -629,7 +629,7 @@ public class SrgsAbnf
   if (yyn == 30)
     /* "SrgsAbnf.y":278  */
                                       {
-  if (((RuleComponent)(yystack.valueAt (3))) instanceof RuleAlternatives) {
+  if (((RuleComponent)(yystack.valueAt (3))) instanceof RuleAlternatives && !((RuleAlternatives)((RuleComponent)(yystack.valueAt (3)))).parenthesized) {
     ((RuleAlternatives)((RuleComponent)(yystack.valueAt (3)))).addAlternative(((RuleComponent)(yystack.valueAt (0))), Double.parseDouble(((String)(yystack.valueAt (1)))));
     yyval = ((RuleComponent)(yystack.valueAt (3)));
   } else {
@@ -653,7 +653,7 @@ public class SrgsAbnf
   if (yyn == 32)
     /* "SrgsAbnf.y":300  */
                            {
-  if (((RuleComponent)(yystack.valueAt (1))) instanceof RuleSequence) {
+  if (((RuleComponent)(yystack.valueAt (1))) instanceof RuleSequence && ! ((RuleComponent)(yystack.valueAt (1))).parenthesized) {
     ((RuleSequence)((RuleComponent)(yystack.valueAt (1)))).addElement(((RuleComponent)(yystack.valueAt (0))));
     yyval = ((RuleComponent)(yystack.valueAt (1)));
   } else {
@@ -701,7 +701,7 @@ public class SrgsAbnf
   if (yyn == 37)
     /* "SrgsAbnf.y":336  */
                       {
-      RuleToken res = new RuleToken(((String)(yystack.valueAt (0))));
+    RuleToken res = new RuleToken(((String)(yystack.valueAt (0))), null);
       yyval = res;
     };
   break;
@@ -721,7 +721,7 @@ public class SrgsAbnf
   if (yyn == 39)
     /* "SrgsAbnf.y":344  */
                        {  // should that be DoubleQuotedCharacters ??
-      RuleToken res = new RuleToken(((String)(yystack.valueAt (0))));
+      RuleToken res = new RuleToken(((String)(yystack.valueAt (0))), null);
       yyval = res;
     };
   break;
@@ -790,6 +790,7 @@ public class SrgsAbnf
   if (yyn == 46)
     /* "SrgsAbnf.y":371  */
                             {
+      ((RuleComponent)(yystack.valueAt (1))).parenthesized = true;
       yyval = ((RuleComponent)(yystack.valueAt (1)));
     };
   break;
@@ -797,8 +798,9 @@ public class SrgsAbnf
 
   case 47:
   if (yyn == 47)
-    /* "SrgsAbnf.y":374  */
+    /* "SrgsAbnf.y":375  */
                                         {
+      ((RuleComponent)(yystack.valueAt (3))).parenthesized = true;
       ((RuleComponent)(yystack.valueAt (3))).setLanguage(((String)(yystack.valueAt (0))));
       yyval = ((RuleComponent)(yystack.valueAt (3)));
     };
@@ -807,7 +809,7 @@ public class SrgsAbnf
 
   case 48:
   if (yyn == 48)
-    /* "SrgsAbnf.y":378  */
+    /* "SrgsAbnf.y":380  */
                             {
       yyval = setOptional(((RuleComponent)(yystack.valueAt (1))));
     };
@@ -816,7 +818,7 @@ public class SrgsAbnf
 
   case 49:
   if (yyn == 49)
-    /* "SrgsAbnf.y":381  */
+    /* "SrgsAbnf.y":383  */
                                         {
       RuleComponent opt = setOptional(((RuleComponent)(yystack.valueAt (3))));
       opt.setLanguage(((String)(yystack.valueAt (0))));
@@ -827,7 +829,7 @@ public class SrgsAbnf
 
   case 50:
   if (yyn == 50)
-    /* "SrgsAbnf.y":386  */
+    /* "SrgsAbnf.y":388  */
               {
       yyval = RuleSpecial.NULL ;
     };
@@ -836,20 +838,20 @@ public class SrgsAbnf
 
   case 51:
   if (yyn == 51)
-    /* "SrgsAbnf.y":390  */
+    /* "SrgsAbnf.y":392  */
                           { yyval = new RuleTag(((String)(yystack.valueAt (1)))) ; };
   break;
     
 
   case 52:
   if (yyn == 52)
-    /* "SrgsAbnf.y":391  */
+    /* "SrgsAbnf.y":393  */
                       { yyval = new RuleTag("") ; };
   break;
     
 
 
-/* "SrgsAbnf.java":853  */
+/* "SrgsAbnf.java":855  */
 
         default: break;
       }
@@ -1451,8 +1453,8 @@ private static final byte yycheck_[] = yycheck_init();
      183,   184,   187,   195,   204,   211,   220,   225,   229,   232,
      235,   240,   241,   244,   254,   255,   256,   259,   262,   267,
      278,   299,   300,   313,   314,   320,   321,   336,   340,   344,
-     348,   352,   355,   360,   363,   368,   371,   374,   378,   381,
-     386,   390,   391
+     348,   352,   355,   360,   363,   368,   371,   375,   380,   383,
+     388,   392,   393
     };
   }
 
@@ -1635,7 +1637,7 @@ private static final byte yycheck_[] = yycheck_init();
     return null;
   }
 
-/* "SrgsAbnf.java":1639  */
+/* "SrgsAbnf.java":1641  */
 
 }
 

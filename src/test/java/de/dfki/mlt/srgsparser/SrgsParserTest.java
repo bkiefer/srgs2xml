@@ -162,7 +162,7 @@ public class SrgsParserTest {
     }
   }
 
-  public void parserTest() throws URISyntaxException, IOException {
+  public void parserTest() throws URISyntaxException, IOException, GrammarException {
     URI grammarReference = testURI("/pizza.srgs");
     final URL url = grammarReference.toURL();
     SrgsRuleGrammarParser p = new SrgsRuleGrammarParser();

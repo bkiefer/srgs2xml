@@ -34,22 +34,46 @@ public class RuleToken extends RuleComponent {
   private String text;
   private Pattern p;
 
-  public RuleToken(String text, String language)
-      throws IllegalArgumentException {
+  /** USE ONLY BY XML GRAMMAR PARSER!!!! */
+  public RuleToken(String text) {
+    this.text = text;
     if ((text == null) || (text.length() == 0)) {
       throw new IllegalArgumentException(
           "'" + text + "'" + " is not a valid grammar text");
     }
-    lang = language;
+    // BK: extension to match arbitrary regex as token
+    if (text.charAt(0) == '"' && text.charAt(text.length() - 1) == '"') {
+      this.text = text = text.substring(1, text.length() - 1);
+    } else {
+      if (! text.startsWith("$$")) {
+        this.text = text.trim().replaceAll("  +", " ");
+      }
+    }
+    // BK: extension to match arbitrary regex as token
     if (text.startsWith("$$")) {
-      p = Pattern.compile(text.substring(2));
-      this.text = text;
-    } else
-      this.text = text.trim().replaceAll("  +", " ");
+      this.p = Pattern.compile(text.substring(2));
+    }
   }
 
-  public RuleToken(String text) {
-    this(text, null);
+  /** USE ONLY BY ABNF GRAMMAR PARSER!!!! */
+  public RuleToken(String text, String language) throws IllegalArgumentException {
+    if ((text == null) || (text.length() == 0)) {
+      throw new IllegalArgumentException(
+          "'" + text + "'" + " is not a valid grammar text");
+    }
+    // BK: extension to match arbitrary regex as token
+    if (text.charAt(0) == '"') {
+      this.text = text = text.substring(1, text.length() - 1);
+    } else {
+      if (! text.startsWith("$$")) {
+        this.text = text.trim().replaceAll("  +", " ");
+      }
+    }
+    // BK: extension to match arbitrary regex as token
+    if (text.startsWith("$$")) {
+      this.p = Pattern.compile(text.substring(2));
+    }
+    this.lang = language;
   }
 
   public Pattern getPattern() {
@@ -68,17 +92,29 @@ public class RuleToken extends RuleComponent {
     StringBuffer str = new StringBuffer();
     str.append("<item");
     appendLangXML(str);
-    str.append('>').append(text).append("</item>");
+    str.append('>');
+    if (text.contains(" ") && text.charAt(0) != '"') {
+      str.append('"');
+      str.append(text);
+      str.append('"');
+    } else {
+      str.append(text);
+    }
+    str.append("</item>");
     return str.toString();
   }
 
   public String toStringABNF() {
     StringBuffer str = new StringBuffer();
-    str.append('"').append(text).append('"');
+    if (text.charAt(0) == '"' || !text.contains(" ")) {
+      str.append(text);
+    } else {
+      str.append('"').append(text).append('"');
+    }
     appendLangABNF(str);
     return str.toString();
   }
-  
+
   public int hashCode() {
     final int prime = 31;
     int result = 1;

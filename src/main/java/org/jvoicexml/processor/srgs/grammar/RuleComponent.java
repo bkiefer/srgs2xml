@@ -28,6 +28,7 @@ package org.jvoicexml.processor.srgs.grammar;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 //Comp 2.0.6
 
@@ -37,6 +38,10 @@ public abstract class RuleComponent {
 
     protected String lang;
 
+    public boolean parenthesized = false;
+
+    private static Pattern valid = Pattern.compile("(\\p{IsAlphabetic}|[_])(\\p{IsAlphabetic}|\\d|[-_.])*");
+
     /**
      * Checks if the given text is a valid grammar text.
      *
@@ -44,28 +49,9 @@ public abstract class RuleComponent {
      *            the text to check.
      */
     protected static void checkValidGrammarText(String text) {
-        if ((text == null) || (text.length() == 0)) {
-            throw new IllegalArgumentException(
-                    "No text is not a valid for a grammar ");
-        }
-
-        final char[] chars = text.toCharArray();
-        // The first symbol must be a character.
-        final char first = chars[0];
-        if (!isLetter(first) && (first != '_')) {
-            throw new IllegalArgumentException("'" + text
-                    + "' is not a valid grammar text: '" + first
-                    + "' Element is not a valid first symbol");
-        }
-        // Following symbols must be a character or a digit.
-        for (int i = 1; i < chars.length; i++) {
-            final char ch = chars[i];
-            if (!isLetter(ch) && !Character.isDigit(ch) && (ch != '_')) {
-                throw new IllegalArgumentException("'" + text
-                        + "' is not a valid grammar tex: '" + ch
-                        + "' Element is not a valid symbol");
-            }
-        }
+      if (!valid.asMatchPredicate().test(text))
+        throw new IllegalArgumentException(
+            "Not a valid text for a grammar: " + text);
     }
 
     public static void printCompact(boolean val) {

@@ -23,7 +23,7 @@ import org.jvoicexml.processor.srgs.grammar.RuleSequence;
 public class JVoiceXmlGrammarManager implements GrammarManager {
 
     private final Stack<Grammar> grammarStack;
-  
+
     private final Map<URI, Grammar> grammars;
 
     public JVoiceXmlGrammarManager() {
@@ -54,13 +54,13 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
 
         List<Rule> rules = null;
         try {
-            rules = parser.load(in);            
+            rules = parser.load(in);
         } catch (URISyntaxException e) {
             throw new GrammarException(e.getMessage(), e);
         } catch (Exception e) {
             throw new GrammarException(e.getMessage(), e);
         }
-        if (rules == null) {
+        if (rules == null || rules.isEmpty()) {
           throw new GrammarException("Failure in parsing '" + grammarReference
                     + "'");
         }
@@ -70,11 +70,11 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
 
         // Register grammar
         grammars.put(grammar.getReference(), grammar);
-        
+
         grammarStack.push(grammar);
         loadExternalGrammars(rules, grammar);
         grammarStack.pop();
-        
+
         return grammar;
     }
 
@@ -84,7 +84,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
 
     public Rule resolve(RuleReference reference) {
         final URI ref = reference.getGrammarReference();
-        final Grammar grammar = (Grammar) grammars.get(ref);
+        final Grammar grammar = grammars.get(ref);
         if (ref == null || grammar == null) {
             return null;
         }
@@ -94,13 +94,13 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
         }
         return grammar.getRule(name);
     }
-    
+
     /** Recursively walk the elements of this grammar to look for external
      *  references.
-     * 
+     *
      * @param component
-     * @throws IOException 
-     * @throws GrammarException 
+     * @throws IOException
+     * @throws GrammarException
      */
     private void walkSubcomponents(RuleComponent component) throws GrammarException, IOException {
       if (component instanceof RuleSequence) {
@@ -117,20 +117,25 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
         final RuleCount count = (RuleCount) component;
         walkSubcomponents(count.getRuleComponent());
       } else if (component instanceof RuleReference) {
-        final RuleReference ref = 
+        final RuleReference ref =
             grammarStack.peek().resolve((RuleReference)component);
         // check if this is an unknown external reference
-        if (! grammars.containsKey(ref.getGrammarReference())) {           
+        if (! grammars.containsKey(ref.getGrammarReference())) {
             loadGrammar(ref.getGrammarReference());
+        }
+        // now it must be possible to resolve the reference!
+        if (resolve(ref) == null) {
+          throw new GrammarException("Unresolvable rule reference: "
+              + ref.getRepresentation());
         }
       }
     }
-    
-    /** Check all right hand sides for external references and load the 
+
+    /** Check all right hand sides for external references and load the
      *  referenced grammars
      * @param rules a list of Rules
-     * @throws IOException 
-     * @throws GrammarException 
+     * @throws IOException
+     * @throws GrammarException
      */
     private void loadExternalGrammars(List<Rule> rules, JVoiceXmlGrammar grammar) throws GrammarException, IOException {
       for (Rule r : rules) {

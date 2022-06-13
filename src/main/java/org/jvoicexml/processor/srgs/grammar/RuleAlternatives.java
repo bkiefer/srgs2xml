@@ -104,6 +104,10 @@ public class RuleAlternatives extends RuleComponent {
       return RuleSpecial.VOID.toStringABNF();
     }
 
+    if (ruleComponents.size() == 1) {
+      return ruleComponents.get(0).component.toStringABNF();
+    }
+
     final StringBuffer str = new StringBuffer();
     str.append("(");
     for (RuleAlternative alt : ruleComponents) {
@@ -121,7 +125,7 @@ public class RuleAlternatives extends RuleComponent {
 
     return str.toString();
   }
-  
+
   @Override
   public boolean looksFor(RuleComponent r, int i) {
     // r must be equal to the ith alternative. Because we're using the

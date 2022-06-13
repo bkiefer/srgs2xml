@@ -265,7 +265,7 @@ ruleExpansion: sequence {
   $$ = alt;
 }
 | ruleExpansion '|' sequence {
-  if ($1 instanceof RuleAlternatives) {
+  if ($1 instanceof RuleAlternatives && !((RuleAlternatives)$1).parenthesized) {
     ((RuleAlternatives)$1).addAlternative($3);
     $$ = $1;
   } else {
@@ -276,7 +276,7 @@ ruleExpansion: sequence {
   }
 }
 | ruleExpansion '|' SlashNum sequence {
-  if ($1 instanceof RuleAlternatives) {
+  if ($1 instanceof RuleAlternatives && !((RuleAlternatives)$1).parenthesized) {
     ((RuleAlternatives)$1).addAlternative($4, Double.parseDouble($3));
     $$ = $1;
   } else {
@@ -298,7 +298,7 @@ ruleAlternative: sequence { $$ = $1; }   // sequence returns an itemseq object
 
 sequence: sequenceElement { $$ = $1 ; }
 | sequence sequenceElement {
-  if ($1 instanceof RuleSequence) {
+  if ($1 instanceof RuleSequence && ! $1.parenthesized) {
     ((RuleSequence)$1).addElement($2);
     $$ = $1;
   } else {
@@ -334,7 +334,7 @@ repeat: Repeat { $$ = new repeat($1); }
 
 
 subexpansion: Nmtoken {
-      RuleToken res = new RuleToken($1);
+    RuleToken res = new RuleToken($1, null);
       $$ = res;
     }
     | Nmtoken '!' Nmtoken {
@@ -342,7 +342,7 @@ subexpansion: Nmtoken {
       $$ = res;
     }
     | QuotedCharacters {  // should that be DoubleQuotedCharacters ??
-      RuleToken res = new RuleToken($1);
+      RuleToken res = new RuleToken($1, null);
       $$ = res;
     }
     | QuotedCharacters '!' Nmtoken {// should that be DoubleQuotedCharacters ??
@@ -369,9 +369,11 @@ subexpansion: Nmtoken {
       $$ = $1;
     }
     | '(' ruleExpansion ')' {
+      $2.parenthesized = true;
       $$ = $2;
     }
     | '(' ruleExpansion ')' '!' Nmtoken {
+      $2.parenthesized = true;
       $2.setLanguage($5);
       $$ = $2;
     }

@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
 import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
+import org.jvoicexml.processor.srgs.grammar.GrammarException;
 import org.jvoicexml.processor.srgs.grammar.Rule;
 
 @RunWith(Parameterized.class)
@@ -32,8 +33,8 @@ public class PrinterTest {
       + "root $order;\n"
       + "mode voice;\n"
       + "tag-format \"semantics/1.0\";\n";
-  
-  public static final String XML_HEADER = 
+
+  public static final String XML_HEADER =
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       + "<grammar version=\"1.0\" root=\"order\" xml:lang=\"en\"\n"
       + "    xmlns=\"http://www.w3.org/2001/06/grammar\" mode=\"voice\"\n"
@@ -42,34 +43,35 @@ public class PrinterTest {
       + "                        http://www.w3.org/TR/speech-grammar/grammar.xsd\"\n"
       + "    tag-format=\"semantics/1.0\">\n";
   public static final String XML_FOOTER = "</grammar>\n";
-  
+
   public static final String RESOURCE_DIR = "src/test/resources/";
   public static URI testURI(String name) {
     return new File(RESOURCE_DIR, name).toURI();
   }
-  
+
   private Path path;
-  
+
   public PrinterTest(Path p) {
     this.path = p;
   }
-  
+
   @Parameterized.Parameters
   public static Collection<Path> official() throws IOException {
     return Files.walk(Path.of(RESOURCE_DIR + "/unixlf/test"), 1)
-        .filter(p -> p.toFile().isFile()).collect(Collectors.toList()); 
+        .filter(p -> p.toFile().isFile()).collect(Collectors.toList());
   }
-  
+
   boolean accepted(String name) {
     return ! (OfficialTest.toReject.contains(name)
-        || name.contains("duplicated-rulenames"));
+        || name.contains("duplicated-")|| name.contains("dtmf"));
   }
-  
+
   @Test
-  public void printTest() throws URISyntaxException, IOException {
+  public void printTest() throws URISyntaxException, IOException, GrammarException {
     String name = path.getFileName().toString();
+    //System.out.println(name);
     if (name.endsWith("grxml")) {
-      if (accepted(name.replace("grxml", "gram"))) {
+      if (accepted(name)) {
         printTestABNF(path);
       }
     } else {
@@ -78,7 +80,7 @@ public class PrinterTest {
       }
     }
   }
-  
+
   private void checkRules(List<Rule> inrules, List<Rule> outrules) {
     for (Rule out : outrules) {
       Rule inrule = null;
@@ -92,8 +94,8 @@ public class PrinterTest {
       assertEquals(inrule.getRuleName(), inrule.toString(), out.toString());
     }
   }
-  
-  public void printTestXML(Path name) throws URISyntaxException, IOException {
+
+  public void printTestXML(Path name) throws URISyntaxException, IOException, GrammarException {
     URI grammarReference = name.toUri();
     URL url = grammarReference.toURL();
     AbnfRuleGrammarParser s = new AbnfRuleGrammarParser(url.toString());
@@ -108,20 +110,20 @@ public class PrinterTest {
 
     String xml = sb.toString();
     //System.out.println(xml);
-    
+
     InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
     SrgsRuleGrammarParser p = new SrgsRuleGrammarParser();
     List<Rule> outrules = p.load(in);
     checkRules(inrules, outrules);
   }
-  
-  public void printTestABNF(Path name) throws URISyntaxException, IOException {
+
+  public void printTestABNF(Path name) throws URISyntaxException, IOException, GrammarException {
     URI grammarReference = name.toUri();
     URL url = grammarReference.toURL();
     SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
     List<Rule> inrules = s.load(url.openStream());
     StringBuffer sb = new StringBuffer();
-    
+
     sb.append(ABNF_HEADER);
     for (Rule r : inrules) {
       sb.append('\n').append(r.toStringABNF());
@@ -129,11 +131,12 @@ public class PrinterTest {
 
     String abnf = sb.toString();
     //System.out.println(abnf);
-    
+
     InputStream in = new ByteArrayInputStream(abnf.getBytes(StandardCharsets.UTF_8));
     String fileName = name.getFileName().toString().replace("grxml", "gram");
     Path out = name.getParent().resolve(fileName);
     AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(out.toUri().toString());
+    //AbnfRuleGrammarParser.DEBUG_GRAMMAR = true;
     List<Rule> outrules = p.load(in);
     checkRules(inrules, outrules);
   }

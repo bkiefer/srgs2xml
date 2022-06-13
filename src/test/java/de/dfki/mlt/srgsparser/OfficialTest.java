@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
+import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
 import org.jvoicexml.processor.srgs.grammar.Grammar;
 import org.jvoicexml.processor.srgs.grammar.GrammarException;
 import org.jvoicexml.processor.srgs.grammar.GrammarManager;
@@ -32,60 +33,87 @@ import org.jvoicexml.processor.srgs.grammar.Meta;
 @RunWith(Parameterized.class)
 public class OfficialTest {
   private Path path;
-  
+
   public static void logOff() {
     System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "off");
   }
-  
+
   public static void logOn() {
     System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
   }
-  
+
   @Parameterized.Parameters
   public static Collection<Path> official() throws IOException {
     return Files.walk(Path.of(RESOURCE_DIR + "/official/test/"), 1)
-        .filter(p -> p.toFile().isFile()).collect(Collectors.toList()); 
+        .filter(p -> p.toFile().isFile()).collect(Collectors.toList());
   }
-  
+
   private static Pattern METAPAT = Pattern.compile("in\\.([0-9]+)");
-  
+
   public OfficialTest(Path p) {
     this.path = p;
   }
-  
+
   //AbnfRuleGrammarParser.DEBUG_GRAMMAR = true; // to test parsing of grammar
-  
+
   static String[] grammarsToReject = {
+      "abnf-sih-header-no-newline.gram",
+      "conformance-5.gram",
+      "dtmf-star-no-quotes.gram",
+      "duplicated-special-rulenames.gram",
+      "no-abnf-sih-header.gram",
+      "no-abnf-sih-version.gram",
+      "no-rules.gram",
+      "no-version.gram",
+      "rule-no-empty.gram",
+      //"ruleref-mismatch-mediatype.gram", // media mismatch not checked
+      "ruleref-nonexistent-local.gram",
+      "unrecognized-header.gram",
+      "uri-ref-undefined-root-referring.gram",
       "wrong-abnf-sih-version.gram",
       "wrong-repeat-abnf-symbols.gram",
       "wrong-tag-delimit-1.gram",
-      "wrong-tag-delimit-2.gram",
-      "no-abnf-sih-version.gram",
-      "duplicated-special-rulenames.gram",
-      "rule-no-empty.gram",
-      "no-abnf-sih-header.gram",
-      "unrecognized-header.gram",
-      "dtmf-star-no-quotes.gram",
-      "abnf-sih-header-no-newline.gram",
       "wrong-tag-delimit-1.gram",
       "wrong-tag-delimit-2.gram",
-      "no-version.gram",
-      "conformance-5.gram",
-      
+      "wrong-tag-delimit-2.gram",
+
       // maybe at some point we will add support for languages, the URIs do not exist
       "lang-ruleref.gram",
-      
+
+      //////////////////////// XML Rejects ////////////////////////////////
+      "conformance-6.grxml",
+      //"duplicated-rulenames.grxml", // not checked on load
+      //"duplicated-special-rulenames.grxml", // not checked on load
+      "language-missing.grxml",
+      "no-language-no-mode.grxml",
+      "no-namespace.grxml",
+      "no-rules.grxml",
+      "no-version.grxml",
+      "rule-no-empty.grxml",
+      //"ruleref-ext-private-rule.grxml", // not checked (private) on load
+      //"ruleref-mismatch-mediatype.grxml", // not checked on load
+      //"ruleref-mismatch-modes.grxml", // not checked on load
+      "ruleref-nonexistent-local.grxml",
+      //"undefined-root.grxml", // not checked on load
+      "uri-ref-undefined-root-referring.grxml",
+
+      // SHOULD WORK
+      "base-declaration.grxml", // xml:base is not treated properly, even if filesystem
+      "base-metabase.grxml", // meta base is not treated properly, even if filesystem
+      "metabase-declaration.grxml",  // meta base is not treated properly, even if filesystem
+      // WILL NOT SUPPORT
+      "lang-ruleref.grxml", // load external grammar
   };
-  
+
   static HashSet<String> toReject = new HashSet<>();
-  
+
   static String[] grammarsNotToParse = {
       // These use feature we're not supporting
       "tag-delimit-1.gram",         // wrong tag delimitation, we want correct
       "uri-ref-undefined-root-referenced.gram", // undefined root, should not do anything
       "dtmf-pound-star-text.gram", // special symbols not supported
       "root-rule-decl-missing.gram", // see above, undefined root
-      
+
       "conformance-3.gram", // don't support parallel rule activation
       "conformance-4.gram", // don't support parallel rule activation
 
@@ -98,14 +126,21 @@ public class OfficialTest {
 
       "special-garbage.gram",  // garbage currently not supported
       "tag-many.gram",  // garbage currently not supported
-      
+
+       // media mismatch not checked: output can not be compared
+      "ruleref-mismatch-mediatype.gram",
+
       // SHOULD REJECT, TOO PERMISSIVE
       "language-missing.gram", // missing lang spec
       "no-language-no-mode.gram", // missing lang spec
       "ruleref-ext-private-root.gram", // private external root
       "ruleref-ext-private-rule.gram", // private external rule
+
+      //////////////////////// XML ////////////////////////////////
+      "conformance-3.grxml", // don't support parallel rule activation
+      "conformance-4.grxml", // don't support parallel rule activation
   };
-  
+
   static HashSet<String> notToParse = new LinkedHashSet<>();
   static HashSet<String> notToAccept = new LinkedHashSet<>();
 
@@ -143,12 +178,13 @@ public class OfficialTest {
       }
     }
   }
-  
+
   static void parseGrammar(Path p) {
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     String name = p.getFileName().toString();
-    //if (toReject.contains(name)) 
+    //if (toReject.contains(name))
     logOff();
+    //AbnfRuleGrammarParser.DEBUG_GRAMMAR = true;
     try {
       final Grammar ruleGrammar = manager.loadGrammar(p.toUri());
       assertNotNull(ruleGrammar);
@@ -162,8 +198,8 @@ public class OfficialTest {
     }
     logOn();
   }
-  
-  @Test 
+
+  @Test
   public void grammarTest() {
     parseGrammar(path);
   }

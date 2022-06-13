@@ -141,32 +141,38 @@ public class RuleCount extends RuleComponent {
     public String toStringABNF() {
         StringBuffer str = new StringBuffer();
 
-        // TODO: would be nicer if <0-1>/1.0/ would be [ ... ]
-        str.append(RuleComponent.toStringABNF(ruleComponent));
-        
-        str.append("<");
-        str.append(repeatMin);
-        if (repeatMin != repeatMax) {
+        // nicer if <0-1>/1.0/ is [ ... ]
+        if (repeatMin == 0 && repeatMax == 1 && repeatProbability < 0) {
+          str.append('[');
+          str.append(RuleComponent.toStringABNF(ruleComponent));
+          str.append(']');
+        } else {
+          str.append(RuleComponent.toStringABNF(ruleComponent));
+
+          str.append("<");
+          str.append(repeatMin);
+          if (repeatMin != repeatMax) {
             str.append("-");
             if (repeatMax != REPEAT_INDEFINITELY) {
-                str.append(repeatMax);
+              str.append(repeatMax);
             }
-        }
+          }
 
-        if (repeatProbability >= 0) {
+          if (repeatProbability >= 0) {
             // TODO we should divide by MAX_PROBABILTY but this is not
             // supported in CLDC 1.0
             str.append("/");
             str.append(repeatProbability);
             str.append("/");
+          }
+          str.append(">");
         }
-        str.append(">");
 
         appendLangABNF(str);
 
         return str.toString();
     }
-    
+
     @Override
     public boolean looksFor(RuleComponent r, int dot) {
       // dot is the number of repetitions already covered

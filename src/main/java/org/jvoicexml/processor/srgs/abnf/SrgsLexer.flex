@@ -122,7 +122,7 @@ import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
   public void begin_repeat() { yybegin(repeat); }
 
   public void begin_header() { yybegin(header); }
-  
+
   // RuleReference with URI with media
   private void treatUriWithMedia() {
     String uri_with_media = yytext();
@@ -294,11 +294,20 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 
 <tag,tag2,YYINITIAL>[=;\(\)\[\]!|<>] { return yytext().charAt(0); }
 
-<YYINITIAL,header,tag,tag2>{
+<header,tag,tag2>{
   {WhiteSpace} { addComment(yytext()); }
 
   (\'[^']*\')|(\"[^\"]*\") { // 'for syntax highlighting''
     yylval = yytext().substring(1, yylength()-1) ;
+    return QuotedCharacters ;
+  }
+}
+
+<YYINITIAL>{
+  {WhiteSpace} { addComment(yytext()); }
+
+  (\"[^\"]*\") { // Quoted strings
+    yylval = yytext();//.substring(1, yylength()-1) ;
     return QuotedCharacters ;
   }
 }

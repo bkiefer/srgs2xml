@@ -117,7 +117,7 @@ public final class ChartGrammarChecker {
       sb.append("> ").append(rule).append(')');
       return sb.toString();
     }
-    
+
     public void printTree(String indent) {
       System.out.println(indent + this);
       for (ChartNode child : children) {
@@ -145,9 +145,9 @@ public final class ChartGrammarChecker {
     public List<ChartNode> getChildren() { return children; }
 
     public int getId() { return id; }
-    
+
     public int getStart() { return start; }
-    
+
     public int getEnd() { return end; }
   }
 
@@ -254,7 +254,7 @@ public final class ChartGrammarChecker {
     }
     return null;
   }
-  
+
   /** Return the input string covered by the chart node n */
   public String covered (ChartNode n) {
     StringBuilder sb = new StringBuilder();
@@ -353,7 +353,8 @@ public final class ChartGrammarChecker {
         final RuleReference reference = (RuleReference) r;
         final Rule rule = manager.resolve(reference);
         if (rule == null) {
-          throw new GrammarException("Invalid rule reference: " + reference);
+          throw new GrammarException("Invalid rule reference: "
+              + reference.getRepresentation());
         }
         final RuleComponent component = rule.getRuleComponent();
         final RuleParse rp = new RuleParse(reference, component);
@@ -478,9 +479,9 @@ public final class ChartGrammarChecker {
     // add complete epsilon item
     add(new ChartNode(current.start, current.end, tag, -1));
   }
-  
+
   /********************** For displaying the chart **********************/
-  
+
   public int chartSize() {
     return chartOut.length;
   }
@@ -488,5 +489,5 @@ public final class ChartGrammarChecker {
   public List<ChartNode> getOutEdges(int i) {
     return chartOut[i];
   }
-  
+
 }

@@ -45,6 +45,11 @@ public class RuleReference extends RuleComponent {
         this.ruleName = ruleName;
     }
 
+    public RuleReference(URI grammarReference) {
+
+        this.grammarReference = grammarReference;
+    }
+
     public RuleReference(URI grammarReference, String ruleName)
         throws IllegalArgumentException {
         checkValidGrammarText(ruleName);
@@ -61,7 +66,7 @@ public class RuleReference extends RuleComponent {
     public void setGrammarReference(URI uri) {
         grammarReference = uri;
     }
-    
+
     public void setMediaType(String t) {
       mediaType = t;
     }
@@ -97,15 +102,15 @@ public class RuleReference extends RuleComponent {
 
         return str.toString();
     }
-    
-    
+
+
     public String toStringABNF() {
         StringBuffer str = new StringBuffer();
 
         if (grammarReference != null) {
           str.append("$<");
           str.append(shortUrl(grammarReference));
-          if (ruleName != null) {
+          if (ruleName != null && ! ruleName.equals("___root")) {
             str.append("#").append(ruleName);
           }
           str.append(">");
@@ -113,12 +118,21 @@ public class RuleReference extends RuleComponent {
           // rulename can not be null: local reference
           str.append('$').append(ruleName);
         }
-        
+
         if (mediaType != null) {
             str.append("~<").append(mediaType).append(">");;
-        } 
+        }
         appendLangABNF(str); // handle optional language attachment
 
         return str.toString();
+    }
+
+    /** not thread safe! **/
+    public String getRepresentation() {
+      boolean shorten = SHORTEN_URLS;
+      SHORTEN_URLS = false;
+      String result = toStringABNF();
+      SHORTEN_URLS = shorten;
+      return result;
     }
 }

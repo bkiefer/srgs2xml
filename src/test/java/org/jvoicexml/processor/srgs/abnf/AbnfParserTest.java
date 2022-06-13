@@ -33,7 +33,7 @@ public class AbnfParserTest {
   public static URI testURI(String name) {
     return new File(RESOURCE_DIR, name).toURI();
   }
-  
+
   public static String[] pizzainputs = {
       "small pizza",
       "medium pizza",
@@ -167,7 +167,7 @@ public class AbnfParserTest {
   }
 
   @Test
-  public void parserTest() throws URISyntaxException, IOException {
+  public void parserTest() throws URISyntaxException, IOException, GrammarException {
     URI grammarReference = testURI("pizza.gram");
     URL url = grammarReference.toURL();
     AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(grammarReference.toString());
@@ -192,7 +192,7 @@ public class AbnfParserTest {
   }
 
   @Test
-  public void parserTest2() throws URISyntaxException, IOException {
+  public void parserTest2() throws URISyntaxException, IOException, GrammarException {
     URI grammarReference = testURI("mini.gram");
     URL url = grammarReference.toURL();
     AbnfRuleGrammarParser p = new AbnfRuleGrammarParser(grammarReference.toString());
@@ -229,13 +229,13 @@ public class AbnfParserTest {
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
   }
-  
+
   @Test
   public void rootruletest() throws GrammarException, IOException, URISyntaxException {
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final Grammar ruleGrammar = manager.loadGrammar(testURI("rootrule.gram"));
-    String[] inputs = { 
+    String[] inputs = {
         "pizza"
     };
     for (String s : inputs) {
