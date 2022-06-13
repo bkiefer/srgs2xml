@@ -6,8 +6,10 @@
 package de.dfki.mlt.srgsparser;
 
 import java.net.URI;
+
 import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
+import org.jvoicexml.processor.srgs.Interpreter;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.grammar.Grammar;
 
@@ -37,8 +39,8 @@ public class Example {
 
             // System.out.println(validRule);
             if (validRule != null) {
-                JSInterpreter walker = new JSInterpreter(checker);
-                JSONObject object = walker.evaluate(validRule);
+                Interpreter walker = new Interpreter(checker);
+                JSONObject object = Interpreter.execute(walker.createProgram(validRule));
                 System.out.println("============================================================");
                 System.out.println(object.toString());
             } else {

@@ -47,9 +47,8 @@ public class SrgsParserTest {
       final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
       final ChartGrammarChecker.ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
-      JSInterpreter walker = new JSInterpreter(checker);
-      JSONObject object = walker.evaluate(validRule);
-      JSONObject order = object.getJSONObject("order");
+      JSONObject o = JSInterpreterTest.interpret(checker, validRule);
+      JSONObject order = (JSONObject)o.get("order");
       assertNotNull(order);
       assertEquals("big", order.getString("size"));
       assertEquals("mushrooms", order.getString("topping"));

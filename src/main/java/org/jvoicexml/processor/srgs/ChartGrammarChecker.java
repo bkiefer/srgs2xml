@@ -58,11 +58,11 @@ public final class ChartGrammarChecker {
 
   private static int gen = 0;
 
-  public static interface TreeWalker {
+  static interface TreeWalker {
 
-    public void enter(ChartNode node, boolean leaf);
+    void enter(ChartNode node, boolean leaf);
 
-    public void leave(ChartNode node, boolean leaf);
+    void leave(ChartNode node, boolean leaf);
   }
 
   // A chart node structure, a replacement for the rule walker
@@ -188,6 +188,23 @@ public final class ChartGrammarChecker {
 
   private boolean canExpand(ChartNode active, ChartNode passive) {
     return active.rule.looksFor(getResolved(passive.rule), active.dot);
+  }
+
+  public ChartNode returnFirstResult() {
+    if (null == chartOut[0]) {
+      return null;
+    }
+    final Rule rule = grammar.getRule(grammar.getRoot());
+    RuleComponent component = rule.getRuleComponent();
+    if (component instanceof RuleReference) {
+      component = resolved.get(component);
+    }
+    for (ChartNode c : chartOut[0]) {
+      if (c.end == input.length && c.rule == component) {
+        return c;
+      }
+    }
+    return null;
   }
 
   /**

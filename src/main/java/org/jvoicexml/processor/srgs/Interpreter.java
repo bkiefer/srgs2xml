@@ -1,40 +1,42 @@
-package de.dfki.mlt.srgsparser;
+package org.jvoicexml.processor.srgs;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker.ChartNode;
+import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
 import org.jvoicexml.processor.srgs.grammar.RuleParse;
 import org.jvoicexml.processor.srgs.grammar.RuleTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public abstract class Interpreter
-implements ChartGrammarChecker.TreeWalker {
+public class Interpreter implements ChartGrammarChecker.TreeWalker {
 
   protected final ChartGrammarChecker checker;
   protected final Stack<ChartNode> stack = new Stack<>();
   protected StringBuilder source;
   private int indent = 0;
 
+  private static final Pattern tok = Pattern.compile("\\$(\\$|%)[0-9]+");
+
   private static final char[] INDENT = new char[200];
   static {
     Arrays.fill(INDENT, ' ');
   }
 
-  protected Interpreter(ChartGrammarChecker c) {
+  public Interpreter(ChartGrammarChecker c) {
     checker = c;
   }
 
-  protected abstract String massageTag(ChartNode n);
-
-  private JSONObject execute() {
+  public static JSONObject execute(String code) {
     Context ctx = Context.enter();
     try {
       Scriptable script = ctx.initStandardObjects();
-      ctx.evaluateString(script, source.toString(), "<cmd>", 0, null);
+      ctx.evaluateString(script, code, "<cmd>", 0, null);
       Object result = ctx.evaluateString(script, "JSON.stringify(rules.root);",
           "<cmd>", 0, null);
       return new JSONObject(result.toString());
@@ -65,7 +67,7 @@ implements ChartGrammarChecker.TreeWalker {
     this.source.append("\n");
   }
 
-  public JSONObject evaluate(ChartNode root) {
+  public String createProgram(ChartNode root) {
     stack.clear();
     source = new StringBuilder();
     addline("rules = {};");
@@ -76,11 +78,58 @@ implements ChartGrammarChecker.TreeWalker {
     addline("return out;");
     close();
     addline("rules.root = rule_root();");
-    return execute();
+    return JSONCode();
   }
 
   public String JSONCode() {
     return source.toString();
+  }
+
+  /** This does the handling of $$n and $%n tags, which have special meanings
+   *  $$n : the matched string n positions before this tag
+   *  $%n : the value returned by the rule n positions before this tag
+   *  n always starts at one. zero is the tag position (not sensible)
+   */
+  protected String massageTag(ChartNode tag) {
+    String in = ((RuleTag) tag.getRule()).getTag().toString();
+    Matcher m = tok.matcher(in);
+    int tagIndex = -1;
+    List<ChartNode> seq = null;
+    StringBuffer sb = null;
+    // Replace the $$n and $%n by the right things
+    while (m.find()) {
+      if (tagIndex < 0) {
+        sb = new StringBuffer();
+        // find my position
+        tagIndex = 0;
+        seq = stack.elementAt(stack.size()-2).getChildren();
+        for (ChartNode curr : seq) {
+          if (curr == tag)
+            break;
+          ++tagIndex;
+        }
+        assert (tagIndex < seq.size());
+      }
+      String match = m.group();
+      int delta = Integer.parseInt(match.substring(2));
+      ChartNode target = seq.get(tagIndex - delta);
+      if (match.charAt(1) == '$') {
+        m.appendReplacement(sb, checker.covered(target));
+      } else {
+        ChartNode targ = target;
+        while (targ.getRule() instanceof RuleAlternatives) {
+          targ = targ.getChildren().get(0);
+        }
+        if (targ.getRule() instanceof RuleParse) {
+          m.appendReplacement(sb, "rule_" + targ.getId() + "()");
+        }
+      }
+    }
+    if (sb != null) {
+      m.appendTail(sb);
+      return sb.toString();
+    }
+    return in;
   }
 
   public void enter(ChartNode node, boolean leaf) {

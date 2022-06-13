@@ -10,12 +10,19 @@ import java.net.URISyntaxException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
+import org.jvoicexml.processor.srgs.Interpreter;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.grammar.Grammar;
 import org.jvoicexml.processor.srgs.grammar.GrammarException;
 import org.jvoicexml.processor.srgs.grammar.GrammarManager;
 
 public class JSInterpreterTest {
+
+  public static JSONObject interpret(ChartGrammarChecker checker,
+      ChartGrammarChecker.ChartNode validRule) {
+    Interpreter walker = new Interpreter(checker);
+    return Interpreter.execute( walker.createProgram(validRule));
+  }
 
   @Test
   public void pizzatest2() throws GrammarException, IOException, URISyntaxException {
@@ -27,8 +34,7 @@ public class JSInterpreterTest {
     final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
     final ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
-    JSInterpreter walker = new JSInterpreter(checker);
-    JSONObject object = walker.evaluate(validRule);
+    JSONObject object = interpret(checker, validRule);
     JSONObject order = object.getJSONObject("order");
     assertNotNull(order);
     assertEquals("big", order.getString("size"));
@@ -45,8 +51,7 @@ public class JSInterpreterTest {
     final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
     final ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
-    JSInterpreter walker = new JSInterpreter(checker);
-    JSONObject object = walker.evaluate(validRule);
+    JSONObject object = interpret(checker, validRule);
     JSONObject order = object.getJSONObject("order");
     assertNotNull(order);
     assertEquals("big", order.getString("size"));
@@ -62,8 +67,7 @@ public class JSInterpreterTest {
     final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
     ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
-    JSInterpreter walker = new JSInterpreter(checker);
-    JSONObject o = walker.evaluate(validRule);
+    JSONObject o = interpret(checker, validRule);
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
   }
@@ -81,8 +85,7 @@ public class JSInterpreterTest {
     final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
     for (String[] toks : tokens) {
       ChartGrammarChecker.ChartNode validRule = checker.parse(ruleGrammar, toks);
-      JSInterpreter walker = new JSInterpreter(checker);
-      JSONObject o = walker.evaluate(validRule);
+      JSONObject o = interpret(checker, validRule);
       assertEquals(toks[2], o.getString("val"));
     }
   }

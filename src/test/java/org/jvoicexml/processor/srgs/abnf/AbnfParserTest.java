@@ -18,6 +18,7 @@ import java.util.List;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
+import org.jvoicexml.processor.srgs.Interpreter;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
 import org.jvoicexml.processor.srgs.grammar.Grammar;
@@ -25,8 +26,6 @@ import org.jvoicexml.processor.srgs.grammar.GrammarException;
 import org.jvoicexml.processor.srgs.grammar.GrammarManager;
 import org.jvoicexml.processor.srgs.grammar.Rule;
 import org.jvoicexml.processor.srgs.grammar.RuleComponent;
-
-import de.dfki.mlt.srgsparser.JSInterpreter;
 
 public class AbnfParserTest {
   public static final String RESOURCE_DIR = "src/test/resources/";
@@ -151,8 +150,8 @@ public class AbnfParserTest {
       assertEquals(s, correct[i], (validRule != null));
       ++i;
       if (validRule != null) {
-        JSInterpreter walker = new JSInterpreter(checker);
-        JSONObject object = walker.evaluate(validRule);
+        Interpreter walker = new Interpreter(checker);
+        JSONObject object = Interpreter.execute(walker.createProgram(validRule));
         String out = object.getString("s");
         assertEquals(s, out);
       }
@@ -224,8 +223,8 @@ public class AbnfParserTest {
     final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
     ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
-    JSInterpreter walker = new JSInterpreter(checker);
-    JSONObject o = walker.evaluate(validRule);
+    Interpreter walker = new Interpreter(checker);
+    JSONObject o = Interpreter.execute(walker.createProgram(validRule));
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
   }
