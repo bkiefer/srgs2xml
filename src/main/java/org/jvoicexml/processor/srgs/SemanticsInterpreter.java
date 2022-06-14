@@ -45,6 +45,12 @@ public class SemanticsInterpreter implements ChartGrammarChecker.TreeWalker {
     }
   }
 
+  public static JSONObject interpret(ChartGrammarChecker checker, ChartNode root) {
+    SemanticsInterpreter walker = new SemanticsInterpreter(checker);
+    String jscode = walker.createProgram(root);
+    return execute(jscode);
+  }
+
   private void indent(int k) {
     source.append(INDENT, 0, Math.min(k, INDENT.length));
   }
