@@ -32,10 +32,12 @@ java -jar target/srgs-parser-1.0-jar-with-dependencies.jar src/test/resources/hy
 
 ## Features to be possibly added in a future version
 - the private attribute to prevent external rule access does not lead to rejection
-- the GARBAGE special rule does not work
+- the GARBAGE special rule does not work fully
 - weights and probabilities are currently not handled by the parser
 
 # Extensions in the Semantic Interpretation
+
+First and foremost, it is important to note that there is *no semantic return value by default*! That means, if a rule contains no semantic tags, it will return an empty object.
 
 The semantic actions can provide return values not only based on the names of terminal symbols, but also using relative positions of matched strings or tokens:
 |       |                                                                        |
