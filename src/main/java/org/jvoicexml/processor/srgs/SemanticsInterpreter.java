@@ -14,7 +14,7 @@ import org.jvoicexml.processor.srgs.grammar.RuleTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public class Interpreter implements ChartGrammarChecker.TreeWalker {
+public class SemanticsInterpreter implements ChartGrammarChecker.TreeWalker {
 
   protected final ChartGrammarChecker checker;
   protected final Stack<ChartNode> stack = new Stack<>();
@@ -28,7 +28,7 @@ public class Interpreter implements ChartGrammarChecker.TreeWalker {
     Arrays.fill(INDENT, ' ');
   }
 
-  public Interpreter(ChartGrammarChecker c) {
+  public SemanticsInterpreter(ChartGrammarChecker c) {
     checker = c;
   }
 

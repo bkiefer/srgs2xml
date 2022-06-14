@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker.ChartNode;
-import org.jvoicexml.processor.srgs.Interpreter;
+import org.jvoicexml.processor.srgs.SemanticsInterpreter;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.grammar.Grammar;
 import org.jvoicexml.processor.srgs.grammar.GrammarException;
@@ -44,7 +44,7 @@ public class Main {
   }
 
   protected ChartNode process(String s) {
-    Interpreter walker = null;
+    SemanticsInterpreter walker = null;
     String jscode = "";
     ChartNode validRule = null;
     try {
@@ -54,12 +54,12 @@ public class Main {
 
       // System.out.println(validRule);
       if (validRule != null) {
-        walker = new Interpreter(checker);
+        walker = new SemanticsInterpreter(checker);
         jscode = walker.createProgram(validRule);
         if (debug) {
           System.out.println(jscode);
         }
-        JSONObject object = Interpreter.execute(jscode);
+        JSONObject object = SemanticsInterpreter.execute(jscode);
         System.out.println(
             "============================================================");
         System.out.println(s);

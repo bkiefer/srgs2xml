@@ -9,7 +9,7 @@ import java.net.URI;
 
 import org.json.JSONObject;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.Interpreter;
+import org.jvoicexml.processor.srgs.SemanticsInterpreter;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.grammar.Grammar;
 
@@ -39,8 +39,8 @@ public class Example {
 
             // System.out.println(validRule);
             if (validRule != null) {
-                Interpreter walker = new Interpreter(checker);
-                JSONObject object = Interpreter.execute(walker.createProgram(validRule));
+                SemanticsInterpreter walker = new SemanticsInterpreter(checker);
+                JSONObject object = SemanticsInterpreter.execute(walker.createProgram(validRule));
                 System.out.println("============================================================");
                 System.out.println(object.toString());
             } else {

@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.Interpreter;
+import org.jvoicexml.processor.srgs.SemanticsInterpreter;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.grammar.Grammar;
 import org.jvoicexml.processor.srgs.grammar.GrammarException;
@@ -20,8 +20,8 @@ public class JSInterpreterTest {
 
   public static JSONObject interpret(ChartGrammarChecker checker,
       ChartGrammarChecker.ChartNode validRule) {
-    Interpreter walker = new Interpreter(checker);
-    return Interpreter.execute( walker.createProgram(validRule));
+    SemanticsInterpreter walker = new SemanticsInterpreter(checker);
+    return SemanticsInterpreter.execute( walker.createProgram(validRule));
   }
 
   @Test

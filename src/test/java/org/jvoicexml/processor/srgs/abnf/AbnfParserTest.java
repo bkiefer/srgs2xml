@@ -18,7 +18,7 @@ import java.util.List;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.Interpreter;
+import org.jvoicexml.processor.srgs.SemanticsInterpreter;
 import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
 import org.jvoicexml.processor.srgs.grammar.Grammar;
@@ -150,8 +150,8 @@ public class AbnfParserTest {
       assertEquals(s, correct[i], (validRule != null));
       ++i;
       if (validRule != null) {
-        Interpreter walker = new Interpreter(checker);
-        JSONObject object = Interpreter.execute(walker.createProgram(validRule));
+        SemanticsInterpreter walker = new SemanticsInterpreter(checker);
+        JSONObject object = SemanticsInterpreter.execute(walker.createProgram(validRule));
         String out = object.getString("s");
         assertEquals(s, out);
       }
@@ -223,8 +223,8 @@ public class AbnfParserTest {
     final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
     ChartGrammarChecker.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
-    Interpreter walker = new Interpreter(checker);
-    JSONObject o = Interpreter.execute(walker.createProgram(validRule));
+    SemanticsInterpreter walker = new SemanticsInterpreter(checker);
+    JSONObject o = SemanticsInterpreter.execute(walker.createProgram(validRule));
     assertEquals("1", o.getString("one"));
     assertEquals("2", o.getString("two"));
   }
