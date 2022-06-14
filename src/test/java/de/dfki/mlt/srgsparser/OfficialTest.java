@@ -124,8 +124,7 @@ public class OfficialTest {
       "example-4-chinese-digits-utf8.gram", // no idea what's going on here
       "conformance-6.gram", // don't know what's going on here
 
-      "special-garbage.gram",  // garbage currently not supported
-      "tag-many.gram",  // garbage currently not supported
+      "tag-many.gram",  // $GARBAGE currently not fully supported
 
        // media mismatch not checked: output can not be compared
       "ruleref-mismatch-mediatype.gram",

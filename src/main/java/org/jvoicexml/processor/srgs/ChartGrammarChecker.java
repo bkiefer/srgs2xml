@@ -307,6 +307,9 @@ public final class ChartGrammarChecker {
     } else if (component instanceof RuleTag) {
       final RuleTag tag = (RuleTag) component;
       scan(grammar, tag, current);
+    } else if (component instanceof RuleSpecial) {
+      final RuleSpecial special = (RuleSpecial) component;
+      scan(grammar, special, current);
     }
   }
 
@@ -480,6 +483,28 @@ public final class ChartGrammarChecker {
 
     // now, for the first time, we add a complete token
     add(new ChartNode(current.start, pos, token, -1));
+  }
+
+
+  /**
+   * This is rather a scan than predict. $GARBAGE is equal to .*
+   *
+   * @param grammar
+   * @param token
+   * @param current
+   * @throws GrammarException
+   */
+  private void scan(final Grammar grammar, final RuleSpecial token,
+      final ChartNode current) throws GrammarException {
+    if (token != RuleSpecial.GARBAGE) {
+      return;
+    }
+    int pos = current.start + 1;
+    addPrediction(current.start, RuleSpecial.NULL);
+    if (pos < chartSize()) {
+      add(new ChartNode(current.start, pos, token, -1));
+      addPrediction(pos, token);
+    }
   }
 
   /**
