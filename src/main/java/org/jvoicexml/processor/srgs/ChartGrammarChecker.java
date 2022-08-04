@@ -105,6 +105,7 @@ public final class ChartGrammarChecker {
 
     // TODO: would be nicer if we had a "graphical" dot, but for that, we would
     // need functions to print the rule with a dot argument
+    @Override
     public String toString() {
       StringBuilder sb = new StringBuilder();
       sb.append('(').append(Integer.toString(id)).append(':')
@@ -278,7 +279,8 @@ public final class ChartGrammarChecker {
     for(int i = n.start; i < n.end; ++i) {
       sb.append(input[i]).append(' ');
     }
-    sb.deleteCharAt(sb.length()-1); // delete trailing space
+    if (n.start != n.end)
+      sb.deleteCharAt(sb.length()-1); // delete trailing space
     return sb.toString();
   }
 

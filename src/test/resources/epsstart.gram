@@ -1,0 +1,12 @@
+#ABNF 1.0 UTF-8;
+
+language en-EN;
+root $order;
+mode voice;
+tag-format "semantics/1.0";
+
+public $order = $mini { out.val = "$$1"; } ;
+
+$eps = "$$.*"<0-4>;
+
+$mini = $eps { out = "$$1"; } (pizza | pasta) ;

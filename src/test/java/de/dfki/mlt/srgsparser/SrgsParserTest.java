@@ -161,6 +161,22 @@ public class SrgsParserTest {
     }
   }
 
+  @Test
+  public void emptyMatchTest() throws GrammarException, IOException, URISyntaxException {
+
+    final GrammarManager manager = new JVoiceXmlGrammarManager();
+    final Grammar ruleGrammar = manager.loadGrammar(testURI("epsstart.gram"));
+
+    String[] tokens = { "pizza" };
+    final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
+    final ChartGrammarChecker.ChartNode validRule =
+        checker.parse(ruleGrammar, tokens);
+    assertNotNull(validRule);
+    // make sure the interpreter does not crash when empty strings are matched
+    JSONObject object = JSInterpreterTest.interpret(checker, validRule);
+    assertEquals("pizza", object.get("val").toString());
+  }
+
   public void parserTest() throws URISyntaxException, IOException, GrammarException {
     URI grammarReference = testURI("/pizza.srgs");
     final URL url = grammarReference.toURL();
