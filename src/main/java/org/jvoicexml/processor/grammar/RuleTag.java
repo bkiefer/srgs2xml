@@ -55,7 +55,6 @@ public class RuleTag extends RuleComponent {
 
         return str.toString();
     }
-    
 
     public String toStringABNF() {
         if (tag == null) return "";
@@ -66,5 +65,11 @@ public class RuleTag extends RuleComponent {
         str.append("}");
 
         return str.toString();
+    }
+
+    public boolean equals(Object obj) {
+      Boolean b = eq(obj);
+      if (b != null) return b;
+      return tag.equals(((RuleTag)obj).tag);
     }
 }

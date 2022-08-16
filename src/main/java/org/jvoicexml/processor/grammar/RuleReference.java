@@ -141,4 +141,24 @@ public class RuleReference extends RuleComponent {
       SHORTEN_URLS = shorten;
       return result;
     }
+
+    public boolean equals(Object obj) {
+      Boolean b = eq(obj);
+      if (b != null) return b;
+      RuleReference other = (RuleReference) obj;
+      if (grammarReference == null) {
+        return (other.grammarReference == null);
+      } else if (! grammarReference.equals(other.grammarReference)) {
+        return false;
+      }
+      if (ruleName == null) {
+        return (other.ruleName == null);
+      } else if (! ruleName.equals(other.ruleName)) {
+        return false;
+      }
+      if (mediaType == null) {
+        return (other.mediaType == null);
+      }
+      return mediaType.equals(other.mediaType);
+    }
 }

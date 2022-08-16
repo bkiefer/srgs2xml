@@ -27,6 +27,7 @@
 package org.jvoicexml.processor.grammar;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 //Comp 2.0.6
@@ -140,7 +141,23 @@ public class RuleAlternatives extends RuleComponent {
     // r must be equal to the ith alternative. Because we're using the
     // RuleComponents as immutable objects from the grammar, it's sufficient
     // to test for token identity
-    return ruleComponents.get(i).component == r;
+    return ruleComponents.get(i).component.equals(r);
   }
 
+  public boolean equals(Object obj) {
+    Boolean b = eq(obj);
+    if (b != null) return b;
+    RuleAlternatives other = (RuleAlternatives) obj;
+    if (ruleComponents.size() != other.ruleComponents.size()) {
+      return false;
+    }
+    Iterator<RuleAlternative> it = other.ruleComponents.iterator();
+    for (RuleAlternative c : ruleComponents) {
+      RuleAlternative co = it.next();
+      if (c.weight - co.weight > 1e-9 || ! c.component.equals(co.component)) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

@@ -127,22 +127,12 @@ public class RuleToken extends RuleComponent {
   }
 
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
+    Boolean b = eq(obj);
+    if (b != null) return b;
     RuleToken other = (RuleToken) obj;
     if (text == null) {
-      if (other.text != null) {
-        return false;
-      }
-    } else if (!text.equals(other.text)) {
-      return false;
+      return (other.text == null);
     }
-    return true;
+    return text.equals(other.text);
   }
 }

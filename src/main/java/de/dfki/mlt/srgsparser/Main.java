@@ -43,6 +43,8 @@ public class Main {
     ruleGrammar = manager.loadGrammar(grammarUri);
   }
 
+  protected Main() {}
+
   protected ChartNode process(String s) {
     SemanticsInterpreter walker = null;
     String jscode = "";

@@ -154,4 +154,16 @@ public abstract class RuleComponent {
   public String getLanguage() {
     return lang;
   }
+
+  protected Boolean eq(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    return null;
+  }
 }

@@ -134,7 +134,7 @@ public final class ChartGrammarChecker {
     }
 
     public boolean equals(ChartNode c) {
-      return (start == c.start && end == c.end && rule == c.rule
+      return (start == c.start && end == c.end && rule.equals(c.rule)
           && dot == c.dot);
     }
 
@@ -357,14 +357,13 @@ public final class ChartGrammarChecker {
     return c;
   }
 
-  private ChartNode add(ChartNode c) {
+  private void add(ChartNode c) {
     if (addToChart(c) == c) {
       agenda.add(c);
     }
-    return c;
   }
 
-  private ChartNode addPrediction(int pos, RuleComponent r)
+  private void addPrediction(int pos, RuleComponent r)
       throws GrammarException {
     if (r instanceof RuleReference) {
       // resolve r and replace it by the resolved proxy, a RuleParse
@@ -383,7 +382,7 @@ public final class ChartGrammarChecker {
         r = rp;
       }
     }
-    return add(new ChartNode(pos, r));
+    add(new ChartNode(pos, r));
   }
 
   private void predict(final Grammar grammar, final RuleParse reference,

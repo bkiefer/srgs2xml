@@ -27,6 +27,7 @@
 package org.jvoicexml.processor.grammar;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 //Comp. 2.0.6
@@ -109,7 +110,7 @@ public class RuleSequence extends RuleComponent {
     @Override
     public boolean looksFor(RuleComponent r, int i) {
       // check the i'th element of the sequence
-      return ruleComponents.get(i) == r;
+      return ruleComponents.get(i).equals(r);
     }
 
     @Override
@@ -118,4 +119,19 @@ public class RuleSequence extends RuleComponent {
       return dot == ruleComponents.size() ? -1 : dot ;
     }
 
+    public boolean equals(Object obj) {
+      Boolean b = eq(obj);
+      if (b != null) return b;
+      RuleSequence other = (RuleSequence) obj;
+      if (ruleComponents.size() != other.ruleComponents.size()) {
+        return false;
+      }
+      Iterator<RuleComponent> it = other.ruleComponents.iterator();
+      for (RuleComponent c : ruleComponents) {
+        if (! c.equals(it.next())) {
+          return false;
+        }
+      }
+      return true;
+    }
 }

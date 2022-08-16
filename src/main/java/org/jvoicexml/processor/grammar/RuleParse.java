@@ -128,10 +128,15 @@ public class RuleParse extends RuleComponent {
 
         return str.toString();
     }
-    
+
     @Override
     public boolean looksFor(RuleComponent r, int dot) {
-      // TODO Auto-generated method stub
-      return parse == r;
+      return parse.equals(r);
+    }
+
+    public boolean equals(Object obj) {
+      Boolean b = eq(obj);
+      if (b != null) return b;
+      return ruleReference.equals(((RuleParse)obj).ruleReference);
     }
 }

@@ -52,4 +52,10 @@ public class RuleSpecial extends RuleComponent {
     void assignName(String myName) {
       name = myName + "_" + toStringABNF();
     }
+
+    public boolean equals(Object obj) {
+      Boolean b = eq(obj);
+      if (b != null) return b;
+      return special.equals(((RuleSpecial)obj).special);
+    }
 }

@@ -181,12 +181,21 @@ public class RuleCount extends RuleComponent {
     @Override
     public boolean looksFor(RuleComponent r, int dot) {
       // dot is the number of repetitions already covered
-      return dot < repeatMax && ruleComponent == r;
+      return dot < repeatMax && ruleComponent.equals(r);
     }
 
     /** dot is the number of repetitions already covered
      */
     public int nextSlot(int dot){
       return ++dot;
+    }
+
+    public boolean equals(Object obj) {
+      Boolean b = eq(obj);
+      if (b != null) return b;
+      RuleCount other = (RuleCount) obj;
+      return repeatMax == other.repeatMax && repeatMin == other.repeatMin
+          && (repeatProbability - other.repeatProbability < 1e-9)
+          && ruleComponent.equals(other.ruleComponent);
     }
 }
