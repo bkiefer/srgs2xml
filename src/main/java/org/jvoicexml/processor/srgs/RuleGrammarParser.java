@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.jvoicexml.processor.srgs.grammar.Rule;
+import org.jvoicexml.processor.grammar.Rule;
 
 public interface RuleGrammarParser {
   public List<Rule> load(final InputStream stream) throws Exception;

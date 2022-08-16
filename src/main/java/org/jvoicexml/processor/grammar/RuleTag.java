@@ -1,6 +1,6 @@
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision: 59 $
+ * Version: $LastChangedRevision: 63 $
  * Date:    $LastChangedDate $
  * Author:  $LastChangedBy: schnelle $
  *
@@ -24,37 +24,43 @@
  *
  */
 
-package org.jvoicexml.processor.srgs.grammar;
+package org.jvoicexml.processor.grammar;
 
+//Comp. 2.0.6
 
-//Comp 2.0.6
+public class RuleTag extends RuleComponent {
+    private Object tag;
 
-@SuppressWarnings("serial")
-public class GrammarException extends Exception {
-
-    private GrammarExceptionDetail[] details;
-
-    public GrammarException() {
+    public RuleTag(Object tag) {
+        this.tag = tag;
     }
 
-    public GrammarException(String message) {
-        super(message);
+    public Object getTag() {
+        return tag;
     }
 
-    public GrammarException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public GrammarException(String message, GrammarExceptionDetail[] details)
-        throws IllegalArgumentException {
-        super(message);
-        if (details == null) {
-            throw new IllegalArgumentException("Details must not be null!");
+    public String toStringXML() {
+        if (tag == null) {
+            throw new IllegalArgumentException(
+                    "null can not be represented in XML");
         }
-        this.details = details;
-    }
+        final StringBuffer str = new StringBuffer();
+        str.append("<tag>");
+        str.append(tag);
+        str.append("</tag>");
 
-    public GrammarExceptionDetail[] getDetails() {
-        return details;
+        return str.toString();
+    }
+    
+
+    public String toStringABNF() {
+        if (tag == null) return "";
+
+        final StringBuffer str = new StringBuffer();
+        str.append("{");
+        str.append(tag);
+        str.append("}");
+
+        return str.toString();
     }
 }

@@ -14,12 +14,12 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import org.json.JSONObject;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker.ChartNode;
-import org.jvoicexml.processor.srgs.SemanticsInterpreter;
-import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Grammar;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
+import org.jvoicexml.processor.ChartGrammarChecker;
+import org.jvoicexml.processor.ChartGrammarChecker.ChartNode;
+import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.srgs.GrammarException;
+import org.jvoicexml.processor.JVoiceXmlGrammarManager;
+import org.jvoicexml.processor.SemanticsInterpreter;
 import org.mozilla.javascript.EcmaError;
 import org.mozilla.javascript.EvaluatorException;
 

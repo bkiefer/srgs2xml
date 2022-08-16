@@ -1,4 +1,4 @@
-package org.jvoicexml.processor.srgs;
+package org.jvoicexml.processor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,10 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.JSONObject;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker.ChartNode;
-import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
-import org.jvoicexml.processor.srgs.grammar.RuleParse;
-import org.jvoicexml.processor.srgs.grammar.RuleTag;
+import org.jvoicexml.processor.ChartGrammarChecker.ChartNode;
+import org.jvoicexml.processor.grammar.RuleAlternatives;
+import org.jvoicexml.processor.grammar.RuleParse;
+import org.jvoicexml.processor.grammar.RuleTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 

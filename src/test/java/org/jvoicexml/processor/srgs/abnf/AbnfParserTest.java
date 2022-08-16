@@ -17,15 +17,15 @@ import java.util.List;
 
 import org.json.JSONObject;
 import org.junit.Test;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.SemanticsInterpreter;
-import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
-import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
-import org.jvoicexml.processor.srgs.grammar.Grammar;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleComponent;
+import org.jvoicexml.processor.ChartGrammarChecker;
+import org.jvoicexml.processor.GrammarManager;
+import org.jvoicexml.processor.JVoiceXmlGrammarManager;
+import org.jvoicexml.processor.SemanticsInterpreter;
+import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.grammar.Rule;
+import org.jvoicexml.processor.grammar.RuleComponent;
+import org.jvoicexml.processor.srgs.GrammarException;
+import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
 public class AbnfParserTest {
   public static final String RESOURCE_DIR = "src/test/resources/";

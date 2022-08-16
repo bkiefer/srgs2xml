@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.processor.srgs;
+package org.jvoicexml.processor;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -33,19 +33,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.jvoicexml.processor.srgs.grammar.Grammar;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
-import org.jvoicexml.processor.srgs.grammar.RuleComponent;
-import org.jvoicexml.processor.srgs.grammar.RuleCount;
-import org.jvoicexml.processor.srgs.grammar.RuleParse;
-import org.jvoicexml.processor.srgs.grammar.RuleReference;
-import org.jvoicexml.processor.srgs.grammar.RuleSequence;
-import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
-import org.jvoicexml.processor.srgs.grammar.RuleTag;
-import org.jvoicexml.processor.srgs.grammar.RuleToken;
+import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.grammar.Rule;
+import org.jvoicexml.processor.grammar.RuleAlternatives;
+import org.jvoicexml.processor.grammar.RuleComponent;
+import org.jvoicexml.processor.grammar.RuleCount;
+import org.jvoicexml.processor.grammar.RuleParse;
+import org.jvoicexml.processor.grammar.RuleReference;
+import org.jvoicexml.processor.grammar.RuleSequence;
+import org.jvoicexml.processor.grammar.RuleSpecial;
+import org.jvoicexml.processor.grammar.RuleTag;
+import org.jvoicexml.processor.grammar.RuleToken;
+import org.jvoicexml.processor.srgs.GrammarException;
 
 /**
  * This class provides a means to perform evaluations on a parsed grammar.

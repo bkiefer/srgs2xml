@@ -24,10 +24,12 @@
  *
  */
 
-package org.jvoicexml.processor.srgs.grammar;
+package org.jvoicexml.processor.grammar;
 
 import java.net.URI;
 import java.util.Map;
+
+import org.jvoicexml.processor.srgs.GrammarException;
 
 
 //Comp. 2.0.6

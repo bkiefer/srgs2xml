@@ -8,10 +8,10 @@ package de.dfki.mlt.srgsparser;
 import java.net.URI;
 
 import org.json.JSONObject;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.SemanticsInterpreter;
-import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Grammar;
+import org.jvoicexml.processor.ChartGrammarChecker;
+import org.jvoicexml.processor.JVoiceXmlGrammarManager;
+import org.jvoicexml.processor.SemanticsInterpreter;
+import org.jvoicexml.processor.grammar.Grammar;
 
 /**
  *

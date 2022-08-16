@@ -14,7 +14,7 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.util.LinkedList;
 
-import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
+import org.jvoicexml.processor.grammar.RuleSpecial;
 
 
 /**

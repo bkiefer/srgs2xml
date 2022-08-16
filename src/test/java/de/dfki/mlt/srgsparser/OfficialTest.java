@@ -21,13 +21,12 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
-import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
-import org.jvoicexml.processor.srgs.grammar.Grammar;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Meta;
+import org.jvoicexml.processor.ChartGrammarChecker;
+import org.jvoicexml.processor.GrammarManager;
+import org.jvoicexml.processor.JVoiceXmlGrammarManager;
+import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.grammar.Meta;
+import org.jvoicexml.processor.srgs.GrammarException;
 
 
 @RunWith(Parameterized.class)

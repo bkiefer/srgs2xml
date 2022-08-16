@@ -43,7 +43,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.grammar.*;
 
 @SuppressWarnings({"unused", "unchecked"})
 

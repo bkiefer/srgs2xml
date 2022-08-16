@@ -1,4 +1,4 @@
-package org.jvoicexml.processor.srgs;
+package org.jvoicexml.processor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,16 +9,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.grammar.JVoiceXmlGrammar;
+import org.jvoicexml.processor.grammar.Rule;
+import org.jvoicexml.processor.grammar.RuleAlternatives;
+import org.jvoicexml.processor.grammar.RuleComponent;
+import org.jvoicexml.processor.grammar.RuleCount;
+import org.jvoicexml.processor.grammar.RuleReference;
+import org.jvoicexml.processor.grammar.RuleSequence;
+import org.jvoicexml.processor.srgs.GrammarException;
+import org.jvoicexml.processor.srgs.RuleGrammarParser;
 import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
-import org.jvoicexml.processor.srgs.grammar.Grammar;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
-import org.jvoicexml.processor.srgs.grammar.RuleComponent;
-import org.jvoicexml.processor.srgs.grammar.RuleCount;
-import org.jvoicexml.processor.srgs.grammar.RuleReference;
-import org.jvoicexml.processor.srgs.grammar.RuleSequence;
+import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
 public class JVoiceXmlGrammarManager implements GrammarManager {
 

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
+import org.jvoicexml.processor.srgs.GrammarException;
 
 @RunWith(Parameterized.class)
 public class UnixLfTest {

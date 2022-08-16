@@ -39,8 +39,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.input.BOMInputStream;
+import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.srgs.RuleGrammarParser;
-import org.jvoicexml.processor.srgs.grammar.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

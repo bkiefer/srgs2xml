@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.processor.srgs.grammar;
+package org.jvoicexml.processor.grammar;
 
 //Comp 2.0.6
 

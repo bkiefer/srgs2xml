@@ -1,4 +1,4 @@
-package org.jvoicexml.processor.srgs.grammar;
+package org.jvoicexml.processor.grammar;
 
 public class Meta {
   public String key, value;

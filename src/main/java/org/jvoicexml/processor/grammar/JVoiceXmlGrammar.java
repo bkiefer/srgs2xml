@@ -1,16 +1,12 @@
-package org.jvoicexml.processor.srgs;
+package org.jvoicexml.processor.grammar;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
-import org.jvoicexml.processor.srgs.grammar.Grammar;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Meta;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleReference;
+import org.jvoicexml.processor.GrammarManager;
+import org.jvoicexml.processor.srgs.GrammarException;
 
 public class JVoiceXmlGrammar implements Grammar {
     private final GrammarManager manager;
@@ -50,7 +46,7 @@ public class JVoiceXmlGrammar implements Grammar {
         base = reference;
       }
     }
-    
+
     public JVoiceXmlGrammar(final GrammarManager grammarManager, final URI ref,
         List<Rule> rules, Map<String, Object> attrs) throws GrammarException {
         manager = grammarManager;

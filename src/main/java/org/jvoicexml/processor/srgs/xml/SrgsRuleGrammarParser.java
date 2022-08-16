@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.processor.srgs;
+package org.jvoicexml.processor.srgs.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,16 +40,17 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.Rule;
-import org.jvoicexml.processor.srgs.grammar.RuleAlternatives;
-import org.jvoicexml.processor.srgs.grammar.RuleComponent;
-import org.jvoicexml.processor.srgs.grammar.RuleCount;
-import org.jvoicexml.processor.srgs.grammar.RuleReference;
-import org.jvoicexml.processor.srgs.grammar.RuleSequence;
-import org.jvoicexml.processor.srgs.grammar.RuleSpecial;
-import org.jvoicexml.processor.srgs.grammar.RuleTag;
-import org.jvoicexml.processor.srgs.grammar.RuleToken;
+import org.jvoicexml.processor.grammar.Rule;
+import org.jvoicexml.processor.grammar.RuleAlternatives;
+import org.jvoicexml.processor.grammar.RuleComponent;
+import org.jvoicexml.processor.grammar.RuleCount;
+import org.jvoicexml.processor.grammar.RuleReference;
+import org.jvoicexml.processor.grammar.RuleSequence;
+import org.jvoicexml.processor.grammar.RuleSpecial;
+import org.jvoicexml.processor.grammar.RuleTag;
+import org.jvoicexml.processor.grammar.RuleToken;
+import org.jvoicexml.processor.srgs.GrammarException;
+import org.jvoicexml.processor.srgs.RuleGrammarParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

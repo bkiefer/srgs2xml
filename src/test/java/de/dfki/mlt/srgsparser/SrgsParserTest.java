@@ -1,7 +1,10 @@
 package de.dfki.mlt.srgsparser;
 
-import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.pizzainputs;
+import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.testURI;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,13 +14,13 @@ import java.util.List;
 
 import org.json.JSONObject;
 import org.junit.Test;
-import org.jvoicexml.processor.srgs.ChartGrammarChecker;
-import org.jvoicexml.processor.srgs.JVoiceXmlGrammarManager;
-import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
-import org.jvoicexml.processor.srgs.grammar.Grammar;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.GrammarManager;
-import org.jvoicexml.processor.srgs.grammar.Rule;
+import org.jvoicexml.processor.ChartGrammarChecker;
+import org.jvoicexml.processor.GrammarManager;
+import org.jvoicexml.processor.JVoiceXmlGrammarManager;
+import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.grammar.Rule;
+import org.jvoicexml.processor.srgs.GrammarException;
+import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
 public class SrgsParserTest {
 

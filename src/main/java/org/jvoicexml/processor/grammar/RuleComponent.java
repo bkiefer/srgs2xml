@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.processor.srgs.grammar;
+package org.jvoicexml.processor.grammar;
 
 import java.net.URI;
 import java.util.HashMap;

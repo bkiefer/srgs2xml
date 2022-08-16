@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.jvoicexml.processor.srgs.SrgsRuleGrammarParser;
+import org.jvoicexml.processor.grammar.Rule;
+import org.jvoicexml.processor.srgs.GrammarException;
 import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
-import org.jvoicexml.processor.srgs.grammar.GrammarException;
-import org.jvoicexml.processor.srgs.grammar.Rule;
+import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
 @RunWith(Parameterized.class)
 public class PrinterTest {
