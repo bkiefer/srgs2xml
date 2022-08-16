@@ -88,6 +88,10 @@ public class RuleToken extends RuleComponent {
     return lang;
   }
 
+  void assignName(String myName) {
+    name = myName + "_" + toStringABNF();
+  }
+
   public String toStringXML() {
     StringBuffer str = new StringBuffer();
     str.append("<item");

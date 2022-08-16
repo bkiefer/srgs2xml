@@ -73,6 +73,15 @@ public class RuleAlternatives extends RuleComponent {
     return ruleComponents.size();
   }
 
+  void assignName(String myName) {
+    name = myName + "_a";
+    int index = 1;
+    for (RuleAlternative a : ruleComponents) {
+      a.component.assignName(name + index);
+      ++index;
+    }
+  }
+
   public String toStringXML() {
     if ((ruleComponents == null) || (ruleComponents.size() == 0)) {
       return RuleSpecial.VOID.toStringXML();

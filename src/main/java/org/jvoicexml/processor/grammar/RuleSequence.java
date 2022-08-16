@@ -55,6 +55,15 @@ public class RuleSequence extends RuleComponent {
         return ruleComponents;
     }
 
+    void assignName(String myName) {
+      name = myName + "_s";
+      int index = 1;
+      for (RuleComponent a : ruleComponents) {
+        a.assignName(name + index);
+        ++index;
+      }
+    }
+
     public String toStringXML() {
         if (ruleComponents == null) {
             return "";

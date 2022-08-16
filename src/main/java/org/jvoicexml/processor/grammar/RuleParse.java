@@ -92,6 +92,11 @@ public class RuleParse extends RuleComponent {
         return ruleReference;
     }
 
+    void assignName(String myName) {
+      name = myName + "_p";
+      parse.assignName(name + "_");
+    }
+
     public String toStringXML() {
         if (parse == null) {
             return "";

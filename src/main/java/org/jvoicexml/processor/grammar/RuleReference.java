@@ -83,6 +83,12 @@ public class RuleReference extends RuleComponent {
         return ruleName;
     }
 
+    void assignName(String myName) {
+      name = myName + "_r_"
+          + (grammarReference == null ? "" : grammarReference + "#")
+          + ruleName;
+    }
+
     public String toStringXML() {
         StringBuffer str = new StringBuffer();
         str.append("<ruleref uri=\"");

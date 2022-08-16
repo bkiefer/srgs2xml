@@ -39,6 +39,10 @@ public class RuleTag extends RuleComponent {
         return tag;
     }
 
+    void assignName(String myName) {
+      name = myName + "_{}";
+    }
+
     public String toStringXML() {
         if (tag == null) {
             throw new IllegalArgumentException(

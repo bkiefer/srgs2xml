@@ -104,6 +104,11 @@ public class RuleCount extends RuleComponent {
         return ruleComponent;
     }
 
+    void assignName(String myName) {
+      name = myName + "_c";
+      ruleComponent.assignName(name + "_");
+    }
+
     public String toStringXML() {
         StringBuffer str = new StringBuffer();
 

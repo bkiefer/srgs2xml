@@ -48,4 +48,8 @@ public class RuleSpecial extends RuleComponent {
     public String toStringABNF() {
       return "$" + special;
     }
+
+    void assignName(String myName) {
+      name = myName + "_" + toStringABNF();
+    }
 }

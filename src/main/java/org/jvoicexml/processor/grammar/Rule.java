@@ -58,6 +58,7 @@ public class Rule {
         this.ruleName = ruleName;
         this.ruleComponent = ruleComponent;
         this.scope = scope;
+        ruleComponent.assignName(ruleName);
     }
 
     public RuleComponent getRuleComponent() {

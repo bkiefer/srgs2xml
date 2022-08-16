@@ -38,6 +38,8 @@ public abstract class RuleComponent {
 
     protected String lang;
 
+    protected String name;
+
     public boolean parenthesized = false;
 
     private static Pattern valid = Pattern.compile("(\\p{IsAlphabetic}|[_])(\\p{IsAlphabetic}|\\d|[-_.])*");
@@ -96,6 +98,8 @@ public abstract class RuleComponent {
         }
     }
 
+    abstract void assignName(String myName);
+
     protected void appendLangXML(StringBuffer str) {
       if (lang != null)
         str.append(" xml:lang=\"").append(lang).append('"');
@@ -120,6 +124,10 @@ public abstract class RuleComponent {
 
     public String toString() {
       return PRINT_COMPACT ? toStringABNF() : toStringXML();
+    }
+
+    public String getName() {
+      return name;
     }
 
   /** Test, for every subclass, if the given RuleComponent is the one required in
