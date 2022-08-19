@@ -26,6 +26,8 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.Map;
+
 //Comp 2.0.6
 
 public class Rule {
@@ -89,23 +91,30 @@ public class Rule {
         str.append("</rule>");
         return str.toString();
     }
-    
+
 
     public String toStringABNF() {
         StringBuffer str = new StringBuffer();
- 
+
         if (scope == PUBLIC) {
           str.append("public ");
         }
-        
+
         str.append("$").append(ruleName)
         .append(" = ")
         .append(ruleComponent.toStringABNF())
         .append(";");
         return str.toString();
     }
-    
+
     public String toString() {
       return (RuleComponent.PRINT_COMPACT) ? toStringABNF() : toStringXML();
+    }
+
+    /** Compute uniqe set of terminals and nonterminals */
+    public Rule cleanup(Map<RuleToken, RuleToken> terminals,
+        Map<RuleComponent, RuleComponent> nonterminals) {
+      ruleComponent = ruleComponent.cleanup(terminals, nonterminals);
+      return this;
     }
 }

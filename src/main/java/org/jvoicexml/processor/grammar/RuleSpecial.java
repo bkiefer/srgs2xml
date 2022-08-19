@@ -26,36 +26,54 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.Map;
+
 //Comp. 2.0.6
 
 public class RuleSpecial extends RuleComponent {
-    public static RuleSpecial GARBAGE = new RuleSpecial("GARBAGE");
+  public static RuleSpecial GARBAGE = new RuleSpecial("GARBAGE");
 
-    public static RuleSpecial NULL = new RuleSpecial("NULL");
+  public static RuleSpecial NULL = new RuleSpecial("NULL");
 
-    public static RuleSpecial VOID = new RuleSpecial("VOID");
+  public static RuleSpecial VOID = new RuleSpecial("VOID");
 
-    private String special;
+  private String special;
 
-    private RuleSpecial(String special) {
-        this.special = special;
-    }
+  private RuleSpecial(String special) {
+    this.special = special;
+  }
 
-    public String toStringXML() {
-        return "<ruleref special=\"" + special + "\"/>";
-    }
-    
-    public String toStringABNF() {
-      return "$" + special;
-    }
+  @Override
+  public String toStringXML() {
+    return "<ruleref special=\"" + special + "\"/>";
+  }
 
-    void assignName(String myName) {
-      name = myName + "_" + toStringABNF();
-    }
+  @Override
+  public String toStringABNF() {
+    return "$" + special;
+  }
 
-    public boolean equals(Object obj) {
-      Boolean b = eq(obj);
-      if (b != null) return b;
-      return special.equals(((RuleSpecial)obj).special);
-    }
+  @Override
+  void assignName(String myName) {
+    name = myName + "_" + toStringABNF();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Boolean b = eq(obj);
+    if (b != null)
+      return b;
+    return special.equals(((RuleSpecial) obj).special);
+  }
+
+  @Override
+  public int hashCode() {
+    return special.hashCode() + 23;
+  }
+
+  @Override
+  RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals) {
+    return this;
+  }
 }

@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.jvoicexml.processor.grammar.Grammar;
 import org.jvoicexml.processor.grammar.Rule;
@@ -190,21 +191,24 @@ public final class ChartGrammarChecker {
     return active.rule.looksFor(getResolved(passive.rule), active.dot);
   }
 
-  public ChartNode returnFirstResult() {
-    if (null == chartOut[0]) {
-      return null;
+  public Stream<ChartNode> returnAllResults() {
+    List<ChartNode> fromZero = getOutEdges(0);
+    if (null == fromZero) {
+      return Stream.empty();
     }
     final Rule rule = grammar.getRule(grammar.getRoot());
-    RuleComponent component = rule.getRuleComponent();
-    if (component instanceof RuleReference) {
-      component = resolved.get(component);
+    RuleComponent compo = rule.getRuleComponent();
+    if (compo instanceof RuleReference) {
+      compo = resolved.get(compo);
     }
-    for (ChartNode c : chartOut[0]) {
-      if (c.end == input.length && c.rule == component) {
-        return c;
-      }
-    }
-    return null;
+    final RuleComponent component = compo;
+    return fromZero
+        .stream()
+        .filter(c -> c.end == input.length && c.rule == component);
+  }
+
+  public ChartNode returnFirstResult() {
+    return returnAllResults().findFirst().orElse(null);
   }
 
   /**
@@ -258,18 +262,7 @@ public final class ChartGrammarChecker {
         add(c);
       }
     }
-    if (null == chartOut[0]) {
-      return null;
-    }
-    if (component instanceof RuleReference) {
-      component = resolved.get(component);
-    }
-    for (ChartNode c : chartOut[0]) {
-      if (c.end == input.length && c.rule == component) {
-        return c;
-      }
-    }
-    return null;
+    return returnFirstResult();
   }
 
   /** Return the input string covered by the chart node n */

@@ -27,138 +27,160 @@
 package org.jvoicexml.processor.grammar;
 
 import java.net.URI;
+import java.util.Map;
 
 //Comp. 2.0.6
 
 public class RuleReference extends RuleComponent {
-    private static final String DEFAULT_MEDIA_TYPE = "application/srgs+xml";
+  private static final String DEFAULT_MEDIA_TYPE = "application/srgs+xml";
 
-    private URI grammarReference;
+  private URI grammarReference;
 
-    private String ruleName;
+  private String ruleName;
 
-    private String mediaType;
+  private String mediaType;
 
-    public RuleReference(String ruleName) throws IllegalArgumentException {
-        checkValidGrammarText(ruleName);
+  public RuleReference(String ruleName) throws IllegalArgumentException {
+    checkValidGrammarText(ruleName);
 
-        this.ruleName = ruleName;
+    this.ruleName = ruleName;
+  }
+
+  public RuleReference(URI grammarReference) {
+
+    this.grammarReference = grammarReference;
+  }
+
+  public RuleReference(URI grammarReference, String ruleName)
+      throws IllegalArgumentException {
+    checkValidGrammarText(ruleName);
+
+    this.grammarReference = grammarReference;
+    this.ruleName = ruleName;
+  }
+
+  public URI getGrammarReference() {
+    return grammarReference;
+  }
+
+  public void setGrammarReference(URI uri) {
+    grammarReference = uri;
+  }
+
+  public void setMediaType(String t) {
+    mediaType = t;
+  }
+
+  public String getMediaType() {
+    if (mediaType == null) {
+      return DEFAULT_MEDIA_TYPE;
     }
 
-    public RuleReference(URI grammarReference) {
+    return mediaType;
+  }
 
-        this.grammarReference = grammarReference;
+  public String getRuleName() {
+    return ruleName;
+  }
+
+  @Override
+  void assignName(String myName) {
+    name = myName + "_r_"
+        + (grammarReference == null ? "" : grammarReference + "#") + ruleName;
+  }
+
+  @Override
+  public String toStringXML() {
+    StringBuffer str = new StringBuffer();
+    str.append("<ruleref uri=\"");
+
+    if (grammarReference != null) {
+      str.append(grammarReference.toString());
+    }
+    if (ruleName != null) {
+      str.append("#").append(ruleName).append("\"");
     }
 
-    public RuleReference(URI grammarReference, String ruleName)
-        throws IllegalArgumentException {
-        checkValidGrammarText(ruleName);
-
-        this.grammarReference = grammarReference;
-        this.ruleName = ruleName;
+    if (mediaType != null) {
+      str.append(" type=\"").append(mediaType).append("\"");
     }
+    appendLangXML(str); // handle optional language attachment
+    str.append("/>");
 
+    return str.toString();
+  }
 
-    public URI getGrammarReference() {
-        return grammarReference;
-    }
+  @Override
+  public String toStringABNF() {
+    StringBuffer str = new StringBuffer();
 
-    public void setGrammarReference(URI uri) {
-        grammarReference = uri;
-    }
-
-    public void setMediaType(String t) {
-      mediaType = t;
-    }
-
-    public String getMediaType() {
-        if (mediaType == null) {
-            return DEFAULT_MEDIA_TYPE;
-        }
-
-        return mediaType;
-    }
-
-    public String getRuleName() {
-        return ruleName;
-    }
-
-    void assignName(String myName) {
-      name = myName + "_r_"
-          + (grammarReference == null ? "" : grammarReference + "#")
-          + ruleName;
-    }
-
-    public String toStringXML() {
-        StringBuffer str = new StringBuffer();
-        str.append("<ruleref uri=\"");
-
-        if (grammarReference != null) {
-            str.append(grammarReference.toString());
-        }
-        if (ruleName != null) {
-            str.append("#").append(ruleName).append("\"");
-        }
-
-        if (mediaType != null) {
-            str.append(" type=\"").append(mediaType).append("\"");
-        }
-        appendLangXML(str); // handle optional language attachment
-        str.append("/>");
-
-        return str.toString();
-    }
-
-
-    public String toStringABNF() {
-        StringBuffer str = new StringBuffer();
-
-        if (grammarReference != null) {
-          str.append("$<");
-          str.append(shortUrl(grammarReference));
-          if (ruleName != null && ! ruleName.equals("___root")) {
-            str.append("#").append(ruleName);
-          }
-          str.append(">");
-        } else {
-          // rulename can not be null: local reference
-          str.append('$').append(ruleName);
-        }
-
-        if (mediaType != null) {
-            str.append("~<").append(mediaType).append(">");;
-        }
-        appendLangABNF(str); // handle optional language attachment
-
-        return str.toString();
-    }
-
-    /** not thread safe! **/
-    public String getRepresentation() {
-      boolean shorten = SHORTEN_URLS;
-      SHORTEN_URLS = false;
-      String result = toStringABNF();
-      SHORTEN_URLS = shorten;
-      return result;
-    }
-
-    public boolean equals(Object obj) {
-      Boolean b = eq(obj);
-      if (b != null) return b;
-      RuleReference other = (RuleReference) obj;
-      if (grammarReference == null) {
-        return (other.grammarReference == null);
-      } else if (! grammarReference.equals(other.grammarReference)) {
-        return false;
+    if (grammarReference != null) {
+      str.append("$<");
+      str.append(shortUrl(grammarReference));
+      if (ruleName != null && !ruleName.equals("___root")) {
+        str.append("#").append(ruleName);
       }
-      if (ruleName == null) {
-        return (other.ruleName == null);
-      } else if (! ruleName.equals(other.ruleName)) {
-        return false;
-      }
-      if (mediaType == null) {
-        return (other.mediaType == null);
-      }
-      return mediaType.equals(other.mediaType);
+      str.append(">");
+    } else {
+      // rulename can not be null: local reference
+      str.append('$').append(ruleName);
     }
+
+    if (mediaType != null) {
+      str.append("~<").append(mediaType).append(">");
+      ;
+    }
+    appendLangABNF(str); // handle optional language attachment
+
+    return str.toString();
+  }
+
+  /** not thread safe! **/
+  public String getRepresentation() {
+    boolean shorten = SHORTEN_URLS;
+    SHORTEN_URLS = false;
+    String result = toStringABNF();
+    SHORTEN_URLS = shorten;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Boolean b = eq(obj);
+    if (b != null)
+      return b;
+    RuleReference other = (RuleReference) obj;
+    if (grammarReference == null) {
+      return (other.grammarReference == null);
+    } else if (!grammarReference.equals(other.grammarReference)) {
+      return false;
+    }
+    if (ruleName == null) {
+      return (other.ruleName == null);
+    } else if (!ruleName.equals(other.ruleName)) {
+      return false;
+    }
+    if (mediaType == null) {
+      return (other.mediaType == null);
+    }
+    return mediaType.equals(other.mediaType);
+  }
+
+  @Override
+  public int hashCode() {
+    return (grammarReference == null ? 0 : grammarReference.hashCode())
+        + (ruleName == null ? 0 : ruleName.hashCode())
+        + (mediaType == null ? 0 : mediaType.hashCode());
+  }
+
+  @Override
+  RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals) {
+    RuleComponent nonterm = nonterminals.get(this);
+    if (nonterm == null) {
+      nonterm = this;
+      nonterminals.put(nonterm, nonterm);
+    }
+    return nonterm;
+  }
 }

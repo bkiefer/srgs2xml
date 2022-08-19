@@ -701,7 +701,7 @@ public class SrgsAbnf
   if (yyn == 37)
     /* "SrgsAbnf.y":336  */
                       {
-    RuleToken res = new RuleToken(((String)(yystack.valueAt (0))), null);
+    RuleToken res = new RuleToken(((String)(yystack.valueAt (0))));
       yyval = res;
     };
   break;
@@ -721,7 +721,7 @@ public class SrgsAbnf
   if (yyn == 39)
     /* "SrgsAbnf.y":344  */
                        {  // should that be DoubleQuotedCharacters ??
-      RuleToken res = new RuleToken(((String)(yystack.valueAt (0))), null);
+      RuleToken res = new RuleToken(((String)(yystack.valueAt (0))));
       yyval = res;
     };
   break;

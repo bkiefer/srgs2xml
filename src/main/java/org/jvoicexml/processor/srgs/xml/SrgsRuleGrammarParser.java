@@ -34,7 +34,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -67,10 +66,9 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 1370 $
  */
-public class SrgsRuleGrammarParser implements RuleGrammarParser {
+public class SrgsRuleGrammarParser extends RuleGrammarParser {
 
     private static EntityResolver entityResolver = new EmptyEntityResolver();
-    private Map<String, Object> attributes;
 
     public static class EmptyEntityResolver implements EntityResolver {
         public InputSource resolveEntity(String publicId, String systemId)
@@ -80,7 +78,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
     }
 
     public SrgsRuleGrammarParser() {
-        attributes = new java.util.HashMap<>();
+      super();
     }
 
     public List<Rule> load(final Reader reader) throws URISyntaxException, GrammarException {
@@ -136,6 +134,7 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
             }
 
             // version attribute has been checked, now comes mode etc.
+            @SuppressWarnings("unused")
             String mode = null;
             Node modeNode = grammarNode.getAttributes().getNamedItem("mode");
             if (modeNode == null || (mode = modeNode.getTextContent()).equals("voice")) {
@@ -389,9 +388,5 @@ public class SrgsRuleGrammarParser implements RuleGrammarParser {
         }
 
         return ruleComponents;
-    }
-
-    public Map<String, Object> getAttributes() {
-        return attributes;
     }
 }

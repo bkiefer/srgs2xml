@@ -26,176 +26,202 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.Map;
+
 //Comp 2.0.6
 
 public class RuleCount extends RuleComponent {
-    public static final int MAX_PROBABILITY = 0x7fffffff;
+  public static final int MAX_PROBABILITY = 0x7fffffff;
 
-    public static final int REPEAT_INDEFINITELY = 0x7fffffff;
+  public static final int REPEAT_INDEFINITELY = 0x7fffffff;
 
-    private RuleComponent ruleComponent;
+  private RuleComponent ruleComponent;
 
-    private int repeatMin;
+  private int repeatMin;
 
-    private int repeatMax;
+  private int repeatMax;
 
-    private double repeatProbability;
+  private double repeatProbability;
 
-    public RuleCount(RuleComponent ruleComponent, int repeatMin)
-        throws IllegalArgumentException {
-        if (repeatMin < 0) {
-            throw new IllegalArgumentException(
-                    "Repeat minimum must be greater or equal to 0!");
+  public RuleCount(RuleComponent ruleComponent, int repeatMin)
+      throws IllegalArgumentException {
+    if (repeatMin < 0) {
+      throw new IllegalArgumentException(
+          "Repeat minimum must be greater or equal to 0!");
+    }
+    this.ruleComponent = ruleComponent;
+    this.repeatMax = REPEAT_INDEFINITELY;
+    this.repeatMin = repeatMin;
+    this.repeatProbability = -1;
+  }
+
+  public RuleCount(RuleComponent ruleComponent, int repeatMin, int repeatMax)
+      throws IllegalArgumentException {
+    if (repeatMin < 0 || (repeatMin > repeatMax)) {
+      throw new IllegalArgumentException(
+          "Repeat minimum must be greater or equal to 0 and smaller "
+              + "than or equal to repeat maximum!");
+    }
+    this.ruleComponent = ruleComponent;
+    this.repeatMin = repeatMin;
+    this.repeatMax = repeatMax;
+    this.repeatProbability = -1;
+  }
+
+  public RuleCount(RuleComponent ruleComponent, int repeatMin, int repeatMax,
+      double repeatProbability) throws IllegalArgumentException {
+    if (repeatMin < 0 || (repeatMin > repeatMax)) {
+      throw new IllegalArgumentException(
+          "Repeat minimum must be greater or equal to 0 and smaller "
+              + "than or equal to repeat maximum!");
+    }
+
+    if (repeatProbability < 0) {
+      throw new IllegalArgumentException(
+          "Repeat propability must be greater or equal to 0!");
+    }
+    this.ruleComponent = ruleComponent;
+    this.repeatMin = repeatMin;
+    this.repeatMax = repeatMax;
+    this.repeatProbability = repeatProbability;
+  }
+
+  public int getRepeatMax() {
+    return repeatMax;
+  }
+
+  public int getRepeatMin() {
+    return repeatMin;
+  }
+
+  public double getRepeatProbability() {
+    if (repeatProbability < 0) {
+      return REPEAT_INDEFINITELY;
+    }
+
+    return repeatProbability;
+  }
+
+  public RuleComponent getRuleComponent() {
+    return ruleComponent;
+  }
+
+  @Override
+  void assignName(String myName) {
+    name = myName + "_c";
+    ruleComponent.assignName(name + "_");
+  }
+
+  @Override
+  public String toStringXML() {
+    StringBuffer str = new StringBuffer();
+
+    str.append("<item repeat=\"");
+    str.append(repeatMin);
+    if (repeatMin != repeatMax) {
+      str.append("-");
+
+      if (repeatMax != REPEAT_INDEFINITELY) {
+        str.append(repeatMax);
+      }
+    }
+    str.append("\"");
+
+    if (repeatProbability >= 0) {
+      // TODO we should divide by MAX_PROBABILTY but this is not
+      // supported in CLDC 1.0
+      str.append(" repeat-prob=\"");
+      str.append(repeatProbability);
+      str.append("\"");
+    }
+
+    appendLangXML(str);
+    str.append(">");
+
+    // TODO: What to do with null rule components?
+    str.append(RuleComponent.toStringXML(ruleComponent));
+
+    str.append("</item>");
+
+    return str.toString();
+  }
+
+  @Override
+  public String toStringABNF() {
+    StringBuffer str = new StringBuffer();
+
+    // nicer if <0-1>/1.0/ is [ ... ]
+    if (repeatMin == 0 && repeatMax == 1 && repeatProbability < 0) {
+      str.append('[');
+      str.append(RuleComponent.toStringABNF(ruleComponent));
+      str.append(']');
+    } else {
+      str.append(RuleComponent.toStringABNF(ruleComponent));
+
+      str.append("<");
+      str.append(repeatMin);
+      if (repeatMin != repeatMax) {
+        str.append("-");
+        if (repeatMax != REPEAT_INDEFINITELY) {
+          str.append(repeatMax);
         }
-        this.ruleComponent = ruleComponent;
-        this.repeatMax = REPEAT_INDEFINITELY;
-        this.repeatMin = repeatMin;
-        this.repeatProbability = -1;
+      }
+
+      if (repeatProbability >= 0) {
+        // TODO we should divide by MAX_PROBABILTY but this is not
+        // supported in CLDC 1.0
+        str.append("/");
+        str.append(repeatProbability);
+        str.append("/");
+      }
+      str.append(">");
     }
 
-    public RuleCount(RuleComponent ruleComponent, int repeatMin, int repeatMax)
-        throws IllegalArgumentException {
-        if (repeatMin < 0 || (repeatMin > repeatMax)) {
-            throw new IllegalArgumentException(
-                    "Repeat minimum must be greater or equal to 0 and smaller "
-                            + "than or equal to repeat maximum!");
-        }
-        this.ruleComponent = ruleComponent;
-        this.repeatMin = repeatMin;
-        this.repeatMax = repeatMax;
-        this.repeatProbability = -1;
+    appendLangABNF(str);
+
+    return str.toString();
+  }
+
+  @Override
+  public boolean looksFor(RuleComponent r, int dot) {
+    // dot is the number of repetitions already covered
+    return dot < repeatMax && ruleComponent.equals(r);
+  }
+
+  /**
+   * dot is the number of repetitions already covered
+   */
+  @Override
+  public int nextSlot(int dot) {
+    return ++dot;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Boolean b = eq(obj);
+    if (b != null)
+      return b;
+    RuleCount other = (RuleCount) obj;
+    return repeatMax == other.repeatMax && repeatMin == other.repeatMin
+        && (repeatProbability - other.repeatProbability < 1e-9)
+        && ruleComponent.equals(other.ruleComponent);
+  }
+
+  @Override
+  public int hashCode() {
+    return repeatMax + repeatMin + ruleComponent.hashCode();
+  }
+
+  @Override
+  RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals) {
+    RuleCount rc = (RuleCount) nonterminals.get(this);
+    if (rc != null) {
+      return rc;
     }
-
-    public RuleCount(RuleComponent ruleComponent, int repeatMin, int repeatMax,
-            double repeatProbability) throws IllegalArgumentException {
-        if (repeatMin < 0 || (repeatMin > repeatMax)) {
-            throw new IllegalArgumentException(
-                    "Repeat minimum must be greater or equal to 0 and smaller "
-                            + "than or equal to repeat maximum!");
-        }
-
-        if (repeatProbability < 0) {
-            throw new IllegalArgumentException(
-                    "Repeat propability must be greater or equal to 0!");
-        }
-        this.ruleComponent = ruleComponent;
-        this.repeatMin = repeatMin;
-        this.repeatMax = repeatMax;
-        this.repeatProbability = repeatProbability;
-    }
-
-    public int getRepeatMax() {
-        return repeatMax;
-    }
-
-    public int getRepeatMin() {
-        return repeatMin;
-    }
-
-    public double getRepeatProbability() {
-        if (repeatProbability < 0) {
-            return REPEAT_INDEFINITELY;
-        }
-
-        return repeatProbability;
-    }
-
-    public RuleComponent getRuleComponent() {
-        return ruleComponent;
-    }
-
-    void assignName(String myName) {
-      name = myName + "_c";
-      ruleComponent.assignName(name + "_");
-    }
-
-    public String toStringXML() {
-        StringBuffer str = new StringBuffer();
-
-        str.append("<item repeat=\"");
-        str.append(repeatMin);
-        if (repeatMin != repeatMax) {
-            str.append("-");
-
-            if (repeatMax != REPEAT_INDEFINITELY) {
-                str.append(repeatMax);
-            }
-        }
-        str.append("\"");
-
-        if (repeatProbability >= 0) {
-            // TODO we should divide by MAX_PROBABILTY but this is not
-            // supported in CLDC 1.0
-            str.append(" repeat-prob=\"");
-            str.append(repeatProbability);
-            str.append("\"");
-        }
-
-        appendLangXML(str);
-        str.append(">");
-
-        // TODO: What to do with null rule components?
-        str.append(RuleComponent.toStringXML(ruleComponent));
-
-        str.append("</item>");
-
-        return str.toString();
-    }
-
-
-    public String toStringABNF() {
-        StringBuffer str = new StringBuffer();
-
-        // nicer if <0-1>/1.0/ is [ ... ]
-        if (repeatMin == 0 && repeatMax == 1 && repeatProbability < 0) {
-          str.append('[');
-          str.append(RuleComponent.toStringABNF(ruleComponent));
-          str.append(']');
-        } else {
-          str.append(RuleComponent.toStringABNF(ruleComponent));
-
-          str.append("<");
-          str.append(repeatMin);
-          if (repeatMin != repeatMax) {
-            str.append("-");
-            if (repeatMax != REPEAT_INDEFINITELY) {
-              str.append(repeatMax);
-            }
-          }
-
-          if (repeatProbability >= 0) {
-            // TODO we should divide by MAX_PROBABILTY but this is not
-            // supported in CLDC 1.0
-            str.append("/");
-            str.append(repeatProbability);
-            str.append("/");
-          }
-          str.append(">");
-        }
-
-        appendLangABNF(str);
-
-        return str.toString();
-    }
-
-    @Override
-    public boolean looksFor(RuleComponent r, int dot) {
-      // dot is the number of repetitions already covered
-      return dot < repeatMax && ruleComponent.equals(r);
-    }
-
-    /** dot is the number of repetitions already covered
-     */
-    public int nextSlot(int dot){
-      return ++dot;
-    }
-
-    public boolean equals(Object obj) {
-      Boolean b = eq(obj);
-      if (b != null) return b;
-      RuleCount other = (RuleCount) obj;
-      return repeatMax == other.repeatMax && repeatMin == other.repeatMin
-          && (repeatProbability - other.repeatProbability < 1e-9)
-          && ruleComponent.equals(other.ruleComponent);
-    }
+    rc = this;
+    nonterminals.put(rc, rc);
+    rc.ruleComponent = rc.ruleComponent.cleanup(terminals, nonterminals);
+    return rc;
+  }
 }

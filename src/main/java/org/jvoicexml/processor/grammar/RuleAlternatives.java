@@ -29,6 +29,7 @@ package org.jvoicexml.processor.grammar;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 //Comp 2.0.6
 
@@ -74,6 +75,7 @@ public class RuleAlternatives extends RuleComponent {
     return ruleComponents.size();
   }
 
+  @Override
   void assignName(String myName) {
     name = myName + "_a";
     int index = 1;
@@ -83,6 +85,7 @@ public class RuleAlternatives extends RuleComponent {
     }
   }
 
+  @Override
   public String toStringXML() {
     if ((ruleComponents == null) || (ruleComponents.size() == 0)) {
       return RuleSpecial.VOID.toStringXML();
@@ -97,7 +100,8 @@ public class RuleAlternatives extends RuleComponent {
       if (alt.weight != NORM_WEIGHT) {
         // TODO we should divide by NORM_WEIGHT but this is not
         // supported in CLDC 1.0
-        str.append(" weight=\"").append(Double.toString(alt.weight)).append("\"");
+        str.append(" weight=\"").append(Double.toString(alt.weight))
+            .append("\"");
       }
       str.append('>');
       str.append(RuleComponent.toStringXML(alt.component));
@@ -108,7 +112,7 @@ public class RuleAlternatives extends RuleComponent {
     return str.toString();
   }
 
-
+  @Override
   public String toStringABNF() {
     if ((ruleComponents == null) || (ruleComponents.size() == 0)) {
       return RuleSpecial.VOID.toStringABNF();
@@ -144,9 +148,11 @@ public class RuleAlternatives extends RuleComponent {
     return ruleComponents.get(i).component.equals(r);
   }
 
+  @Override
   public boolean equals(Object obj) {
     Boolean b = eq(obj);
-    if (b != null) return b;
+    if (b != null)
+      return b;
     RuleAlternatives other = (RuleAlternatives) obj;
     if (ruleComponents.size() != other.ruleComponents.size()) {
       return false;
@@ -154,10 +160,34 @@ public class RuleAlternatives extends RuleComponent {
     Iterator<RuleAlternative> it = other.ruleComponents.iterator();
     for (RuleAlternative c : ruleComponents) {
       RuleAlternative co = it.next();
-      if (c.weight - co.weight > 1e-9 || ! c.component.equals(co.component)) {
+      if (c.weight - co.weight > 1e-9 || !c.component.equals(co.component)) {
         return false;
       }
     }
     return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 0;
+    for (RuleAlternative alt : ruleComponents) {
+      result += ((int) alt.weight * 100) + alt.component.hashCode();
+    }
+    return result;
+  }
+
+  @Override
+  RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals) {
+    RuleAlternatives alt = (RuleAlternatives) nonterminals.get(this);
+    if (alt != null) {
+      return alt;
+    }
+    alt = this;
+    for (RuleAlternative a : alt.ruleComponents) {
+      a.component = a.component.cleanup(terminals, nonterminals);
+    }
+    nonterminals.put(alt, alt);
+    return alt;
   }
 }

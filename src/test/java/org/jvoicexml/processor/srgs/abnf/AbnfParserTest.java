@@ -14,6 +14,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -22,8 +24,10 @@ import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.SemanticsInterpreter;
 import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.grammar.JVoiceXmlGrammar;
 import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.grammar.RuleComponent;
+import org.jvoicexml.processor.grammar.RuleToken;
 import org.jvoicexml.processor.srgs.GrammarException;
 import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
@@ -94,7 +98,10 @@ public class AbnfParserTest {
   public void pizzatest() throws GrammarException, IOException, URISyntaxException {
 
     final GrammarManager manager = new JVoiceXmlGrammarManager();
-    final Grammar ruleGrammar = manager.loadGrammar(testURI("pizza.gram"));
+    final JVoiceXmlGrammar ruleGrammar =
+        (JVoiceXmlGrammar)manager.loadGrammar(testURI("pizza.gram"));
+    assertEquals(12, ruleGrammar.getTerminals().size());
+    assertEquals(32, ruleGrammar.getNonterminals().size());
 
     for (String s : pizzainputs) {
       String[] tokens = s.split(" +");
@@ -102,9 +109,9 @@ public class AbnfParserTest {
       final ChartGrammarChecker.ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);
+
     }
   }
-
 
   public void lexerTest() throws URISyntaxException, IOException {
     URI grammarReference = testURI("pizza.gram");
@@ -119,9 +126,20 @@ public class AbnfParserTest {
   }
 
   @Test
-  public void regexTest() throws GrammarException, IOException, URISyntaxException {
-    String[] inputs = {
-        "one", //c
+  public void postProcessTest() throws GrammarException, IOException {
+    final GrammarManager manager = new JVoiceXmlGrammarManager();
+    final JVoiceXmlGrammar ruleGrammar =
+        (JVoiceXmlGrammar) manager.loadGrammar(testURI("mini.gram"));
+    Set<RuleToken> terms = ruleGrammar.getTerminals();
+    Set<RuleComponent> nonterms = ruleGrammar.getNonterminals();
+    assertEquals(4, terms.size());
+    assertEquals(6, nonterms.size());
+  }
+
+  @Test
+  public void regexTest()
+      throws GrammarException, IOException, URISyntaxException {
+    String[] inputs = { "one", //c
         "two", //c
         "three", //c
         "four", //w

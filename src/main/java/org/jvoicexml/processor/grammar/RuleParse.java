@@ -26,117 +26,143 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.Map;
 
 //Comp. 2.0.6
 /** This stands in for a resolved RuleReference, kind of a proxy */
 public class RuleParse extends RuleComponent {
-    private RuleReference ruleReference;
+  private RuleReference ruleReference;
 
-    private RuleComponent parse;
+  private RuleComponent parse;
 
-    public RuleParse(RuleReference ruleReference, RuleComponent parse) {
-        this.ruleReference = ruleReference;
-        this.parse = parse;
-    }
-    /*
-    public Object[] getTags() {
-        if (parse == null) {
-            return null;
-        }
+  public RuleParse(RuleReference ruleReference, RuleComponent parse) {
+    this.ruleReference = ruleReference;
+    this.parse = parse;
+  }
+  /*
+  public Object[] getTags() {
+      if (parse == null) {
+          return null;
+      }
+  
+      final Vector parseTags = new Vector();
+      addTags(parseTags, parse);
+  
+      final Object[] tags = new Object[parseTags.size()];
+      parseTags.copyInto(tags);
+  
+      return tags;
+  }
+  
+  @SuppressWarnings("unchecked")
+  private void addTags(Vector tags, RuleComponent component) {
+      if (component instanceof RuleTag) {
+          final RuleTag tag = (RuleTag) component;
+          final Object tagName = tag.getTag();
+          tags.addElement(tagName);
+      } else if (component instanceof RuleAlternatives) {
+          final RuleAlternatives alternatives = (RuleAlternatives) component;
+          List<RuleAlternative> components = alternatives.getRuleAlternatives();
+          for (int i = 0; i < components.size(); i++) {
+              final RuleAlternative actComponent = components.get(i);
+              addTags(tags, actComponent.getRuleComponent());
+          }
+      } else if (component instanceof RuleCount) {
+          final RuleCount count = (RuleCount) component;
+          final RuleComponent actComponent = count.getRuleComponent();
+          addTags(tags, actComponent);
+      } else if (component instanceof RuleParse) {
+          final RuleParse parse = (RuleParse) component;
+          final RuleComponent actComponent = parse.getParse();
+          addTags(tags, actComponent);
+      } else if (component instanceof RuleSequence) {
+          final RuleSequence sequence = (RuleSequence) component;
+          List<RuleComponent> components = sequence.getRuleComponents();
+          for (int i = 0; i < components.size(); i++) {
+              final RuleComponent actComponent = components.get(i);
+              addTags(tags, actComponent);
+          }
+      }
+  }*/
 
-        final Vector parseTags = new Vector();
-        addTags(parseTags, parse);
+  public RuleComponent getParse() {
+    return parse;
+  }
 
-        final Object[] tags = new Object[parseTags.size()];
-        parseTags.copyInto(tags);
+  public RuleReference getRuleReference() {
+    return ruleReference;
+  }
 
-        return tags;
-    }
+  @Override
+  void assignName(String myName) {
+    name = myName + "_p";
+    parse.assignName(name + "_");
+  }
 
-    @SuppressWarnings("unchecked")
-    private void addTags(Vector tags, RuleComponent component) {
-        if (component instanceof RuleTag) {
-            final RuleTag tag = (RuleTag) component;
-            final Object tagName = tag.getTag();
-            tags.addElement(tagName);
-        } else if (component instanceof RuleAlternatives) {
-            final RuleAlternatives alternatives = (RuleAlternatives) component;
-            List<RuleAlternative> components = alternatives.getRuleAlternatives();
-            for (int i = 0; i < components.size(); i++) {
-                final RuleAlternative actComponent = components.get(i);
-                addTags(tags, actComponent.getRuleComponent());
-            }
-        } else if (component instanceof RuleCount) {
-            final RuleCount count = (RuleCount) component;
-            final RuleComponent actComponent = count.getRuleComponent();
-            addTags(tags, actComponent);
-        } else if (component instanceof RuleParse) {
-            final RuleParse parse = (RuleParse) component;
-            final RuleComponent actComponent = parse.getParse();
-            addTags(tags, actComponent);
-        } else if (component instanceof RuleSequence) {
-            final RuleSequence sequence = (RuleSequence) component;
-            List<RuleComponent> components = sequence.getRuleComponents();
-            for (int i = 0; i < components.size(); i++) {
-                final RuleComponent actComponent = components.get(i);
-                addTags(tags, actComponent);
-            }
-        }
-    }*/
-
-    public RuleComponent getParse() {
-        return parse;
-    }
-
-    public RuleReference getRuleReference() {
-        return ruleReference;
-    }
-
-    void assignName(String myName) {
-      name = myName + "_p";
-      parse.assignName(name + "_");
-    }
-
-    public String toStringXML() {
-        if (parse == null) {
-            return "";
-        }
-
-        StringBuffer str = new StringBuffer();
-
-        if (ruleReference != null) {
-            str.append(ruleReference.toStringXML());
-        }
-
-        str.append(parse.toStringXML());
-
-        return str.toString();
+  @Override
+  public String toStringXML() {
+    if (parse == null) {
+      return "";
     }
 
-    public String toStringABNF() {
-        if (parse == null) {
-            return "";
-        }
+    StringBuffer str = new StringBuffer();
 
-        StringBuffer str = new StringBuffer();
-
-        if (ruleReference != null) {
-            str.append(ruleReference.toStringABNF());
-        }
-
-        str.append(parse.toStringABNF());
-
-        return str.toString();
+    if (ruleReference != null) {
+      str.append(ruleReference.toStringXML());
     }
 
-    @Override
-    public boolean looksFor(RuleComponent r, int dot) {
-      return parse.equals(r);
+    str.append(parse.toStringXML());
+
+    return str.toString();
+  }
+
+  @Override
+  public String toStringABNF() {
+    if (parse == null) {
+      return "";
     }
 
-    public boolean equals(Object obj) {
-      Boolean b = eq(obj);
-      if (b != null) return b;
-      return ruleReference.equals(((RuleParse)obj).ruleReference);
+    StringBuffer str = new StringBuffer();
+
+    if (ruleReference != null) {
+      str.append(ruleReference.toStringABNF());
     }
+
+    str.append(parse.toStringABNF());
+
+    return str.toString();
+  }
+
+  @Override
+  public boolean looksFor(RuleComponent r, int dot) {
+    return parse.equals(r);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Boolean b = eq(obj);
+    if (b != null)
+      return b;
+    return ruleReference.equals(((RuleParse) obj).ruleReference);
+  }
+
+  @Override
+  public int hashCode() {
+    return parse.hashCode() + 10;
+  }
+
+  @Override
+  RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals) {
+    RuleParse rp = (RuleParse) nonterminals.get(this);
+    if (rp != null) {
+      return rp;
+    }
+    rp = this;
+    nonterminals.put(rp, rp);
+    rp.parse = rp.parse.cleanup(terminals, nonterminals);
+    rp.ruleReference = (RuleReference) rp.ruleReference.cleanup(terminals,
+        nonterminals);
+    return rp;
+  }
 }

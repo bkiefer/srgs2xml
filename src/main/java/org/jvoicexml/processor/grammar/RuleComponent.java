@@ -28,122 +28,125 @@ package org.jvoicexml.processor.grammar;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 //Comp 2.0.6
 
 public abstract class RuleComponent {
-    protected static boolean PRINT_COMPACT = true;
-    public static boolean SHORTEN_URLS = false;
+  protected static boolean PRINT_COMPACT = true;
+  public static boolean SHORTEN_URLS = false;
 
-    protected String lang;
+  protected String lang;
 
-    protected String name;
+  protected String name;
 
-    public boolean parenthesized = false;
+  public boolean parenthesized = false;
 
-    private static Pattern valid = Pattern.compile("(\\p{IsAlphabetic}|[_])(\\p{IsAlphabetic}|\\d|[-_.])*");
+  private static Pattern valid = Pattern
+      .compile("(\\p{IsAlphabetic}|[_])(\\p{IsAlphabetic}|\\d|[-_.])*");
 
-    /**
-     * Checks if the given text is a valid grammar text.
-     *
-     * @param text
-     *            the text to check.
-     */
-    protected static void checkValidGrammarText(String text) {
-      if (!valid.asMatchPredicate().test(text))
-        throw new IllegalArgumentException(
-            "Not a valid text for a grammar: " + text);
-    }
+  /**
+   * Checks if the given text is a valid grammar text.
+   *
+   * @param text the text to check.
+   */
+  protected static void checkValidGrammarText(String text) {
+    if (!valid.asMatchPredicate().test(text))
+      throw new IllegalArgumentException(
+          "Not a valid text for a grammar: " + text);
+  }
 
-    public static void printCompact(boolean val) {
-      PRINT_COMPACT = val;
-    }
+  public static void printCompact(boolean val) {
+    PRINT_COMPACT = val;
+  }
 
-    private static int nsNo = 0;
-    private static HashMap<String, String> url2ns = new HashMap<>();
+  private static int nsNo = 0;
+  private static HashMap<String, String> url2ns = new HashMap<>();
 
-    public static String shortUrl(URI grammarRef) {
-      String name = grammarRef.toString();
-      if (SHORTEN_URLS) {
-        if (! url2ns.containsKey(name)) {
-          url2ns.put(name, "ref" + (nsNo++));
-        }
-        return url2ns.get(name);
+  public static String shortUrl(URI grammarRef) {
+    String name = grammarRef.toString();
+    if (SHORTEN_URLS) {
+      if (!url2ns.containsKey(name)) {
+        url2ns.put(name, "ref" + (nsNo++));
       }
-      return name;
+      return url2ns.get(name);
     }
+    return name;
+  }
 
-    static boolean isLetter(char ch) {
-        return isUpperCase(ch)
-                || isLowerCase(ch)
-                || (ch >= '\u00c0' && ch != '\u00d7' && ch != '\u00f7' && ch != '\u0006');
+  static boolean isLetter(char ch) {
+    return isUpperCase(ch) || isLowerCase(ch) || (ch >= '\u00c0'
+        && ch != '\u00d7' && ch != '\u00f7' && ch != '\u0006');
+  }
+
+  static boolean isUpperCase(char ch) {
+    return (ch >= 'A') && (ch <= 'Z');
+  }
+
+  static boolean isLowerCase(char ch) {
+    return (ch >= 'a') && (ch <= 'z');
+  }
+
+  static boolean isWhitespace(char ch) {
+    switch (ch) {
+    case ' ':
+    case '\t':
+      return true;
+    default:
+      return false;
     }
+  }
 
-    static boolean isUpperCase(char ch) {
-        return (ch >= 'A') && (ch <= 'Z');
-    }
+  abstract void assignName(String myName);
 
-    static boolean isLowerCase(char ch) {
-        return (ch >= 'a') && (ch <= 'z');
-    }
+  protected void appendLangXML(StringBuffer str) {
+    if (lang != null)
+      str.append(" xml:lang=\"").append(lang).append('"');
+  }
 
-    static boolean isWhitespace(char ch) {
-        switch (ch) {
-        case ' ':
-        case '\t':
-            return true;
-        default:
-            return false;
-        }
-    }
+  protected void appendLangABNF(StringBuffer str) {
+    if (lang != null)
+      str.append("!").append(lang);
+  }
 
-    abstract void assignName(String myName);
+  public abstract String toStringXML();
 
-    protected void appendLangXML(StringBuffer str) {
-      if (lang != null)
-        str.append(" xml:lang=\"").append(lang).append('"');
-    }
+  public abstract String toStringABNF();
 
-    protected void appendLangABNF(StringBuffer str) {
-      if (lang != null)
-        str.append("!").append(lang);
-    }
+  public static String toStringXML(RuleComponent c) {
+    return (c == null) ? RuleSpecial.NULL.toStringXML() : c.toStringXML();
+  }
 
-    public abstract String toStringXML();
+  public static String toStringABNF(RuleComponent c) {
+    return (c == null) ? RuleSpecial.NULL.toStringABNF() : c.toStringABNF();
+  }
 
-    public abstract String toStringABNF();
+  @Override
+  public String toString() {
+    return PRINT_COMPACT ? toStringABNF() : toStringXML();
+  }
 
-    public static String toStringXML(RuleComponent c) {
-      return (c == null) ? RuleSpecial.NULL.toStringXML() : c.toStringXML();
-    }
+  public String getName() {
+    return name;
+  }
 
-    public static String toStringABNF(RuleComponent c) {
-      return (c == null) ? RuleSpecial.NULL.toStringABNF() : c.toStringABNF();
-    }
-
-    public String toString() {
-      return PRINT_COMPACT ? toStringABNF() : toStringXML();
-    }
-
-    public String getName() {
-      return name;
-    }
-
-  /** Test, for every subclass, if the given RuleComponent is the one required in
-   *  the dot'th "position", which means in the case of RuleAlternative, for
-   *  example, that it must be equal to the i'th alternative. Because we're using
-   *  the RuleComponents as immutable objects from the grammar, it should suffice
-   *  to test for token identity.
+  /**
+   * Test, for every subclass, if the given RuleComponent is the one required in
+   * the dot'th "position", which means in the case of RuleAlternative, for
+   * example, that it must be equal to the i'th alternative. Because we're using
+   * the RuleComponents as immutable objects from the grammar, it should suffice
+   * to test for token identity.
    */
   public boolean looksFor(RuleComponent r, int dot) {
     return false;
   }
 
-  /** Test if this is the last slot to be filled, i.e., if the dot advances
-   *  one more position, the item will be passive.
+  /**
+   * Test if this is the last slot to be filled, i.e., if the dot advances one
+   * more position, the item will be passive.
    */
-  public int nextSlot(int dot){
+  public int nextSlot(int dot) {
     return -1;
   }
 
@@ -166,4 +169,7 @@ public abstract class RuleComponent {
     }
     return null;
   }
+
+  abstract RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals);
 }

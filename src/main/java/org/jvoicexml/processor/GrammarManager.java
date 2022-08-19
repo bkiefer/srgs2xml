@@ -11,14 +11,14 @@ import org.jvoicexml.processor.srgs.GrammarException;
 //Comp. 2.0.6
 
 public interface GrammarManager {
-    Grammar[] listGrammars();
+  Grammar[] listGrammars();
 
-    Grammar loadGrammar(URI grammarReference)
-            throws GrammarException, IOException;
+  Grammar loadGrammar(URI grammarReference)
+      throws GrammarException, IOException;
 
-    Grammar getGrammar(URI grammarReference);
+  Grammar getGrammar(URI grammarReference);
 
-    void deleteGrammar(Grammar grammar);
+  void deleteGrammar(Grammar grammar);
 
-    public Rule resolve(RuleReference reference);
+  public Rule resolve(RuleReference reference);
 }

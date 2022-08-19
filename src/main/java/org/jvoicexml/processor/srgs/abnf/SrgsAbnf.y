@@ -7,7 +7,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
-import org.jvoicexml.processor.srgs.grammar.*;
+import org.jvoicexml.processor.grammar.*;
 
 @SuppressWarnings({"unused", "unchecked"})
 }
@@ -334,7 +334,7 @@ repeat: Repeat { $$ = new repeat($1); }
 
 
 subexpansion: Nmtoken {
-    RuleToken res = new RuleToken($1, null);
+    RuleToken res = new RuleToken($1);
       $$ = res;
     }
     | Nmtoken '!' Nmtoken {
@@ -342,7 +342,7 @@ subexpansion: Nmtoken {
       $$ = res;
     }
     | QuotedCharacters {  // should that be DoubleQuotedCharacters ??
-      RuleToken res = new RuleToken($1, null);
+      RuleToken res = new RuleToken($1);
       $$ = res;
     }
     | QuotedCharacters '!' Nmtoken {// should that be DoubleQuotedCharacters ??

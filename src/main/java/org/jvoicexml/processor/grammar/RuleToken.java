@@ -26,6 +26,7 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 //Comp. 2.0.6
@@ -34,8 +35,12 @@ public class RuleToken extends RuleComponent {
   private String text;
   private Pattern p;
 
-  /** USE ONLY BY XML GRAMMAR PARSER!!!! */
   public RuleToken(String text) {
+    this(text, null);
+  }
+
+  public RuleToken(String text, String language)
+      throws IllegalArgumentException {
     this.text = text;
     if ((text == null) || (text.length() == 0)) {
       throw new IllegalArgumentException(
@@ -45,27 +50,7 @@ public class RuleToken extends RuleComponent {
     if (text.charAt(0) == '"' && text.charAt(text.length() - 1) == '"') {
       this.text = text = text.substring(1, text.length() - 1);
     } else {
-      if (! text.startsWith("$$")) {
-        this.text = text.trim().replaceAll("  +", " ");
-      }
-    }
-    // BK: extension to match arbitrary regex as token
-    if (text.startsWith("$$")) {
-      this.p = Pattern.compile(text.substring(2));
-    }
-  }
-
-  /** USE ONLY BY ABNF GRAMMAR PARSER!!!! */
-  public RuleToken(String text, String language) throws IllegalArgumentException {
-    if ((text == null) || (text.length() == 0)) {
-      throw new IllegalArgumentException(
-          "'" + text + "'" + " is not a valid grammar text");
-    }
-    // BK: extension to match arbitrary regex as token
-    if (text.charAt(0) == '"') {
-      this.text = text = text.substring(1, text.length() - 1);
-    } else {
-      if (! text.startsWith("$$")) {
+      if (!text.startsWith("$$")) {
         this.text = text.trim().replaceAll("  +", " ");
       }
     }
@@ -84,14 +69,17 @@ public class RuleToken extends RuleComponent {
     return text;
   }
 
+  @Override
   public String getLanguage() {
     return lang;
   }
 
+  @Override
   void assignName(String myName) {
     name = myName + "_" + toStringABNF();
   }
 
+  @Override
   public String toStringXML() {
     StringBuffer str = new StringBuffer();
     str.append("<item");
@@ -108,6 +96,7 @@ public class RuleToken extends RuleComponent {
     return str.toString();
   }
 
+  @Override
   public String toStringABNF() {
     StringBuffer str = new StringBuffer();
     if (text.charAt(0) == '"' || !text.contains(" ")) {
@@ -119,20 +108,32 @@ public class RuleToken extends RuleComponent {
     return str.toString();
   }
 
+  @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((text == null) ? 0 : text.hashCode());
-    return result;
+    return 31 + ((text == null) ? 0 : text.hashCode());
   }
 
+  @Override
   public boolean equals(Object obj) {
     Boolean b = eq(obj);
-    if (b != null) return b;
+    if (b != null)
+      return b;
     RuleToken other = (RuleToken) obj;
     if (text == null) {
       return (other.text == null);
     }
     return text.equals(other.text);
   }
+
+  @Override
+  RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals) {
+    RuleToken term = terminals.get(this);
+    if (term == null) {
+      term = this;
+      terminals.put(term, term);
+    }
+    return term;
+  }
+
 }

@@ -26,50 +26,81 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.Map;
+
 //Comp. 2.0.6
 
+/**
+ * This class represents the semantic annotations of the grammar. The exact
+ * format is not specified, the current library only supports JavaScript like
+ * semantic annotations with special restrictions.
+ *
+ * @author kiefer
+ *
+ */
 public class RuleTag extends RuleComponent {
-    private Object tag;
+  private Object tag;
 
-    public RuleTag(Object tag) {
-        this.tag = tag;
+  public RuleTag(Object tag) {
+    this.tag = tag;
+  }
+
+  public Object getTag() {
+    return tag;
+  }
+
+  @Override
+  void assignName(String myName) {
+    name = myName + "_{}";
+  }
+
+  @Override
+  public String toStringXML() {
+    if (tag == null) {
+      throw new IllegalArgumentException("null can not be represented in XML");
     }
+    final StringBuffer str = new StringBuffer();
+    str.append("<tag>");
+    str.append(tag);
+    str.append("</tag>");
 
-    public Object getTag() {
-        return tag;
+    return str.toString();
+  }
+
+  @Override
+  public String toStringABNF() {
+    if (tag == null)
+      return "";
+
+    final StringBuffer str = new StringBuffer();
+    str.append("{");
+    str.append(tag);
+    str.append("}");
+
+    return str.toString();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Boolean b = eq(obj);
+    if (b != null)
+      return b;
+    return tag.equals(((RuleTag) obj).tag);
+  }
+
+  @Override
+  public int hashCode() {
+    return tag.hashCode();
+  }
+
+  @Override
+  RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals) {
+    RuleComponent nonterm = nonterminals.get(this);
+    if (nonterm == null) {
+      nonterm = this;
+      nonterminals.put(nonterm, nonterm);
     }
-
-    void assignName(String myName) {
-      name = myName + "_{}";
-    }
-
-    public String toStringXML() {
-        if (tag == null) {
-            throw new IllegalArgumentException(
-                    "null can not be represented in XML");
-        }
-        final StringBuffer str = new StringBuffer();
-        str.append("<tag>");
-        str.append(tag);
-        str.append("</tag>");
-
-        return str.toString();
-    }
-
-    public String toStringABNF() {
-        if (tag == null) return "";
-
-        final StringBuffer str = new StringBuffer();
-        str.append("{");
-        str.append(tag);
-        str.append("}");
-
-        return str.toString();
-    }
-
-    public boolean equals(Object obj) {
-      Boolean b = eq(obj);
-      if (b != null) return b;
-      return tag.equals(((RuleTag)obj).tag);
-    }
+    return nonterm;
+  }
 }
