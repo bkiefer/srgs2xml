@@ -27,9 +27,13 @@
 package org.jvoicexml.processor.grammar;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.jvoicexml.processor.GrammarManager;
 
 //Comp. 2.0.6
 
@@ -163,5 +167,20 @@ public class RuleSequence extends RuleComponent {
     ruleComponents = children;
     nonterminals.put(this, this);
     return this;
+  }
+
+  @Override
+  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+    if (leftCorner != null) return leftCorner;
+    leftCorner = new HashSet<>();
+    leftCorner.add(this);
+    if (! ruleComponents.isEmpty()) {
+      leftCorner.addAll(ruleComponents.get(0).computeLeftCorner(mgr));
+    }
+    return leftCorner;
+  }
+
+  public Set<RuleComponent> getLeftCorner(int i) {
+    return ruleComponents.get(i).getLeftCorner();
   }
 }

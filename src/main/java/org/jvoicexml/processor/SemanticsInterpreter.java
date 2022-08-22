@@ -7,16 +7,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.JSONObject;
-import org.jvoicexml.processor.ChartGrammarChecker.ChartNode;
+import org.jvoicexml.processor.AbstractParser.ChartNode;
 import org.jvoicexml.processor.grammar.RuleAlternatives;
 import org.jvoicexml.processor.grammar.RuleParse;
 import org.jvoicexml.processor.grammar.RuleTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public class SemanticsInterpreter implements ChartGrammarChecker.TreeWalker {
+public class SemanticsInterpreter implements AbstractParser.TreeWalker {
 
-  protected final ChartGrammarChecker checker;
+  protected final AbstractParser checker;
   protected final Stack<ChartNode> stack = new Stack<>();
   protected StringBuilder source;
   private int indent = 0;
@@ -28,7 +28,7 @@ public class SemanticsInterpreter implements ChartGrammarChecker.TreeWalker {
     Arrays.fill(INDENT, ' ');
   }
 
-  public SemanticsInterpreter(ChartGrammarChecker c) {
+  public SemanticsInterpreter(AbstractParser c) {
     checker = c;
   }
 
@@ -45,7 +45,7 @@ public class SemanticsInterpreter implements ChartGrammarChecker.TreeWalker {
     }
   }
 
-  public static JSONObject interpret(ChartGrammarChecker checker, ChartNode root) {
+  public static JSONObject interpret(AbstractParser checker, ChartNode root) {
     SemanticsInterpreter walker = new SemanticsInterpreter(checker);
     String jscode = walker.createProgram(root);
     return execute(jscode);

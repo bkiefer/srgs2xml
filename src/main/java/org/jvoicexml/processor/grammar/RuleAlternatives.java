@@ -27,9 +27,13 @@
 package org.jvoicexml.processor.grammar;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.jvoicexml.processor.GrammarManager;
 
 //Comp 2.0.6
 
@@ -40,17 +44,6 @@ public class RuleAlternatives extends RuleComponent {
   public static final double NORM_WEIGHT = 0x3E8;
 
   public static final double MIN_WEIGHT = 0x0;
-
-  private static class RuleAlternative {
-    public RuleComponent component;
-
-    public double weight;
-
-    public RuleAlternative(RuleComponent ruleComponent, double weight) {
-      this.weight = weight;
-      this.component = ruleComponent;
-    }
-  }
 
   private List<RuleAlternative> ruleComponents;
 
@@ -63,7 +56,12 @@ public class RuleAlternatives extends RuleComponent {
   }
 
   public void addAlternative(RuleComponent c, double weight) {
-    ruleComponents.add(new RuleAlternative(c, weight));
+    ruleComponents.add(
+        new RuleAlternative(this, c, weight, ruleComponents.size()));
+  }
+
+  public List<RuleAlternative> getAlternatives() {
+    return ruleComponents;
   }
 
   public RuleComponent getAlternative(int i) {
@@ -80,7 +78,7 @@ public class RuleAlternatives extends RuleComponent {
     name = myName + "_a";
     int index = 1;
     for (RuleAlternative a : ruleComponents) {
-      a.component.assignName(name + index);
+      a.assignName(name + index);
       ++index;
     }
   }
@@ -149,6 +147,20 @@ public class RuleAlternatives extends RuleComponent {
   }
 
   @Override
+  public boolean looksForLC(RuleComponent r, int i) {
+    // first of all, r must be an alternative
+    if (! (r instanceof RuleAlternative)) {
+      return false;
+    }
+    RuleAlternative alt = (RuleAlternative)r;
+    // r must be equal to the ith alternative. Because we're using the
+    // RuleComponents as immutable objects from the grammar, it's sufficient
+    // to test for token identity
+    return alt.nr < ruleComponents.size() &&
+        ruleComponents.get(alt.nr).equals(alt);
+  }
+
+  @Override
   public boolean equals(Object obj) {
     Boolean b = eq(obj);
     if (b != null)
@@ -160,7 +172,7 @@ public class RuleAlternatives extends RuleComponent {
     Iterator<RuleAlternative> it = other.ruleComponents.iterator();
     for (RuleAlternative c : ruleComponents) {
       RuleAlternative co = it.next();
-      if (c.weight - co.weight > 1e-9 || !c.component.equals(co.component)) {
+      if (! c.equals(co)) {
         return false;
       }
     }
@@ -171,7 +183,7 @@ public class RuleAlternatives extends RuleComponent {
   public int hashCode() {
     int result = 0;
     for (RuleAlternative alt : ruleComponents) {
-      result += ((int) alt.weight * 100) + alt.component.hashCode();
+      result += alt.hashCode();
     }
     return result;
   }
@@ -184,10 +196,22 @@ public class RuleAlternatives extends RuleComponent {
       return alt;
     }
     alt = this;
-    for (RuleAlternative a : alt.ruleComponents) {
-      a.component = a.component.cleanup(terminals, nonterminals);
+    for (int i = 0; i < alt.size(); ++i) {
+      ruleComponents.set(i,
+          (RuleAlternative) ruleComponents.get(i).cleanup(terminals, nonterminals));
     }
     nonterminals.put(alt, alt);
     return alt;
+  }
+
+  @Override
+  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+    if (leftCorner != null) return leftCorner;
+    leftCorner = new HashSet<>();
+    leftCorner.add(this);
+    for (RuleAlternative alt : ruleComponents) {
+      leftCorner.addAll(alt.computeLeftCorner(mgr));
+    }
+    return leftCorner;
   }
 }

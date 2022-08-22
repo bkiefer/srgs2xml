@@ -26,7 +26,11 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.jvoicexml.processor.GrammarManager;
 
 //Comp. 2.0.6
 /** This stands in for a resolved RuleReference, kind of a proxy */
@@ -44,16 +48,16 @@ public class RuleParse extends RuleComponent {
       if (parse == null) {
           return null;
       }
-  
+
       final Vector parseTags = new Vector();
       addTags(parseTags, parse);
-  
+
       final Object[] tags = new Object[parseTags.size()];
       parseTags.copyInto(tags);
-  
+
       return tags;
   }
-  
+
   @SuppressWarnings("unchecked")
   private void addTags(Vector tags, RuleComponent component) {
       if (component instanceof RuleTag) {
@@ -164,5 +168,19 @@ public class RuleParse extends RuleComponent {
     rp.ruleReference = (RuleReference) rp.ruleReference.cleanup(terminals,
         nonterminals);
     return rp;
+  }
+
+  @Override
+  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+    if (leftCorner != null) return leftCorner;
+    leftCorner = new HashSet<>();
+    leftCorner.add(this);
+    leftCorner.add(parse);
+    leftCorner.addAll(parse.computeLeftCorner(mgr));
+    return leftCorner;
+  }
+
+  public Set<RuleComponent> getLeftCorner(int i) {
+    return parse.leftCorner;
   }
 }

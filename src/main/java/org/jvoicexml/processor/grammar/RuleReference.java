@@ -27,7 +27,12 @@
 package org.jvoicexml.processor.grammar;
 
 import java.net.URI;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.jvoicexml.processor.GrammarManager;
+import org.jvoicexml.processor.srgs.GrammarException;
 
 //Comp. 2.0.6
 
@@ -182,5 +187,23 @@ public class RuleReference extends RuleComponent {
       nonterminals.put(nonterm, nonterm);
     }
     return nonterm;
+  }
+
+  /** The rule reference has to be resolved (which happened before) and the
+   *  grammar manager has to be asked for the rule
+   * @param mgr
+   * @throws GrammarException
+   */
+    // for the left corner context
+  @Override
+  public Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+    if (leftCorner != null) return leftCorner;
+    leftCorner = new HashSet<>();
+    leftCorner.add(this);
+    Rule r = mgr.resolve(this);
+    if (r != null) {
+      leftCorner.addAll(r.getRuleComponent().computeLeftCorner(mgr));
+    }
+    return leftCorner;
   }
 }

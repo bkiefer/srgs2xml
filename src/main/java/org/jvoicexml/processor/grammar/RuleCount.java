@@ -26,7 +26,11 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.jvoicexml.processor.GrammarManager;
 
 //Comp 2.0.6
 
@@ -188,6 +192,20 @@ public class RuleCount extends RuleComponent {
     return dot < repeatMax && ruleComponent.equals(r);
   }
 
+  /** For counts and alternatives, the dot has a special meaning. To account for
+   *  that, we need these special tests for some subclasses
+   */
+  public Boolean isPassive(int dot) {
+    return dot >= repeatMin && dot <= repeatMax;
+  }
+
+  /** For counts and alternatives, the dot has a special meaning. To account for
+   *  that, we need these special tests for some subclasses
+   */
+  public Boolean isActive(int dot) {
+    return dot < repeatMax;
+  }
+
   /**
    * dot is the number of repetitions already covered
    */
@@ -223,5 +241,19 @@ public class RuleCount extends RuleComponent {
     nonterminals.put(rc, rc);
     rc.ruleComponent = rc.ruleComponent.cleanup(terminals, nonterminals);
     return rc;
+  }
+
+  @Override
+  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+    if (leftCorner != null) return leftCorner;
+    // TODO WHAT ABOUT EPSILON? (RULEMIN = 0)
+    leftCorner = new HashSet<>();
+    leftCorner.add(this);
+    leftCorner.addAll(ruleComponent.computeLeftCorner(mgr));
+    return leftCorner;
+  }
+
+  public Set<RuleComponent> getLeftCorner(int i) {
+    return ruleComponent.leftCorner;
   }
 }

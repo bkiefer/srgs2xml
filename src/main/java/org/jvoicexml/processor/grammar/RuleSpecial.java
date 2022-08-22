@@ -26,7 +26,11 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.jvoicexml.processor.GrammarManager;
 
 //Comp. 2.0.6
 
@@ -41,6 +45,8 @@ public class RuleSpecial extends RuleComponent {
 
   private RuleSpecial(String special) {
     this.special = special;
+    leftCorner = new HashSet<>();
+    leftCorner.add(this);
   }
 
   @Override
@@ -74,6 +80,22 @@ public class RuleSpecial extends RuleComponent {
   @Override
   RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
       Map<RuleComponent, RuleComponent> nonterminals) {
+    if (this == GARBAGE) {
+      RuleToken garbage = new RuleToken(".*");
+      if (! terminals.containsKey(garbage)) {
+        terminals.put(garbage, garbage);
+      } else {
+        garbage = terminals.get(garbage);
+      }
+      leftCorner = new HashSet<>();
+      leftCorner.add(garbage);
+      return this;
+    }
     return this;
+  }
+
+  @Override
+  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr){
+    return leftCorner;
   }
 }

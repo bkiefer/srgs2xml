@@ -5,5 +5,5 @@ root $order;
 mode voice;
 tag-format "semantics/1.0";
 
-public $order = $mini;
-$mini = (pizza | pasta) ;
+public $order = $mini { out.val = rules.mini; };
+$mini = (pizza | pasta) { out = "$$1" };

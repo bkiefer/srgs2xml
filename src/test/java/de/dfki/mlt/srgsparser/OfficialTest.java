@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.jvoicexml.processor.ChartGrammarChecker;
+import org.jvoicexml.processor.AbstractParser;
 import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.grammar.Grammar;
@@ -157,8 +157,8 @@ public class OfficialTest {
         Matcher mat = METAPAT.matcher(in.key);
         if (mat.matches()) { // we have an input string to check (key in.X)
           String[] tokens = in.value.split(" +");
-          final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-          ChartGrammarChecker.ChartNode validRule = null;
+          final AbstractParser checker = AbstractParser.getParser(manager);
+          AbstractParser.ChartNode validRule = null;
           try {
             validRule = checker.parse(ruleGrammar, tokens);
           } catch (GrammarException ex) {

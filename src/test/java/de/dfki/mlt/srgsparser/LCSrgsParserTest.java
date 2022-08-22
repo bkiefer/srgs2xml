@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.processor.AbstractParser;
 import org.jvoicexml.processor.GrammarManager;
@@ -22,7 +23,12 @@ import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.srgs.GrammarException;
 import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
-public class SrgsParserTest {
+public class LCSrgsParserTest {
+
+  @BeforeClass
+  public static void init() {
+    AbstractParser.useLeftCorner = true;
+  }
 
   @Test
   public void pizzatest() throws GrammarException, IOException, URISyntaxException {
@@ -34,7 +40,7 @@ public class SrgsParserTest {
       final AbstractParser checker = AbstractParser.getParser(manager);
       final AbstractParser.ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
-      assertTrue(validRule != null);
+      assertTrue(s, validRule != null);
     }
   }
 

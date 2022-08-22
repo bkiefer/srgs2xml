@@ -14,12 +14,12 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import org.json.JSONObject;
-import org.jvoicexml.processor.ChartGrammarChecker;
-import org.jvoicexml.processor.ChartGrammarChecker.ChartNode;
-import org.jvoicexml.processor.grammar.Grammar;
-import org.jvoicexml.processor.srgs.GrammarException;
+import org.jvoicexml.processor.AbstractParser;
+import org.jvoicexml.processor.AbstractParser.ChartNode;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.SemanticsInterpreter;
+import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.srgs.GrammarException;
 import org.mozilla.javascript.EcmaError;
 import org.mozilla.javascript.EvaluatorException;
 
@@ -35,7 +35,7 @@ public class Main {
 
   final JVoiceXmlGrammarManager manager = new JVoiceXmlGrammarManager();
   protected Grammar ruleGrammar;
-  protected ChartGrammarChecker checker;
+  protected AbstractParser checker;
 
   protected static boolean debug = true;
 
@@ -51,7 +51,7 @@ public class Main {
     ChartNode validRule = null;
     try {
       String[] tokens = s.split(" +");
-      checker = new ChartGrammarChecker(manager);
+      checker = AbstractParser.getParser(manager);
       validRule = checker.parse(ruleGrammar, tokens);
 
       // System.out.println(validRule);

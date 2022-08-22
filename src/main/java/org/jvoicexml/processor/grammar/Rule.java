@@ -107,6 +107,7 @@ public class Rule {
         return str.toString();
     }
 
+    @Override
     public String toString() {
       return (RuleComponent.PRINT_COMPACT) ? toStringABNF() : toStringXML();
     }

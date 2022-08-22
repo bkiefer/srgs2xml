@@ -26,7 +26,11 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.jvoicexml.processor.GrammarManager;
 
 //Comp. 2.0.6
 
@@ -102,5 +106,13 @@ public class RuleTag extends RuleComponent {
       nonterminals.put(nonterm, nonterm);
     }
     return nonterm;
+  }
+
+  @Override
+  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+   if (leftCorner != null) return leftCorner;
+   leftCorner = new HashSet<>();
+   leftCorner.add(this);
+   return leftCorner;
   }
 }

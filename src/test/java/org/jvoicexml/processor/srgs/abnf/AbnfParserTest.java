@@ -14,12 +14,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONObject;
 import org.junit.Test;
-import org.jvoicexml.processor.ChartGrammarChecker;
+import org.jvoicexml.processor.AbstractParser;
 import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.SemanticsInterpreter;
@@ -101,12 +100,12 @@ public class AbnfParserTest {
     final JVoiceXmlGrammar ruleGrammar =
         (JVoiceXmlGrammar)manager.loadGrammar(testURI("pizza.gram"));
     assertEquals(12, ruleGrammar.getTerminals().size());
-    assertEquals(32, ruleGrammar.getNonterminals().size());
+    assertEquals(41, ruleGrammar.getNonterminals().size());
 
     for (String s : pizzainputs) {
       String[] tokens = s.split(" +");
-      final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-      final ChartGrammarChecker.ChartNode validRule =
+      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser.ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);
 
@@ -133,7 +132,7 @@ public class AbnfParserTest {
     Set<RuleToken> terms = ruleGrammar.getTerminals();
     Set<RuleComponent> nonterms = ruleGrammar.getNonterminals();
     assertEquals(4, terms.size());
-    assertEquals(6, nonterms.size());
+    assertEquals(8, nonterms.size());
   }
 
   @Test
@@ -159,11 +158,11 @@ public class AbnfParserTest {
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final Grammar ruleGrammar = manager.loadGrammar(testURI("regex.gram"));
 
-    final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
+    final AbstractParser checker = AbstractParser.getParser(manager);
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final ChartGrammarChecker.ChartNode validRule =
+      final AbstractParser.ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
       ++i;
@@ -174,7 +173,7 @@ public class AbnfParserTest {
         assertEquals(s, out);
       }
     }
-    ChartGrammarChecker.ChartNode validRule;
+    AbstractParser.ChartNode validRule;
     String[] tok2 = { "damn" };
     String[] tok3 = { "damn", "goooood"};
     validRule = checker.parse(ruleGrammar, tok2);
@@ -238,8 +237,8 @@ public class AbnfParserTest {
     final Grammar ruleGrammar = manager.loadGrammar(testURI("tags.gram"));
 
     String[] tokens = {"1", "is", "2" };
-    final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-    ChartGrammarChecker.ChartNode validRule =
+    final AbstractParser checker = AbstractParser.getParser(manager);
+    AbstractParser.ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     SemanticsInterpreter walker = new SemanticsInterpreter(checker);
     JSONObject o = SemanticsInterpreter.execute(walker.createProgram(validRule));
@@ -257,8 +256,8 @@ public class AbnfParserTest {
     };
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final ChartGrammarChecker checker = new ChartGrammarChecker(manager);
-      final ChartGrammarChecker.ChartNode validRule =
+      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser.ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);
     }

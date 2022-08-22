@@ -29,7 +29,10 @@ package org.jvoicexml.processor.grammar;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
+
+import org.jvoicexml.processor.GrammarManager;
 
 //Comp 2.0.6
 
@@ -42,6 +45,8 @@ public abstract class RuleComponent {
   protected String name;
 
   public boolean parenthesized = false;
+
+  protected Set<RuleComponent> leftCorner;
 
   private static Pattern valid = Pattern
       .compile("(\\p{IsAlphabetic}|[_])(\\p{IsAlphabetic}|\\d|[-_.])*");
@@ -143,6 +148,31 @@ public abstract class RuleComponent {
   }
 
   /**
+   * Test, for every subclass, if the given RuleComponent is the one required in
+   * the dot'th "position", which means in the case of RuleAlternative, for
+   * example, that it must be equal to the i'th alternative. Because we're using
+   * the RuleComponents as immutable objects from the grammar, it should suffice
+   * to test for token identity.
+   */
+  public boolean looksForLC(RuleComponent r, int dot) {
+    return looksFor(r, dot);
+  }
+
+  /** For counts and alternatives, the dot has a special meaning. To account for
+   *  that, we need these special tests for some subclasses
+   */
+  public Boolean isPassive(int dot) {
+    return null;
+  }
+
+  /** For counts and alternatives, the dot has a special meaning. To account for
+   *  that, we need these special tests for some subclasses
+   */
+  public Boolean isActive(int dot) {
+    return null;
+  }
+
+  /**
    * Test if this is the last slot to be filled, i.e., if the dot advances one
    * more position, the item will be passive.
    */
@@ -172,4 +202,14 @@ public abstract class RuleComponent {
 
   abstract RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
       Map<RuleComponent, RuleComponent> nonterminals);
+
+  protected abstract Set<RuleComponent> computeLeftCorner(GrammarManager mgr);
+
+  public Set<RuleComponent> getLeftCorner() {
+    return leftCorner;
+  }
+
+  public Set<RuleComponent> getLeftCorner(int i) {
+    return leftCorner;
+  }
 }
