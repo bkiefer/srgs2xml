@@ -36,6 +36,8 @@ import org.jvoicexml.processor.GrammarManager;
 
 public class RuleSpecial extends RuleComponent {
   public static RuleSpecial GARBAGE = new RuleSpecial("GARBAGE");
+  private static RuleToken GARBTOK = new RuleToken("$$.*");
+  private static RuleComponent GARBRULE = new RuleCount(GARBTOK, 1);
 
   public static RuleSpecial NULL = new RuleSpecial("NULL");
 
@@ -46,7 +48,12 @@ public class RuleSpecial extends RuleComponent {
   private RuleSpecial(String special) {
     this.special = special;
     leftCorner = new HashSet<>();
-    leftCorner.add(this);
+    if (this == GARBAGE) {
+      leftCorner.add(GARBRULE);
+      leftCorner.add(GARBTOK);
+    } else {
+      leftCorner.add(this);
+    }
   }
 
   @Override
@@ -81,15 +88,21 @@ public class RuleSpecial extends RuleComponent {
   RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
       Map<RuleComponent, RuleComponent> nonterminals) {
     if (this == GARBAGE) {
-      RuleToken garbage = new RuleToken(".*");
-      if (! terminals.containsKey(garbage)) {
-        terminals.put(garbage, garbage);
+      if (nonterminals.containsKey(this))
+        return nonterminals.get(this);
+      if (! terminals.containsKey(GARBTOK)) {
+        terminals.put(GARBTOK, GARBTOK);
       } else {
-        garbage = terminals.get(garbage);
+        leftCorner.remove(GARBTOK);
+        leftCorner.remove(GARBRULE);
+        GARBTOK = terminals.get(GARBTOK);
+        GARBRULE = new RuleCount(GARBTOK, 1);
+        nonterminals.put(GARBRULE, GARBRULE);
+        nonterminals.put(this, GARBRULE);
+        leftCorner.add(GARBTOK);
+        leftCorner.add(GARBRULE);
       }
-      leftCorner = new HashSet<>();
-      leftCorner.add(garbage);
-      return this;
+      return GARBRULE;
     }
     return this;
   }

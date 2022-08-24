@@ -324,7 +324,7 @@ public abstract class AbstractParser {
     for (ChartNode x : edges) {
       if (x.equals(c)) {
         if (x.equalsChildren(c)) {
-          log.warn("Identical chart node produced: {}", c);
+          log.debug("Identical chart node produced: {}", c);
         } else {
           if (null == x.equivs) {
             x.equivs = new ArrayList<ChartNode>();

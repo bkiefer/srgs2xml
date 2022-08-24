@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 import org.jvoicexml.processor.AbstractParser.ChartNode;
+import org.jvoicexml.processor.grammar.RuleAlternative;
 import org.jvoicexml.processor.grammar.RuleAlternatives;
 import org.jvoicexml.processor.grammar.RuleParse;
 import org.jvoicexml.processor.grammar.RuleTag;
@@ -123,7 +124,8 @@ public class SemanticsInterpreter implements AbstractParser.TreeWalker {
         m.appendReplacement(sb, checker.covered(target));
       } else {
         ChartNode targ = target;
-        while (targ.getRule() instanceof RuleAlternatives) {
+        while (targ.getRule() instanceof RuleAlternatives
+            || targ.getRule() instanceof RuleAlternative) {
           targ = targ.getChildren().get(0);
         }
         if (targ.getRule() instanceof RuleParse) {

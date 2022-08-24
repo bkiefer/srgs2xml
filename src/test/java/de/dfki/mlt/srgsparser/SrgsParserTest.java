@@ -34,7 +34,7 @@ public class SrgsParserTest {
       final AbstractParser checker = AbstractParser.getParser(manager);
       final AbstractParser.ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
-      assertTrue(validRule != null);
+      assertTrue(s, validRule != null);
     }
   }
 
