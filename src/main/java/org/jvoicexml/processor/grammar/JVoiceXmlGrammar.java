@@ -191,4 +191,9 @@ public class JVoiceXmlGrammar implements Grammar {
   public Map<String, Object> getAttributes() {
     return attributes;
   }
+
+  public void addSymbols(JVoiceXmlGrammar sub) {
+    terminals.putAll(sub.terminals);
+    nonterminals.putAll(sub.nonterminals);
+  }
 }

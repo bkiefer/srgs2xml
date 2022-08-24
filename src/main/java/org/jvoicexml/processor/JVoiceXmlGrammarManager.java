@@ -113,27 +113,28 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
    * @throws IOException
    * @throws GrammarException
    */
-  private void walkSubcomponents(RuleComponent component)
+  private void walkSubcomponents(RuleComponent component, JVoiceXmlGrammar grammar)
       throws GrammarException, IOException {
     if (component instanceof RuleSequence) {
       final RuleSequence sequence = (RuleSequence) component;
       for (RuleComponent c : sequence.getRuleComponents()) {
-        walkSubcomponents(c);
+        walkSubcomponents(c, grammar);
       }
     } else if (component instanceof RuleAlternatives) {
       final RuleAlternatives alternatives = (RuleAlternatives) component;
       for (int i = 0; i < alternatives.size(); ++i) {
-        walkSubcomponents(alternatives.getAlternative(i));
+        walkSubcomponents(alternatives.getAlternative(i), grammar);
       }
     } else if (component instanceof RuleCount) {
       final RuleCount count = (RuleCount) component;
-      walkSubcomponents(count.getRuleComponent());
+      walkSubcomponents(count.getRuleComponent(), grammar);
     } else if (component instanceof RuleReference) {
       final RuleReference ref = grammarStack.peek()
           .resolve((RuleReference) component);
       // check if this is an unknown external reference
       if (!grammars.containsKey(ref.getGrammarReference())) {
-        loadGrammar(ref.getGrammarReference());
+        JVoiceXmlGrammar sub = (JVoiceXmlGrammar) loadGrammar(ref.getGrammarReference());
+        grammar.addSymbols(sub);
       }
       // now it must be possible to resolve the reference!
       if (resolve(ref) == null) {
@@ -155,7 +156,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
   private void loadExternalGrammars(List<Rule> rules, JVoiceXmlGrammar grammar)
       throws GrammarException, IOException {
     for (Rule r : rules) {
-      walkSubcomponents(r.getRuleComponent());
+      walkSubcomponents(r.getRuleComponent(), grammar);
     }
   }
 }
