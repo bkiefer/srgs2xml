@@ -416,4 +416,8 @@ public abstract class AbstractParser {
   public List<ChartNode> getInEdges(int i) {
     return chartIn[i];
   }
+
+  public String tokenAt(int i) {
+    return i < input.length ? input[i] : null;
+  }
 }

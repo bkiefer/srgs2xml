@@ -32,7 +32,6 @@ import org.jvoicexml.processor.grammar.Grammar;
 import org.jvoicexml.processor.grammar.JVoiceXmlGrammar;
 import org.jvoicexml.processor.grammar.RuleComponent;
 import org.jvoicexml.processor.grammar.RuleCount;
-import org.jvoicexml.processor.grammar.RuleSequence;
 import org.jvoicexml.processor.grammar.RuleSpecial;
 import org.jvoicexml.processor.grammar.RuleTag;
 import org.jvoicexml.processor.grammar.RuleToken;
@@ -56,29 +55,30 @@ public class LeftCornerParser extends AbstractParser {
    */
   protected LeftCornerParser(final GrammarManager grammarManager) {
     super(grammarManager);
+    log.info("Initializing Left Corner Parser");
   }
 
   /** Complete for the main loop */
   private void complete(ChartNode act, ChartNode pass, List<ChartNode> expd) {
-    log.debug("? {} + {} ", act, pass);
+    //log.debug("   + CO {} ", pass);
     if (act.rule.looksForLC(getResolved(pass.rule), act.dot)) {
       ChartNode newNode = new ChartNode(act, pass);
       expd.add(newNode);
-      log.debug("succeeds");
+      //log.debug("succeeds");
     } else {
-      log.debug("fails");
+      //log.debug("fails");
     }
   }
 
   /** Complete for the left corner predict */
   private void complete(RuleComponent act, ChartNode pass, List<ChartNode> expd) {
-    log.debug("! {} + {} ", act, pass);
+    //log.debug("LC {} + {} ", act, pass);
     if (act.looksForLC(getResolved(pass.rule), 0)) {
       ChartNode newNode = new ChartNode(act, pass);
       expd.add(newNode);
-      log.debug("succeeds");
+      //log.debug("succeeds");
     } else {
-      log.debug("fails");
+      //log.debug("fails");
     }
   }
 
@@ -95,14 +95,29 @@ public class LeftCornerParser extends AbstractParser {
     // We need the left corner relation of act.rule[dot] here
     for (RuleComponent r : act.rule.getLeftCorner(act.dot)) {
       r = resolve(r);
-      if (pass != null) {
-        complete(r, pass, expd);
-      }
-      // *SPECIAL* treatment of RuleCount that represents an optional items,
-      // i.e., where repeatMin == 0
+      complete(r, pass, expd);
+    }
+  }
+
+  /** Predict all rules where the LHS is in left corner relation with the
+   *  next wanted RuleComponent AND the rule can eat the passive item immediately
+   *  (i.e. it's the first (non)terminal on the RHS)
+   * @param act
+   * @param pass
+   * @param expd
+   * @throws GrammarException
+   */
+  private void leftCornerCompleteEmpty(ChartNode act, List<ChartNode> expd)
+      throws GrammarException {
+    // We need the left corner relation of act.rule[dot] here
+    for (RuleComponent r : act.rule.getLeftCorner(act.dot)) {
+      r = resolve(r);
+      // special treatment of all "empty" items: RuleCount that represents an
+      // optional item i.e., where repeatMin == 0, RuleTag and NULL
       if ((r instanceof RuleCount && ((RuleCount)r).getRepeatMin() == 0)
           || (r instanceof RuleTag)
           || (r == RuleSpecial.NULL)) {
+        //log.debug("EMPTY {} {}", act, r);
         ChartNode newNode = new ChartNode(act.end, r);
         expd.add(newNode);
       }
@@ -153,7 +168,7 @@ public class LeftCornerParser extends AbstractParser {
 
     while (agendaNotEmpty()) {
       ChartNode curr = agendaPop();
-      log.debug("Popped {}", curr);
+      //log.debug("Popped {}", curr);
       List<ChartNode> expanded = new ArrayList<ChartNode>();
       if (isPassive(curr)) {
         if (chartIn[curr.start] != null) {
@@ -161,12 +176,13 @@ public class LeftCornerParser extends AbstractParser {
           for (ChartNode act : chartIn[curr.start]) {
             // complete all active items that look for this passive item
             complete(act, curr, expanded);
-            // do all predictions
+            // do all left corner predictions
             leftCornerPredict(act, curr, expanded);
           }
         }
       }
       if (isActive(curr)) {
+        //log.debug("Act: {}", curr);
         // Complete active item to the right
         if (null != chartOut[curr.end]) {
           for (ChartNode pass : chartOut[curr.end]) {
@@ -175,29 +191,8 @@ public class LeftCornerParser extends AbstractParser {
             // do all left corner predictions
             leftCornerPredict(curr, pass, expanded);
           }
-        } else {
-          leftCornerPredict(curr, null, expanded);
-        /**/
         }
-        if (curr.rule instanceof RuleSequence) {
-          RuleSequence seq = (RuleSequence) curr.rule;
-          RuleComponent next = seq.getRuleComponents().get(curr.dot);
-          // *SPECIAL* treatment of RuleTags. Especially for the last tag in
-          // a sequence, which might be at the end of the chart, there is no
-          // passive item to combine with
-          if (next instanceof RuleTag) {
-            RuleTag tag = (RuleTag)seq.getRuleComponents().get(curr.dot);
-            expanded.add(new ChartNode(curr.end, tag));
-          }
-          // *SPECIAL* treatment of RuleCount that represents an optional items,
-          // i.e., where repeatMin == 0
-          if (next instanceof RuleCount && ((RuleCount)next).getRepeatMin() == 0) {
-            ChartNode newNode = new ChartNode(curr.end, next);
-            expanded.add(newNode);
-          }
-
-          /**/
-        }
+        leftCornerCompleteEmpty(curr, expanded);
       }
       for (ChartNode c : expanded) {
         add(c);
