@@ -33,7 +33,7 @@ public class Main {
     System.out.println("usage: srgsparser grammar.xml examplefile.txt");
   }
 
-  final JVoiceXmlGrammarManager manager = new JVoiceXmlGrammarManager();
+  protected JVoiceXmlGrammarManager manager = new JVoiceXmlGrammarManager();
   protected Grammar ruleGrammar;
   protected AbstractParser checker;
 
