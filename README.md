@@ -24,6 +24,8 @@ java -jar target/srgs-parser-1.0-jar-with-dependencies.jar src/test/resources/hy
 
 # Unsupported Features / Deviation from the Standard
 
+The ABNF grammar reader assumes the encoding to be UTF-8 if no encoding is specified. The standard does not specify a default encoding.
+
 ## Features not planned to be added
 - Loading grammars over the internet is not supported
 - Status of language markers is not fully clear

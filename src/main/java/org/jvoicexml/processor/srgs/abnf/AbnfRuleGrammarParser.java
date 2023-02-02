@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -102,7 +103,7 @@ public class AbnfRuleGrammarParser extends RuleGrammarParser {
         if (m.groupCount() >= 2 && m.group(2) != null) {
           r = new InputStreamReader(stream, m.group(2).trim());
         } else {
-          r = new InputStreamReader(stream);
+          r = new InputStreamReader(stream, StandardCharsets.UTF_8);
         }
       }
       return parseGrammar(r);

@@ -5,12 +5,12 @@
 
     <groupId>de.dfki.mlt</groupId>
     <artifactId>srgs-parser</artifactId>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
     <packaging>jar</packaging>
 
     <properties>
-      <maven.compiler.source>1.8</maven.compiler.source>
-      <maven.compiler.target>1.8</maven.compiler.target>
+      <maven.compiler.source>11</maven.compiler.source>
+      <maven.compiler.target>11</maven.compiler.target>
       <encoding>UTF-8</encoding>
       <slf4j.version>2.0.5</slf4j.version>
       <logback.version>1.4.5</logback.version>
@@ -48,25 +48,42 @@
             </descriptorRefs>
           </configuration>
         </plugin>
-
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>1.1</version>
-          <executions>
-            <execution>
-              <id>makebisonflex</id>
-              <phase>generate-sources</phase>
-              <goals><goal>exec</goal></goals>
-              <configuration>
-                <workingDirectory>${project.build.sourceDirectory}/org/jvoicexml/processor/srgs/abnf</workingDirectory>
-                <executable>make</executable>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
       </plugins>
     </build>
+
+    <!-- use .java files provided from repo as default -->
+    <!--
+    <profiles>
+      <profile>
+        <id>platform-unix</id>
+        <activation>
+          <os>
+            <family>unix</family>
+          </os>
+        </activation>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>1.1</version>
+              <executions>
+                <execution>
+                  <id>makebisonflex</id>
+                  <phase>generate-sources</phase>
+                  <goals><goal>exec</goal></goals>
+                  <configuration>
+                    <workingDirectory>${project.build.sourceDirectory}/org/jvoicexml/processor/srgs/abnf</workingDirectory>
+                    <executable>make</executable>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+    </profiles>
+    -->
 
     <dependencies>
       <dependency>
@@ -103,7 +120,7 @@
         <scope>test</scope>
         <type>jar</type>
       </dependency>
-      
+
       <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
       <dependency>
         <groupId>ch.qos.logback</groupId>

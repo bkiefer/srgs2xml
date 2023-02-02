@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.jvoicexml.processor.grammar.Rule;
+import org.jvoicexml.processor.grammar.RuleComponent;
 import org.jvoicexml.processor.srgs.GrammarException;
 import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
 import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
@@ -96,6 +97,7 @@ public class PrinterTest {
   }
 
   public void printTestXML(Path name) throws URISyntaxException, IOException, GrammarException {
+    RuleComponent.printCompact(false);
     URI grammarReference = name.toUri();
     URL url = grammarReference.toURL();
     AbnfRuleGrammarParser s = new AbnfRuleGrammarParser(url.toString());
@@ -118,6 +120,7 @@ public class PrinterTest {
   }
 
   public void printTestABNF(Path name) throws URISyntaxException, IOException, GrammarException {
+    RuleComponent.printCompact(true);
     URI grammarReference = name.toUri();
     URL url = grammarReference.toURL();
     SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();

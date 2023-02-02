@@ -9,7 +9,7 @@ BISON	   = bison
 # --------------------------------------------------
 
 %.java : %.y
-	$(BISON) -Wall -rall --language java $<
+	$(BISON) -Wall -rall --language java --debug $<
 
 all: SrgsAbnf.java SrgsLexer.java
 
