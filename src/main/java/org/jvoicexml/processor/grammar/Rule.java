@@ -112,7 +112,7 @@ public class Rule {
       return (RuleComponent.PRINT_COMPACT) ? toStringABNF() : toStringXML();
     }
 
-    /** Compute uniqe set of terminals and nonterminals */
+    /** Compute unique set of terminals and nonterminals */
     public Rule cleanup(Map<RuleToken, RuleToken> terminals,
         Map<RuleComponent, RuleComponent> nonterminals) {
       ruleComponent = ruleComponent.cleanup(terminals, nonterminals);

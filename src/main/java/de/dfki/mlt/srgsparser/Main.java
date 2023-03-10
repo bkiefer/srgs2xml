@@ -39,11 +39,9 @@ public class Main {
 
   protected static boolean debug = true;
 
-  public Main(URI grammarUri) throws GrammarException, IOException {
+  public void loadGrammar(URI grammarUri) throws GrammarException, IOException {
     ruleGrammar = manager.loadGrammar(grammarUri);
   }
-
-  protected Main() {}
 
   protected ChartNode process(String s) {
     SemanticsInterpreter walker = null;
@@ -92,7 +90,8 @@ public class Main {
       System.exit(1);
     }
     File grammarFile = new File(args[0]);
-    Main main = new Main(grammarFile.toURI());
+    Main main = new Main();
+    main.loadGrammar(grammarFile.toURI());
 
     if (args.length > 1) {
       Stream<String> in = Files.lines(Paths.get(args[1]));
