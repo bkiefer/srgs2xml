@@ -212,4 +212,8 @@ public abstract class RuleComponent {
   public Set<RuleComponent> getLeftCorner(int i) {
     return leftCorner;
   }
+
+  public double weight() {
+    return 0.0;
+  }
 }

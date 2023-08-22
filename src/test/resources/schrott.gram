@@ -1,0 +1,10 @@
+#ABNF 1.0 UTF-8;
+
+language en-EN;
+root $root;
+mode voice;
+tag-format "semantics/1.0";
+ 
+public $root = 
+    ($GARBAGE<0-4>){ out.garb="$$1";} (das ist sinnvoll) { out.res = "var1"; }
+    | das ($GARBAGE<0-4>){ out.garb="$$1";} (ist sinnvoll) { out.res = "var2"; };

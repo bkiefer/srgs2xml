@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.JSONObject;
-import org.jvoicexml.processor.AbstractParser.ChartNode;
 import org.jvoicexml.processor.grammar.RuleAlternative;
 import org.jvoicexml.processor.grammar.RuleAlternatives;
 import org.jvoicexml.processor.grammar.RuleParse;
@@ -15,7 +14,7 @@ import org.jvoicexml.processor.grammar.RuleTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public class SemanticsInterpreter implements AbstractParser.TreeWalker {
+public class SemanticsInterpreter implements TreeWalker<ChartNode> {
 
   protected final AbstractParser checker;
   protected final Stack<ChartNode> stack = new Stack<>();
@@ -74,7 +73,7 @@ public class SemanticsInterpreter implements AbstractParser.TreeWalker {
     this.source.append("\n");
   }
 
-  public String createProgram(ChartNode root) {
+  public String createProgram(TreeStrategy root) {
     stack.clear();
     source = new StringBuilder();
     addline("rules = {};");

@@ -147,4 +147,9 @@ public class RuleToken extends RuleComponent {
     leftCorner.add(this);
     return leftCorner;
   }
+
+  /** Maybe we should reject this as token text and enforce GARBAGE instead */
+  public double weight() {
+    return (getText().equals("$$.*")) ? 1.0 : super.weight();
+  }
 }

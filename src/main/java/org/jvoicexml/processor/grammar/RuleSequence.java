@@ -180,6 +180,7 @@ public class RuleSequence extends RuleComponent {
     return leftCorner;
   }
 
+  @Override
   public Set<RuleComponent> getLeftCorner(int i) {
     return ruleComponents.get(i).getLeftCorner();
   }

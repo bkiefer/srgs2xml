@@ -9,6 +9,7 @@ import java.net.URI;
 
 import org.json.JSONObject;
 import org.jvoicexml.processor.AbstractParser;
+import org.jvoicexml.processor.ChartNode;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.SemanticsInterpreter;
 import org.jvoicexml.processor.grammar.Grammar;
@@ -35,7 +36,7 @@ public class Example {
         for (String s : inputs) {
             String[] tokens = s.split(" +");
             final AbstractParser checker = AbstractParser.getParser(manager);
-            final AbstractParser.ChartNode validRule = checker.parse(ruleGrammar, tokens);
+            final ChartNode validRule = checker.parse(ruleGrammar, tokens);
 
             // System.out.println(validRule);
             if (validRule != null) {

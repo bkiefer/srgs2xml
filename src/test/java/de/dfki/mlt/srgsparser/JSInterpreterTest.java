@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.jvoicexml.processor.AbstractParser;
+import org.jvoicexml.processor.ChartNode;
 import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.SemanticsInterpreter;
@@ -21,7 +22,7 @@ import org.jvoicexml.processor.srgs.GrammarException;
 public class JSInterpreterTest {
 
   public static JSONObject interpret(AbstractParser checker,
-      AbstractParser.ChartNode validRule) {
+      ChartNode validRule) {
     SemanticsInterpreter walker = new SemanticsInterpreter(checker);
     return SemanticsInterpreter.execute( walker.createProgram(validRule));
   }
@@ -34,7 +35,7 @@ public class JSInterpreterTest {
     String s = pizzainputs[pizzainputs.length-1];
     String[] tokens = s.split(" +");
     final AbstractParser checker = AbstractParser.getParser(manager);
-    final AbstractParser.ChartNode validRule =
+    final ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSONObject object = interpret(checker, validRule);
     JSONObject order = object.getJSONObject("order");
@@ -51,7 +52,7 @@ public class JSInterpreterTest {
     String s = pizzainputs[pizzainputs.length-1];
     String[] tokens = s.split(" +");
     final AbstractParser checker = AbstractParser.getParser(manager);
-    final AbstractParser.ChartNode validRule =
+    final ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSONObject object = interpret(checker, validRule);
     JSONObject order = object.getJSONObject("order");
@@ -67,7 +68,7 @@ public class JSInterpreterTest {
 
     String[] tokens = {"1", "is", "2" };
     final AbstractParser checker = AbstractParser.getParser(manager);
-    AbstractParser.ChartNode validRule =
+    ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSONObject o = interpret(checker, validRule);
     assertEquals("1", o.getString("one"));
@@ -86,7 +87,7 @@ public class JSInterpreterTest {
     };
     final AbstractParser checker = AbstractParser.getParser(manager);
     for (String[] toks : tokens) {
-      AbstractParser.ChartNode validRule = checker.parse(ruleGrammar, toks);
+      ChartNode validRule = checker.parse(ruleGrammar, toks);
       JSONObject o = interpret(checker, validRule);
       assertEquals(toks[2], o.getString("val"));
     }

@@ -111,4 +111,8 @@ public class RuleSpecial extends RuleComponent {
   protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr){
     return leftCorner;
   }
+
+  public double weight() {
+    return (this == GARBAGE) ? 1.0 : super.weight();
+  }
 }

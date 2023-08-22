@@ -15,6 +15,7 @@ import java.util.List;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.jvoicexml.processor.AbstractParser;
+import org.jvoicexml.processor.ChartNode;
 import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.grammar.Grammar;
@@ -32,7 +33,7 @@ public class SrgsParserTest {
     for (String s : pizzainputs) {
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(s, validRule != null);
     }
@@ -48,7 +49,7 @@ public class SrgsParserTest {
       String s = pizzainputs[pizzainputs.length-1];
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       JSONObject o = JSInterpreterTest.interpret(checker, validRule);
       JSONObject order = (JSONObject)o.get("order");
@@ -71,7 +72,7 @@ public class SrgsParserTest {
     for (String s : inputs) {
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);
     }
@@ -99,7 +100,7 @@ public class SrgsParserTest {
     for (String s : inputs) {
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
       ++i;
@@ -122,7 +123,7 @@ public class SrgsParserTest {
     for (String s : inputs) {
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
       ++i;
@@ -151,7 +152,7 @@ public class SrgsParserTest {
     for (String s : inputs) {
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
       ++i;
@@ -180,7 +181,7 @@ public class SrgsParserTest {
     for (String s : inputs) {
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
       ++i;
@@ -195,7 +196,7 @@ public class SrgsParserTest {
 
     String[] tokens = { "pizza" };
     final AbstractParser checker = AbstractParser.getParser(manager);
-    final AbstractParser.ChartNode validRule =
+    final ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     assertNotNull(validRule);
     // make sure the interpreter does not crash when empty strings are matched
@@ -223,7 +224,7 @@ public class SrgsParserTest {
 
     String[] tokens = { "pizza" };
     final AbstractParser checker = AbstractParser.getParser(manager);
-    final AbstractParser.ChartNode validRule =
+    final ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     assertNotNull(validRule);
     // make sure the interpreter does not crash when empty strings are matched

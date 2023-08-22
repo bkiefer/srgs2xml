@@ -19,6 +19,7 @@ import java.util.Set;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.jvoicexml.processor.AbstractParser;
+import org.jvoicexml.processor.ChartNode;
 import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.SemanticsInterpreter;
@@ -105,7 +106,7 @@ public class AbnfParserTest {
     for (String s : pizzainputs) {
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);
 
@@ -162,7 +163,7 @@ public class AbnfParserTest {
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
       ++i;
@@ -173,7 +174,7 @@ public class AbnfParserTest {
         assertEquals(s, out);
       }
     }
-    AbstractParser.ChartNode validRule;
+    ChartNode validRule;
     String[] tok2 = { "damn" };
     String[] tok3 = { "damn", "goooood"};
     validRule = checker.parse(ruleGrammar, tok2);
@@ -238,7 +239,7 @@ public class AbnfParserTest {
 
     String[] tokens = {"1", "is", "2" };
     final AbstractParser checker = AbstractParser.getParser(manager);
-    AbstractParser.ChartNode validRule =
+    ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     SemanticsInterpreter walker = new SemanticsInterpreter(checker);
     JSONObject o = SemanticsInterpreter.execute(walker.createProgram(validRule));
@@ -257,7 +258,7 @@ public class AbnfParserTest {
     for (String s : inputs) {
       String[] tokens = s.split(" +");
       final AbstractParser checker = AbstractParser.getParser(manager);
-      final AbstractParser.ChartNode validRule =
+      final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);
     }

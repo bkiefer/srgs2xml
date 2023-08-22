@@ -29,7 +29,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -40,8 +39,6 @@ import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.grammar.RuleComponent;
 import org.jvoicexml.processor.grammar.RuleParse;
 import org.jvoicexml.processor.grammar.RuleReference;
-import org.jvoicexml.processor.grammar.RuleSpecial;
-import org.jvoicexml.processor.grammar.RuleTag;
 import org.jvoicexml.processor.grammar.RuleToken;
 import org.jvoicexml.processor.srgs.GrammarException;
 import org.slf4j.Logger;
@@ -58,132 +55,6 @@ public abstract class AbstractParser {
   private static final Logger log = LoggerFactory.getLogger(AbstractParser.class);
 
   protected static int gen = 0;
-
-  static interface TreeWalker {
-
-    void enter(ChartNode node, boolean leaf);
-
-    void leave(ChartNode node, boolean leaf);
-  }
-
-  // A chart node structure, a replacement for the rule walker
-  public static class ChartNode {
-
-    int start, end, dot, id;
-    RuleComponent rule;
-    // multiple parents needed, in case added multiple times
-    List<ChartNode> children;
-    List<ChartNode> equivs;
-    //ChartNode parent;
-
-    public RuleComponent getRule() {
-      return rule;
-    }
-
-    /** Constructor, for use with other constructors */
-    protected ChartNode(int s, int e, RuleComponent r, int d) {
-      id = ++gen;
-      start = s;
-      end = e;
-      rule = r;
-      dot = d;
-      children = new ArrayList<ChartNode>();
-    }
-
-    /** Constructor for predicts */
-    protected ChartNode(int s, RuleComponent r) {
-      // if it's an epsilon, it's passive (dot == -1)
-      this(s, s, r,
-          (r.equals(RuleSpecial.NULL) || (r instanceof RuleTag)
-              //|| (r instanceof RuleToken && ((RuleToken)r).isEpsilon())
-              ? -1 : 0));
-    }
-
-    /** Constructor combining active and passive item (only AbstractParser)
-     */
-    protected ChartNode(ChartNode active, ChartNode passive) {
-      this(active.start, passive.end, active.rule,
-          active.rule.nextSlot(active.dot));
-      children.addAll(active.children);
-      children.add(passive);
-    }
-
-    /** Constructor for "left corner predicts" that combine a RuleComponent with
-     *  dot at position zero and a passive ChartNode
-     *  Only used by LeftCornerParser
-     */
-    protected ChartNode(RuleComponent r, ChartNode passive) {
-      // The first item of r has already be filled, and span is the same as the
-      // tokNode
-      this(passive.getStart(), passive.getEnd(), r, r.nextSlot(0));
-      children.add(passive);
-    }
-
-    /** Constructor advancing the dot for RuleSequence when the next item is
-     *  a RuleTag (only LeftCornerParser)
-     */
-    protected ChartNode(int pos, RuleTag tag) {
-      this(pos, pos, tag, -1);
-    }
-
-    // TODO: would be nicer if we had a "graphical" dot, but for that, we would
-    // need functions to print the rule with a dot argument
-    @Override
-    public String toString() {
-      StringBuilder sb = new StringBuilder();
-      sb.append('(').append(Integer.toString(id)).append(':')
-          .append(Integer.toString(start)).append(',')
-          .append(Integer.toString(end)).append(',')
-          .append(Integer.toString(dot)).append(" <");
-      for (ChartNode c : children) {
-        sb.append(c == null ? "r" : Integer.toString(c.id)).append(' ');
-      }
-      sb.append("> ").append(rule).append(')');
-      return sb.toString();
-    }
-
-    public void printTree(String indent) {
-      System.out.println(indent + this);
-      for (ChartNode child : children) {
-        child.printTree(indent + "  ");
-      }
-    }
-
-    public void preorder(TreeWalker acceptor) {
-      acceptor.enter(this, children.isEmpty());
-      for (ChartNode child : children) {
-        child.preorder(acceptor);
-      }
-      acceptor.leave(this, children.isEmpty());
-    }
-
-    public boolean equals(ChartNode c) {
-      return (start == c.start && end == c.end && rule.equals(c.rule)
-          && dot == c.dot);
-    }
-
-    public boolean equalsChildren(ChartNode c) {
-      Iterator<ChartNode> it = c.children.iterator();
-      for (ChartNode child : children) {
-        if (child.id != it.next().id) return false;
-      }
-      return true;
-    }
-
-    public boolean isPassive() {
-      return dot < 0;
-    }
-
-    public List<ChartNode> getChildren() { return children; }
-
-    public int getId() { return id; }
-
-    public int getDot() { return dot; }
-
-    public int getStart() { return start; }
-
-    public int getEnd() { return end; }
-  }
 
   public static boolean useLeftCorner = true;
 
