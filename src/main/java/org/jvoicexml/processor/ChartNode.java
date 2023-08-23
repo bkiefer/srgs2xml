@@ -9,7 +9,7 @@ import org.jvoicexml.processor.grammar.RuleSpecial;
 import org.jvoicexml.processor.grammar.RuleTag;
 
 // A chart node structure, a replacement for the rule walker
-public class ChartNode implements TreeStrategy {
+public class ChartNode implements Traversable {
 
   int start, end, dot, id;
   RuleComponent rule;

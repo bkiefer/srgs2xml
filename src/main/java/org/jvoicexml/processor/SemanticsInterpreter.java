@@ -45,7 +45,7 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
     }
   }
 
-  public static JSONObject interpret(AbstractParser checker, ChartNode root) {
+  public static JSONObject interpret(AbstractParser checker, Traversable root) {
     SemanticsInterpreter walker = new SemanticsInterpreter(checker);
     String jscode = walker.createProgram(root);
     return execute(jscode);
@@ -73,7 +73,7 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
     this.source.append("\n");
   }
 
-  public String createProgram(TreeStrategy root) {
+  public String createProgram(Traversable root) {
     stack.clear();
     source = new StringBuilder();
     addline("rules = {};");
@@ -139,6 +139,7 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
     return in;
   }
 
+  @Override
   public void enter(ChartNode node, boolean leaf) {
     stack.push(node);
     if (node.getRule() instanceof RuleParse) {
@@ -155,6 +156,7 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
     }
   }
 
+  @Override
   public void leave(ChartNode node, boolean leaf) {
     ChartNode env = stack.pop(); // == node
     if (node.getRule() instanceof RuleParse) {
