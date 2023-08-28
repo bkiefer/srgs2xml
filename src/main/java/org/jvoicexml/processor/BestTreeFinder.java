@@ -18,8 +18,9 @@ public class BestTreeFinder {
    *
    */
   protected void evaluateChildren(Configuration c) {
-    c.weight = c.node.rule.weight() * (c.node.end - c.node.start);
-    for (ChartNode child : c.node.children) {
+    ChartNode node = c.getAlternative();
+    c.weight = node.rule.weight() * (node.end - node.start);
+    for (ChartNode child : node.children) {
       findBestConf(child);
       c.children.add(minConf.get(child));
       c.weight += minConf.get(child).weight;
@@ -68,7 +69,7 @@ public class BestTreeFinder {
     List<Configuration> l = new ArrayList<>();
     l.add(c);
     List<Configuration> temp = new ArrayList<>();
-    for (ChartNode child : c.node.children) {
+    for (ChartNode child : c.getAlternative().children) {
       for (Configuration parent : l) {
         for (Configuration childConf : walkAllConfigs(child)) {
           temp.add(parent.newWithChild(childConf));

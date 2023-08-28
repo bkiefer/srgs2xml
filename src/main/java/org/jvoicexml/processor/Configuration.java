@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Configuration implements Comparable<Configuration>, Traversable {
   double weight;
-  ChartNode node;
-  int variant;
+  private ChartNode node;
+  private int variant;
   List<Configuration> children;
 
   public Configuration(ChartNode n) {
@@ -33,7 +33,7 @@ public class Configuration implements Comparable<Configuration>, Traversable {
 
   @Override
   public int compareTo(Configuration arg0) {
-    return (int)(arg0.weight - weight);
+    return (int)(weight - arg0.weight);
   }
 
   public boolean isDefault() {

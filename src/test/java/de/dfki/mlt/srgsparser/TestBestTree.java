@@ -5,6 +5,7 @@ import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -36,7 +37,7 @@ public class TestBestTree {
       final ChartNode validRule = checker.parse(ruleGrammar, tokens);
       assertNotNull(validRule);
 
-      List<ChartNode> all = checker.returnAllResults().toList();
+      List<ChartNode> all = checker.returnAllResults().collect(Collectors.toList());
       assertFalse(s, all.isEmpty());
 
       Configuration best = BestTreeFinder.findBestTree(all);
