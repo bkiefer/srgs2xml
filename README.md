@@ -1,5 +1,7 @@
 # SRGS/XML parser with javascript semantic actions
 
+[![mvn build](https://github.com/bkiefer/srgs2xml/actions/workflows/maven.yml/badge.svg)](https://github.com/bkiefer/srgs2xml/actions/workflows/maven.yml)
+
 This project contains a parser for grammars in SRGS XML and ABNF format [https://www.w3.org/TR/speech-grammar/], with javascript semantic actions. It attempts to replicate the functionality of, e.g., grammars used in the Microsoft Speech API or the Nuance Recognizer.
 
 The module builds on a modified version of jvoicexml, whose SRGS parser does not work, at least not at the point when this was implemented.
