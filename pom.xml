@@ -11,7 +11,7 @@
     <properties>
       <maven.compiler.source>11</maven.compiler.source>
       <maven.compiler.target>11</maven.compiler.target>
-      <encoding>UTF-8</encoding>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <slf4j.version>2.0.5</slf4j.version>
       <logback.version>1.4.5</logback.version>
     </properties>
@@ -46,6 +46,8 @@
             <descriptorRefs>
               <descriptorRef>jar-with-dependencies</descriptorRef>
             </descriptorRefs>
+            <!-- exclude from deployment -->
+            <attach>false</attach>
           </configuration>
         </plugin>
       </plugins>
