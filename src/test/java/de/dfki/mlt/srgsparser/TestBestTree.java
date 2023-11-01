@@ -52,4 +52,23 @@ public class TestBestTree {
     }
   }
 
+  @Test
+  public void testSelect() throws GrammarException, IOException {
+    final GrammarManager manager = new JVoiceXmlGrammarManager();
+    final Grammar ruleGrammar = manager.loadGrammar(testURI("schrott.gram"));
+    String s = "Januar der dreizehnte";
+    String[] tokens = s.split(" +");
+    final AbstractParser checker = AbstractParser.getParser(manager);
+    final ChartNode validRule = checker.parse(ruleGrammar, tokens);
+    assertNotNull(validRule);
+
+    List<ChartNode> all = checker.returnAllResults().collect(Collectors.toList());
+    assertFalse(s, all.isEmpty());
+    Configuration best = BestTreeFinder.findBestTree(all);
+    assertEquals("0", 0, best.getWeight(), 0.0001);
+    JSONObject o = SemanticsInterpreter.interpret(checker, best);
+    assertTrue(o.has("what"));
+    assertTrue(o.has("day"));
+  }
+
 }

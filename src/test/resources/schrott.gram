@@ -4,7 +4,22 @@ language en-EN;
 root $root;
 mode voice;
 tag-format "semantics/1.0";
- 
-public $root = 
+
+public $root =
     ($GARBAGE<0-4>){ out.garb="$$1";} (das ist sinnvoll) { out.res = "var1"; }
-    | [$GARBAGE<0-2>{ out.garb="one";}] das [$GARBAGE{ out.garb="two";}] (ist sinnvoll) { out.res = "var2"; };
+    | [$GARBAGE<0-2>{ out.garb="one";}] das [$GARBAGE{ out.garb="two";}] (ist sinnvoll) { out.res = "var2"; }
+    | $month_response { out = $%1; };
+
+$junk = $GARBAGE<0-2>;
+
+$day_of_month = zehnte|elfte|zwölfte|dreizehnte;
+$month = Januar|Februar;
+
+$ithink = ([ich] (denke|glaube|meine)) | (denke|glaube|meine) ich;
+
+$month_opt_day = [[der] $day_of_month {out.day="$$1";}] $month {out.what = "$$1";}|
+            $month {out.what = "$$1";} [der] $day_of_month {out.day="$$1";};
+
+$month_response = $junk ([$ithink] $month_opt_day { out = $%1 }
+                | $month_opt_day { out = $%1 } $ithink
+                ) { out.da = "Inform"; out.prop = "Month"; } $junk;

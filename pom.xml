@@ -5,7 +5,7 @@
 
     <groupId>de.dfki.mlt</groupId>
     <artifactId>srgs-parser</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -105,7 +105,7 @@
       <dependency>
         <groupId>org.json</groupId>
         <artifactId>json</artifactId>
-        <version>20230227</version>
+        <version>20231013</version>
       </dependency>
 
       <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
