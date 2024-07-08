@@ -37,11 +37,11 @@ import org.jvoicexml.processor.grammar.RuleReference;
 import org.jvoicexml.processor.grammar.RuleSequence;
 import org.jvoicexml.processor.grammar.RuleSpecial;
 import org.jvoicexml.processor.grammar.RuleTag;
-import org.jvoicexml.processor.grammar.RuleToken;
 import org.jvoicexml.processor.srgs.GrammarException;
 
 /**
  * This class provides a means to perform evaluations on a parsed grammar.
+ * It is an implementation of an Earley style parser.
  *
  * @author Bernd Kiefer
  * @version $Revision$
@@ -69,21 +69,25 @@ public class ChartGrammarChecker extends AbstractParser {
    * @return <code>true</code> if the tokens are valid.
    * @throws GrammarException
    */
+  @Override
   public ChartNode parse(final Grammar gram, final String[] in)
       throws GrammarException {
     RuleComponent component = initParse(gram, in);
-    final ChartNode init = new ChartNode(0, component);
-    add(init);
+    addPrediction(0, component);
+
+    addPreterminals();
 
     while (agendaNotEmpty()) {
       ChartNode curr = agendaPop();
       List<ChartNode> expanded = new ArrayList<ChartNode>();
       if (curr.isPassive()) {
-        // complete passive to the left
-        for (ChartNode act : chartIn[curr.start]) {
-          // all active items that look for this passive item are to be completed
-          if (canExpand(act, curr)) {
-            expanded.add(new ChartNode(act, curr));
+        if (chartIn[curr.start] != null) {
+          // complete passive to the left
+          for (ChartNode act : chartIn[curr.start]) {
+            // all active items that look for this passive item are to be completed
+            if (canExpand(act, curr)) {
+              expanded.add(new ChartNode(act, curr));
+            }
           }
         }
       } else {
@@ -125,9 +129,6 @@ public class ChartGrammarChecker extends AbstractParser {
     } else if (component instanceof RuleParse) {
       final RuleParse parse = (RuleParse) component;
       predict(grammar, parse, current);
-    } else if (component instanceof RuleToken) {
-      final RuleToken token = (RuleToken) component;
-      scan(token, current.start);
     } else if (component instanceof RuleTag) {
       final RuleTag tag = (RuleTag) component;
       scan(tag, current);
@@ -137,17 +138,13 @@ public class ChartGrammarChecker extends AbstractParser {
     }
   }
 
-  private boolean addToChart(ChartNode c) {
+  @Override
+  protected boolean addToChart(ChartNode c) {
     return c.isPassive()
         ? checkEquiv(getEdges(chartOut, c.start), c)
         : checkEquiv(getEdges(chartIn, c.end), c);
   }
 
-  protected void add(ChartNode c) {
-    if (addToChart(c)) {
-      addToAgenda(c);
-    }
-  }
 
   private void predict(final Grammar grammar, final RuleParse reference,
       final ChartNode current) throws GrammarException {

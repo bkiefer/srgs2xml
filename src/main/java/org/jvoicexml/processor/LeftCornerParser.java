@@ -29,18 +29,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jvoicexml.processor.grammar.Grammar;
-import org.jvoicexml.processor.grammar.JVoiceXmlGrammar;
 import org.jvoicexml.processor.grammar.RuleComponent;
 import org.jvoicexml.processor.grammar.RuleCount;
 import org.jvoicexml.processor.grammar.RuleSpecial;
 import org.jvoicexml.processor.grammar.RuleTag;
-import org.jvoicexml.processor.grammar.RuleToken;
 import org.jvoicexml.processor.srgs.GrammarException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * This class provides a means to perform evaluations on a parsed grammar.
+ * It is an implementation of an Left Corner style parser.
  *
  * @author Bernd Kiefer
  * @version $Revision$
@@ -129,20 +128,16 @@ public class LeftCornerParser extends AbstractParser {
     return (b != null) ? b : c.isPassive();
   }
 
-  public boolean isActive(ChartNode c) {
+  private boolean isActive(ChartNode c) {
     Boolean b = c.rule.isActive(c.dot);
     return (b != null) ? b : ! c.isPassive();
   }
 
   @Override
-  protected void add(ChartNode c) {
-    // this differs from  the Earley style parser since RuleCount items can act
-    // as passive and active items at the same time
+  protected boolean addToChart(ChartNode c) {
     boolean toAddP = isPassive(c) && checkEquiv(getEdges(chartOut, c.start), c);
     boolean toAddA = isActive(c) && checkEquiv(getEdges(chartIn, c.end), c);
-    if (toAddP || toAddA) {
-      addToAgenda(c);
-    }
+    return (toAddP || toAddA);
   }
 
   /**
@@ -159,12 +154,7 @@ public class LeftCornerParser extends AbstractParser {
     RuleComponent component = initParse(gram, in);
     addPrediction(0, component);
 
-    // Add all token nodes for that are applicable to the input tokens
-    for (int start = 0; start < input.length; ++ start) {
-      for (RuleToken tok : ((JVoiceXmlGrammar)grammar).getTerminals()) {
-        scan(tok, start);
-      }
-    }
+    addPreterminals();
 
     while (agendaNotEmpty()) {
       ChartNode curr = agendaPop();

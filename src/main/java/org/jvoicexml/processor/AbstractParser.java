@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.jvoicexml.processor.grammar.Grammar;
+import org.jvoicexml.processor.grammar.JVoiceXmlGrammar;
 import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.grammar.RuleComponent;
 import org.jvoicexml.processor.grammar.RuleParse;
@@ -149,8 +150,21 @@ public abstract class AbstractParser {
     return rule.getRuleComponent();
   }
 
+  /** Check (possibly parser specific) conditions for adding a chart node to
+   *  the agenda
+   *
+   * @param c the chart node in question
+   * @return true if the chart node should be added to the agenda, false
+   * otherwise
+   */
+  protected abstract boolean addToChart(ChartNode c);
+
   /** Add a chart node, checking specific preconditions beforehand */
-  protected abstract void add(ChartNode c);
+  protected void add(ChartNode c) {
+    if (addToChart(c)) {
+      addToAgenda(c);
+    }
+  };
 
   /**
    * Checks if the given tokens can be represented using the given graph.
@@ -237,11 +251,11 @@ public abstract class AbstractParser {
   }
 
   /**
-   * This is rather a scan than predict. It directly creates a passive item,
-   * if possible.
+   * This checks if a rule token should be added to the chart.
+   * It immediately creates a passive item, if possible.
    *
-   * @param token
-   * @param current
+   * @param token a RuleToken, which is in fact a preterminal
+   * @param start the start position of the final token
    */
   protected final void scan(final RuleToken token, int start) {
     int pos = start;
@@ -270,8 +284,23 @@ public abstract class AbstractParser {
       ++pos;
     }
 
-    // now, for the first time, we add a complete token
+    // now we add a complete token
     add(new ChartNode(start, pos, token, -1));
+  }
+
+
+  /** Apply all rules that work on input tokens
+   *
+   *  TODO: Possible target for adding "lexicon" functionality
+   */
+  protected void addPreterminals() {
+    // Add all token nodes for that are applicable to the input tokens
+    for (int start = 0; start < input.length; ++ start) {
+      // Add all token nodes for that are applicable to the input tokens
+      for (RuleToken tok : ((JVoiceXmlGrammar)grammar).getTerminals()) {
+          scan(tok, start);
+      }
+    }
   }
 
   /********************** For displaying the chart **********************/
