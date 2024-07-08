@@ -250,42 +250,30 @@ public abstract class AbstractParser {
     add(new ChartNode(pos, resolve(r)));
   }
 
+
   /**
-   * This checks if a rule token should be added to the chart.
+   * This adds all rule tokens that are compatible with the input at some input
+   * position.
    * It immediately creates a passive item, if possible.
    *
-   * @param token a RuleToken, which is in fact a preterminal
-   * @param start the start position of the final token
+   * @param start the start position of the input token
    */
-  protected final void scan(final RuleToken token, int start) {
-    int pos = start;
-    Pattern p = token.getPattern();
-    if (p == null) {
-      final String text = token.getText();
-      final String[] tokens = text.split(" ");
-      for (String tok : tokens) {
-        if (pos >= input.length) {
-          return;
-        }
-        final String currentInput = input[pos];
-        if (!tok.equalsIgnoreCase(currentInput)) {
-          return;
-        }
-        ++pos;
-      }
-    } else {
-      if (pos >= input.length) {
-        return;
-      }
-      final String currentInput = input[pos];
-      if (! p.matcher(currentInput).matches()) {
-        return;
-      }
-      ++pos;
+  private final void addPreterminals(int start) {
+    JVoiceXmlGrammar g = ((JVoiceXmlGrammar)grammar);
+    if (start >= input.length) {
+      return;
     }
+    g.getPreterminals(input, start,
+        (RuleComponent r, Integer end) -> add(new ChartNode(start, end, r, -1)));
 
-    // now we add a complete token
-    add(new ChartNode(start, pos, token, -1));
+    for (RuleToken token : g.getPatternTerminals()) {
+      Pattern p = token.getPattern();
+      final String currentInput = input[start];
+      if (p.matcher(currentInput).matches()) {
+        // now we add a complete token
+        add(new ChartNode(start, start + 1, token, -1));
+      }
+    }
   }
 
 
@@ -296,10 +284,7 @@ public abstract class AbstractParser {
   protected void addPreterminals() {
     // Add all token nodes for that are applicable to the input tokens
     for (int start = 0; start < input.length; ++ start) {
-      // Add all token nodes for that are applicable to the input tokens
-      for (RuleToken tok : ((JVoiceXmlGrammar)grammar).getTerminals()) {
-          scan(tok, start);
-      }
+      addPreterminals(start);
     }
   }
 

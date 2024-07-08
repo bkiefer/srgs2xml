@@ -37,6 +37,7 @@ import org.jvoicexml.processor.GrammarManager;
 
 public class RuleToken extends RuleComponent {
   private String text;
+  private String[] tokens;
   private Pattern p;
 
   public RuleToken(String text) {
@@ -45,28 +46,34 @@ public class RuleToken extends RuleComponent {
 
   public RuleToken(String text, String language)
       throws IllegalArgumentException {
-    this.text = text;
     if ((text == null) || (text.length() == 0)) {
       throw new IllegalArgumentException(
           "'" + text + "'" + " is not a valid grammar text");
     }
     // BK: extension to match arbitrary regex as token
     if (text.charAt(0) == '"' && text.charAt(text.length() - 1) == '"') {
-      this.text = text = text.substring(1, text.length() - 1);
+      text = text.substring(1, text.length() - 1);
     } else {
       if (!text.startsWith("$$")) {
-        this.text = text.trim().replaceAll("  +", " ");
+        text = text.trim().replaceAll("  +", " ");
       }
     }
+    this.text = text;
     // BK: extension to match arbitrary regex as token
     if (text.startsWith("$$")) {
       this.p = Pattern.compile(text.substring(2));
+    } else {
+      this.tokens = text.split(" ");
     }
     this.lang = language;
   }
 
   public Pattern getPattern() {
     return p;
+  }
+
+  public String[] getTokens() {
+    return tokens;
   }
 
   public String getText() {
@@ -83,19 +90,21 @@ public class RuleToken extends RuleComponent {
     name = myName + "_" + toStringABNF();
   }
 
+  private void addText(StringBuffer str) {
+    if (tokens != null && tokens.length > 1) {
+      str.append('"').append(text).append('"');
+    } else {
+      str.append(text);//tokens[0]);
+    }
+  }
+
   @Override
   public String toStringXML() {
     StringBuffer str = new StringBuffer();
     str.append("<item");
     appendLangXML(str);
     str.append('>');
-    if (text.contains(" ") && text.charAt(0) != '"') {
-      str.append('"');
-      str.append(text);
-      str.append('"');
-    } else {
-      str.append(text);
-    }
+    addText(str);
     str.append("</item>");
     return str.toString();
   }
@@ -103,11 +112,7 @@ public class RuleToken extends RuleComponent {
   @Override
   public String toStringABNF() {
     StringBuffer str = new StringBuffer();
-    if (text.charAt(0) == '"' || !text.contains(" ")) {
-      str.append(text);
-    } else {
-      str.append('"').append(text).append('"');
-    }
+    addText(str);
     appendLangABNF(str);
     return str.toString();
   }
@@ -149,6 +154,7 @@ public class RuleToken extends RuleComponent {
   }
 
   /** Maybe we should reject this as token text and enforce GARBAGE instead */
+  @Override
   public double weight() {
     return (getText().equals("$$.*")) ? 1.0 : super.weight();
   }

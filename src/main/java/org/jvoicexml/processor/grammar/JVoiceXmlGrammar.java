@@ -2,15 +2,60 @@ package org.jvoicexml.processor.grammar;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.srgs.GrammarException;
 
 public class JVoiceXmlGrammar implements Grammar {
+  private class TokenMap {
+
+    Map<String, List<RuleToken>> impl;
+    List<RuleToken> patterns;
+
+    public TokenMap() {
+      impl = new HashMap<>();
+      patterns  = new ArrayList<>();
+    }
+
+    public void add(RuleToken t) {
+      if (t.getPattern() != null) {
+        patterns.add(t);
+      } else {
+        String leftMost = t.getTokens()[0];
+        if (! isCaseSensitive) {
+          leftMost = leftMost.toLowerCase();
+        }
+        List<RuleToken> tokens = impl.get(leftMost);
+        if (tokens == null) {
+          tokens = new ArrayList<>();
+          impl.put(leftMost, tokens);
+        }
+        tokens.add(t);
+      }
+    }
+
+    public List<RuleToken> get(String leftMost) {
+      if (! isCaseSensitive) {
+        leftMost = leftMost.toLowerCase();
+      }
+      List<RuleToken> result = impl.get(leftMost);
+      return result == null ? Collections.emptyList() : result;
+    }
+
+    public List<RuleToken> get() {
+      return patterns;
+    }
+  }
+
+
   private final GrammarManager manager;
   private final URI reference;
   private URI base;
@@ -22,6 +67,10 @@ public class JVoiceXmlGrammar implements Grammar {
 
   private Map<String, Object> attributes;
 
+  private boolean isCaseSensitive = false;
+
+  private TokenMap tokenMap = new TokenMap();
+
   /**
    * Create a list of unique tokens (terminals) and non-terminals, as well as
    * left-corner information. In all rules, terminals and non-terminals may be
@@ -32,6 +81,7 @@ public class JVoiceXmlGrammar implements Grammar {
   public void postProcess() {
     for (RuleToken t : getTerminals()) {
       t.computeLeftCorner(manager);
+      tokenMap.add(t);
     }
     for (RuleComponent c : getNonterminals()) {
       c.computeLeftCorner(manager);
@@ -177,6 +227,43 @@ public class JVoiceXmlGrammar implements Grammar {
   @Override
   public String getRoot() {
     return root;
+  }
+
+  public void setCaseSensitive(boolean val) {
+    isCaseSensitive = val;
+  }
+
+  public boolean isCaseSensitive() {
+    return isCaseSensitive;
+  }
+
+  private int matchTokenSequence(String[] input, int start, String[] tokens) {
+    if (start + tokens.length > input.length) return -1;
+    int pos = start + 1;
+    for (int i = 1; i < tokens.length; ++i, ++pos) {
+      if (isCaseSensitive) {
+        if (!tokens[i].equals(input[pos])) return -1;
+      } else {
+        if (!tokens[i].equalsIgnoreCase(input[pos])) return -1;
+      }
+    }
+    return pos;
+  }
+
+  public void getPreterminals(String[] input, int start,
+      BiConsumer<RuleComponent, Integer> consumer) {
+    String leftMostToken = input[start];
+    for (RuleToken token : tokenMap.get(leftMostToken)) {
+      int pos = matchTokenSequence(input, start, token.getTokens());
+      if (pos >= 0) {
+        consumer.accept(token, pos);
+      }
+    }
+  }
+
+
+  public Collection<RuleToken> getPatternTerminals() {
+    return tokenMap.get();
   }
 
   public Set<RuleToken> getTerminals() {
