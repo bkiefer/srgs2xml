@@ -79,9 +79,12 @@ public class AbnfRuleGrammarParser extends RuleGrammarParser {
   }
 
   public List<Rule> load(final InputStream is) {
-    try (BOMInputStream stream = new BOMInputStream(is, ByteOrderMark.UTF_8,
-        ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE,
-        ByteOrderMark.UTF_32LE)) {
+    try (BOMInputStream stream = BOMInputStream.builder()
+        .setInputStream(is)
+        .setByteOrderMarks(ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE,
+            ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE,
+            ByteOrderMark.UTF_32LE)
+        .get()) {
       ByteOrderMark bom = stream.getBOM();
       int c;
       StringBuffer sb = new StringBuffer();

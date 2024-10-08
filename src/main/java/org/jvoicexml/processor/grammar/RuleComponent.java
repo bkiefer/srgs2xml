@@ -214,6 +214,6 @@ public abstract class RuleComponent {
   }
 
   public double weight() {
-    return 0.0;
+    return 0.00000000001;
   }
 }
