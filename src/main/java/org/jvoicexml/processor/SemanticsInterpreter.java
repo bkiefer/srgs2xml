@@ -165,6 +165,9 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
       addline("return out;");
       close();
       addline("rules." + ruleName + "= rule_" + node.getId() + "();");
+      // this works in older versions of rhino
+      // addline("rules.latest = rule_"+node.getId());
+      addline("rules.latest = () => rules."+ruleName+";");
     }
   }
 }
