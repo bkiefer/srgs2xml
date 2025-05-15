@@ -115,7 +115,8 @@ public class LeftCornerParser extends AbstractParser {
       // optional item i.e., where repeatMin == 0, RuleTag and NULL
       if ((r instanceof RuleCount && ((RuleCount)r).getRepeatMin() == 0)
           || (r instanceof RuleTag)
-          || (r == RuleSpecial.NULL)) {
+          || (r == RuleSpecial.NULL)
+          || (r == RuleSpecial.GARBAGE)) {
         //log.debug("EMPTY {} {}", act, r);
         ChartNode newNode = new ChartNode(act.end, r);
         expd.add(newNode);

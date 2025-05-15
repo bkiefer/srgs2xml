@@ -28,7 +28,7 @@ public class TestBestTree {
 
     String[] inputs = { "das ist sinnvoll", "schrott das ist sinnvoll",
         "das schrott ist sinnvoll", "schrott das das ist sinnvoll" };
-    String[] garbs = { "NONE", "schrott", "two", "schrott das" };
+    String[] garbs = { "", "schrott", "two", "schrott das" };
     int[] weights = { 0, 1, 1, 2 };
     int i = 0;
     for (String s : inputs) {

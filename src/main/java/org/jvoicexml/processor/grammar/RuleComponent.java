@@ -200,6 +200,14 @@ public abstract class RuleComponent {
     return null;
   }
 
+  /** Make sure that after grammar loading exactly one instance of every
+   * terminal and nonterminal remains in the grammar to avoid artificial
+   * spurious ambiguities during parsing.
+   *
+   * @param terminals
+   * @param nonterminals
+   * @return
+   */
   abstract RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
       Map<RuleComponent, RuleComponent> nonterminals);
 

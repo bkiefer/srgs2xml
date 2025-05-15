@@ -6,11 +6,11 @@ mode voice;
 tag-format "semantics/1.0";
 
 public $root =
-    ($GARBAGE<0-4>){ out.garb="$$1";} (das ist sinnvoll) { out.res = "var1"; }
-    | [$GARBAGE<0-2>{ out.garb="one";}] das [$GARBAGE{ out.garb="two";}] (ist sinnvoll) { out.res = "var2"; }
+    $GARBAGE{ out.garb="$$1";} (das ist sinnvoll) { out.res = "var1"; }
+    | [$GARBAGE{ out.garb="one";}] das [$GARBAGE{ out.garb="two";}] (ist sinnvoll) { out.res = "var2"; }
     | $month_response { out = $%1; };
 
-$junk = $GARBAGE<0-2>;
+$junk = $GARBAGE;
 
 $day_of_month = zehnte|elfte|zwölfte|dreizehnte;
 $month = Januar|Februar;

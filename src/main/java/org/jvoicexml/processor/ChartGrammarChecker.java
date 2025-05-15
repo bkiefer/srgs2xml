@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.processor;
 
+import static org.jvoicexml.processor.grammar.RuleSpecial.GARBAGE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,6 @@ import org.jvoicexml.processor.grammar.RuleCount;
 import org.jvoicexml.processor.grammar.RuleParse;
 import org.jvoicexml.processor.grammar.RuleReference;
 import org.jvoicexml.processor.grammar.RuleSequence;
-import org.jvoicexml.processor.grammar.RuleSpecial;
 import org.jvoicexml.processor.grammar.RuleTag;
 import org.jvoicexml.processor.srgs.GrammarException;
 
@@ -132,9 +133,8 @@ public class ChartGrammarChecker extends AbstractParser {
     } else if (component instanceof RuleTag) {
       final RuleTag tag = (RuleTag) component;
       scan(tag, current);
-    } else if (component instanceof RuleSpecial) {
-      final RuleSpecial special = (RuleSpecial) component;
-      scan(special, current);
+    } else if (component == GARBAGE) {
+      predictGarbage(current);
     }
   }
 
@@ -205,25 +205,13 @@ public class ChartGrammarChecker extends AbstractParser {
     addPrediction(current.end, ref);
   }
 
-  /**
-   * This is rather a scan than predict. $GARBAGE is equal to .*
-   *
-   * @param grammar
-   * @param token
-   * @param current
-   * @throws GrammarException
-   */
-  private void scan(final RuleSpecial token, final ChartNode current)
-      throws GrammarException {
-    if (token != RuleSpecial.GARBAGE) {
-      return;
-    }
-    int pos = current.start + 1;
-    addPrediction(current.start, RuleSpecial.NULL);
-    if (pos < chartSize()) {
-      add(new ChartNode(current.start, pos, token, -1));
-      addPrediction(pos, token);
-    }
+  private void predictGarbage(final ChartNode current) throws GrammarException {
+    final RuleComponent component = GARBAGE.getRuleComponent();
+    addPrediction(current.end, component);
+    // add passive item: a special case
+    ChartNode c = new ChartNode(current.start, current.end, GARBAGE, -1);
+    c.children.addAll(current.children);
+    add(c);
   }
 
   /**

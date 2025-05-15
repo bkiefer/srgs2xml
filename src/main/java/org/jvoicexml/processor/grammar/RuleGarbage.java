@@ -26,7 +26,6 @@
 
 package org.jvoicexml.processor.grammar;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,54 +33,60 @@ import org.jvoicexml.processor.GrammarManager;
 
 //Comp. 2.0.6
 
-public class RuleSpecial extends RuleComponent {
-  public static final RuleGarbage GARBAGE = new RuleGarbage();
+/** A $GARBAGE token behaves like "$$.*"<0->
+ *
+ *  It's weight is by default bigger that all other items to suppress garbage
+ *  where possible.
+ */
+public class RuleGarbage extends RuleSpecial {
+  private static final RuleToken GARBTOK = new RuleToken("$$.*");
 
-  public static final RuleSpecial NULL = new RuleSpecial("NULL");
+  protected RuleGarbage() {
+    super("GARBAGE");
+    leftCorner.add(this);
+    leftCorner.add(GARBTOK);
+  }
 
-  public static final RuleSpecial VOID = new RuleSpecial("VOID");
-
-  protected String special;
-
-  protected RuleSpecial(String special) {
-    this.special = special;
-    leftCorner = new HashSet<>();
-    if (special != "GARBAGE") {
-      leftCorner.add(this);
-    }
+  public RuleComponent getRuleComponent() {
+    return GARBTOK;
   }
 
   @Override
-  public String toStringXML() {
-    return "<ruleref special=\"" + special + "\"/>";
+  public boolean looksFor(RuleComponent r, int dot) {
+    // dot is the number of repetitions already covered
+    return GARBTOK.equals(r);
   }
 
+  /** Behaves like a count(0, infinity) */
   @Override
-  public String toStringABNF() {
-    return "$" + special;
+  public Boolean isPassive(int dot) {
+    return true;
   }
 
+  /** Behaves like a count(0, infinity) */
   @Override
-  void assignName(String myName) {
-    name = myName + "_" + toStringABNF();
+  public Boolean isActive(int dot) {
+    return true;
   }
 
+  /**
+   * dot is the number of repetitions already covered
+   */
   @Override
-  public boolean equals(Object obj) {
-    Boolean b = eq(obj);
-    if (b != null)
-      return b;
-    return special.equals(((RuleSpecial) obj).special);
-  }
-
-  @Override
-  public int hashCode() {
-    return special.hashCode() + 23;
+  public int nextSlot(int dot) {
+    return ++dot;
   }
 
   @Override
   RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
       Map<RuleComponent, RuleComponent> nonterminals) {
+    if (nonterminals.containsKey(this))
+      return nonterminals.get(this);
+    if (! terminals.containsKey(GARBTOK)) {
+      terminals.put(GARBTOK, GARBTOK);
+    } else {
+      nonterminals.put(this, this);
+    }
     return this;
   }
 
@@ -89,5 +94,4 @@ public class RuleSpecial extends RuleComponent {
   protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr){
     return leftCorner;
   }
-
 }

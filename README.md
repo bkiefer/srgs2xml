@@ -36,7 +36,6 @@ The ABNF grammar reader assumes the encoding to be UTF-8 if no encoding is speci
 
 ## Features to be possibly added in a future version
 - the private attribute to prevent external rule access does not lead to rejection
-- the GARBAGE special rule does not work fully
 - weights and probabilities are currently not handled by the parser
 
 # Extensions in the Semantic Interpretation
