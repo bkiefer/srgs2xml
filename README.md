@@ -38,6 +38,10 @@ The ABNF grammar reader assumes the encoding to be UTF-8 if no encoding is speci
 - the private attribute to prevent external rule access does not lead to rejection
 - weights and probabilities are currently not handled by the parser
 
+# Extensions in String Matching: Regular Expressions
+
+If a token string starts with `$$`, the rest of the token is interpreted as Java regular expression, and input tokens will be matched against this token using Jva's regular expression matching implementation.
+
 # Extensions in the Semantic Interpretation
 
 First and foremost, it is important to note that there is *no semantic return value by default*! That means, if a rule contains no semantic tags, it will return an empty object.

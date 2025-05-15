@@ -77,7 +77,7 @@ public class OfficialTest {
       "wrong-tag-delimit-2.gram",
       "wrong-tag-delimit-2.gram",
 
-      // maybe at some point we will add support for languages, the URIs do not exist
+      // TODO: maybe at some point we will add support for languages, the URIs do not exist
       "lang-ruleref.gram",
 
       //////////////////////// XML Rejects ////////////////////////////////
@@ -97,7 +97,7 @@ public class OfficialTest {
       //"undefined-root.grxml", // not checked on load
       "uri-ref-undefined-root-referring.grxml",
 
-      // SHOULD WORK
+      // TODO: SHOULD POSSIBLY WORK
       "base-declaration.grxml", // xml:base is not treated properly, even if filesystem
       "base-metabase.grxml", // meta base is not treated properly, even if filesystem
       "metabase-declaration.grxml",  // meta base is not treated properly, even if filesystem
@@ -117,17 +117,13 @@ public class OfficialTest {
       "conformance-3.gram", // don't support parallel rule activation
       "conformance-4.gram", // don't support parallel rule activation
 
-      // currently leads to heap space overflow
+      // TODO: currently leads to heap space overflow
       "tag-repetition.gram",
-
-      // SHOULD WORK
-      "example-4-chinese-digits-utf8.gram", // no idea what's going on here
-      "conformance-6.gram", // don't know what's going on here
 
       // media mismatch not checked: output can not be compared
       "ruleref-mismatch-mediatype.gram",
 
-      // SHOULD REJECT, TOO PERMISSIVE
+      // TODO: SHOULD REJECT, TOO PERMISSIVE
       "language-missing.gram", // missing lang spec
       "no-language-no-mode.gram", // missing lang spec
       "ruleref-ext-private-root.gram", // private external root
