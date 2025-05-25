@@ -67,8 +67,8 @@ public class TestBestTree {
     Configuration best = BestTreeFinder.findBestTree(all);
     assertEquals("0", 0, best.getWeight(), 0.0001);
     JSONObject o = SemanticsInterpreter.interpret(checker, best);
-    assertTrue(o.has("what"));
-    assertTrue(o.has("day"));
+    assertEquals("Januar", o.getString("what"));
+    assertEquals("dreizehnte", o.getString("day"));
   }
 
 }

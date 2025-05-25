@@ -42,6 +42,8 @@ The ABNF grammar reader assumes the encoding to be UTF-8 if no encoding is speci
 
 If a token string starts with `$$`, the rest of the token is interpreted as Java regular expression, and input tokens will be matched against this token using Jva's regular expression matching implementation.
 
+The special `$GARBAGE` token is implemented as specified in the standard, in fact, it behaves like putting in a `"$$.*"<0->"`, but since the parsers in this implementation always do exhaustive parsing, it's use is somewhat discouraged, since a single `$GARBAGE` will match every token right to it. Therefore, a special token `$JUNK` has been added that will match exactly one nonempty token, like `"$$.*"`.
+
 # Extensions in the Semantic Interpretation
 
 First and foremost, it is important to note that there is *no semantic return value by default*! That means, if a rule contains no semantic tags, it will return an empty object.

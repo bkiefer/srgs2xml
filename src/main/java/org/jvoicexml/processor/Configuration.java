@@ -78,4 +78,23 @@ public class Configuration implements Comparable<Configuration>, Traversable {
     }
     acceptor.leave(current, children.isEmpty());
   }
+
+  private static int INDENT = 2;
+
+  private void printRec(StringBuffer sb, int level) {
+    for (int i = 0; i < INDENT*level; ++i) sb.append(' ');
+    sb.append(node.toString()).append(System.lineSeparator());
+    if (children != null) {
+      for (Configuration c: children) {
+        c.printRec(sb, level + 1);
+      }
+    }
+  }
+
+  @Override
+  public String toString() {
+    StringBuffer sb = new StringBuffer();
+    printRec(sb, 0);
+    return sb.toString();
+  }
 }

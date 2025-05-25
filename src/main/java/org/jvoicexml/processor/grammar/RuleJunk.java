@@ -26,31 +26,59 @@
 
 package org.jvoicexml.processor.grammar;
 
+import java.util.Map;
+
 //Comp. 2.0.6
 
-/** A $GARBAGE token behaves like "$$.*"<0->
+/** A $JUNK token behaves like "$$.*"
  *
  *  It's weight is by default bigger that all other items to suppress garbage
  *  where possible.
  */
-public class RuleGarbage extends RuleJunk {
+public class RuleJunk extends RuleSpecial {
 
-  protected RuleGarbage() {
-    super("GARBAGE");
+  protected RuleJunk() {
+    this("JUNK");
+  }
+
+  protected RuleJunk(String what) {
+    super(what);
+    leftCorner.add(GARBTOK);
+  }
+
+  public RuleComponent getRuleComponent() {
+    return GARBTOK;
+  }
+
+  @Override
+  public boolean looksFor(RuleComponent r, int dot) {
+    // dot is the number of repetitions already covered
+    return GARBTOK.equals(r);
+  }
+
+  /** Behaves like a count(0, infinity) */
+  @Override
+  public Boolean isPassive(int dot) {
+    return true;
   }
 
   /** Behaves like a count(0, infinity) */
   @Override
   public Boolean isActive(int dot) {
-    return true;
+    return false;
   }
 
-  /**
-   * dot is the number of repetitions already covered
-   */
   @Override
-  public int nextSlot(int dot) {
-    return ++dot;
+  RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
+      Map<RuleComponent, RuleComponent> nonterminals) {
+    if (nonterminals.containsKey(this))
+      return nonterminals.get(this);
+    if (! terminals.containsKey(GARBTOK)) {
+      terminals.put(GARBTOK, GARBTOK);
+    } else {
+      nonterminals.put(this, this);
+    }
+    return this;
   }
 
 }

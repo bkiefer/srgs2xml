@@ -71,6 +71,7 @@ public class SrgsRuleGrammarParser extends RuleGrammarParser {
     private static EntityResolver entityResolver = new EmptyEntityResolver();
 
     public static class EmptyEntityResolver implements EntityResolver {
+        @Override
         public InputSource resolveEntity(String publicId, String systemId)
                 throws SAXException, IOException {
             return new InputSource(new StringReader(""));
@@ -86,6 +87,7 @@ public class SrgsRuleGrammarParser extends RuleGrammarParser {
         return load(source);
     }
 
+    @Override
     public List<Rule> load(final InputStream stream) throws URISyntaxException, GrammarException {
         final InputSource source = new InputSource(stream);
         return load(source);
@@ -326,6 +328,8 @@ public class SrgsRuleGrammarParser extends RuleGrammarParser {
                 return RuleSpecial.VOID;
             } else if (specialStr.equalsIgnoreCase("GARBAGE")) {
                 return RuleSpecial.GARBAGE;
+            } else if (specialStr.equalsIgnoreCase("JUNK")) {
+              return RuleSpecial.JUNK;
             }
         } else {
             final String uriStr = getAttribute(attributes, "uri");

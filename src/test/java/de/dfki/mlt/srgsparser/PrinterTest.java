@@ -1,7 +1,8 @@
 package de.dfki.mlt.srgsparser;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -17,6 +18,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -28,6 +31,19 @@ import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
 @RunWith(Parameterized.class)
 public class PrinterTest {
+
+  static boolean shortenUrls;
+  @BeforeClass
+  public static void init() {
+    shortenUrls = RuleComponent.SHORTEN_URLS;
+    RuleComponent.SHORTEN_URLS = false;
+  }
+
+  @AfterClass
+  public static void afterClass() {
+    RuleComponent.SHORTEN_URLS = shortenUrls;
+  }
+
   public static final String ABNF_HEADER =
       "#ABNF 1.0 UTF-8;\n\n"
       + "language en-EN;\n"

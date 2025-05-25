@@ -201,11 +201,12 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 }
 
 <ruleref> {
-("NULL"|"VOID"|"GARBAGE") {
+("NULL"|"VOID"|"GARBAGE"|"JUNK") {
   switch (yytext()) {
     case "NULL": yylval = RuleSpecial.NULL; break;
     case "VOID": yylval = RuleSpecial.VOID; break;
     case "GARBAGE": yylval = RuleSpecial.GARBAGE; break;
+    case "JUNK": yylval = RuleSpecial.JUNK; break;
   }
   yybegin(YYINITIAL);
   return specialRuleReference;

@@ -35,6 +35,10 @@ import org.jvoicexml.processor.GrammarManager;
 //Comp. 2.0.6
 
 public class RuleSpecial extends RuleComponent {
+  protected static final RuleToken GARBTOK = new RuleToken("$$.*");
+
+  public static final RuleJunk JUNK = new RuleJunk();
+
   public static final RuleGarbage GARBAGE = new RuleGarbage();
 
   public static final RuleSpecial NULL = new RuleSpecial("NULL");
@@ -46,9 +50,7 @@ public class RuleSpecial extends RuleComponent {
   protected RuleSpecial(String special) {
     this.special = special;
     leftCorner = new HashSet<>();
-    if (special != "GARBAGE") {
-      leftCorner.add(this);
-    }
+    leftCorner.add(this);
   }
 
   @Override
