@@ -45,6 +45,8 @@ public class RuleReference extends RuleComponent {
 
   private String mediaType;
 
+  private Rule resolved;
+
   public RuleReference(String ruleName) throws IllegalArgumentException {
     checkValidGrammarText(ruleName);
 
@@ -86,6 +88,15 @@ public class RuleReference extends RuleComponent {
 
   public String getRuleName() {
     return ruleName;
+  }
+
+  public void setResolved(Rule r) {
+    resolved = r;
+  }
+
+  @Override
+  public RuleComponent getResolved() {
+    return resolved.getRuleComponent();
   }
 
   @Override
@@ -169,6 +180,7 @@ public class RuleReference extends RuleComponent {
       return (other.mediaType == null);
     }
     return mediaType.equals(other.mediaType);
+
   }
 
   @Override
@@ -185,25 +197,32 @@ public class RuleReference extends RuleComponent {
     if (nonterm == null) {
       nonterm = this;
       nonterminals.put(nonterm, nonterm);
+      getResolved().cleanup(terminals, nonterminals);
+      getResolved().ruleRoot = this;
     }
     return nonterm;
   }
 
-  /** The rule reference has to be resolved (which happened before) and the
-   *  grammar manager has to be asked for the rule
+  /** Add left corner predictions for the LHS (the resolved rule)
    * @param mgr
    * @throws GrammarException
    */
-    // for the left corner context
   @Override
-  public Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
     if (leftCorner != null) return leftCorner;
     leftCorner = new HashSet<>();
     leftCorner.add(this);
-    Rule r = mgr.resolve(this);
-    if (r != null) {
-      leftCorner.addAll(r.getRuleComponent().computeLeftCorner(mgr));
-    }
+    leftCorner.addAll(getResolved().computeLeftCorner(mgr));
     return leftCorner;
+  }
+
+  @Override
+  protected boolean equ(RuleComponent r) {
+    return getResolved().equals(r);
+  }
+
+  @Override
+  public boolean looksFor(RuleComponent r, int dot) {
+    return equ(r);
   }
 }

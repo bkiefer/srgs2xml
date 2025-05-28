@@ -78,7 +78,10 @@ public class JVoiceXmlGrammar implements Grammar {
    *
    * @param parsedRules
    */
-  public void postProcess() {
+  public void postProcess(List<Rule> parsedRules) {
+    for (Rule r : parsedRules) {
+      addRule(r.cleanup(terminals, nonterminals));
+    }
     for (RuleToken t : getTerminals()) {
       t.computeLeftCorner(manager);
       tokenMap.add(t);
@@ -86,6 +89,14 @@ public class JVoiceXmlGrammar implements Grammar {
     for (RuleComponent c : getNonterminals()) {
       c.computeLeftCorner(manager);
     }
+    /*
+    Rule rt = rules.get(getRoot());
+    if (rt != null) {
+      RuleReference rootRef = new RuleReference(base, getRoot());
+      rootRef.setResolved(rt);
+      rt.getRuleComponent().ruleRoot = rootRef;
+    }
+    */
   }
 
   @SuppressWarnings("unchecked")
@@ -128,9 +139,11 @@ public class JVoiceXmlGrammar implements Grammar {
     rules = new HashMap<>();
     terminals = new HashMap<>();
     nonterminals = new HashMap<>();
+
     for (Rule r : parsedRules) {
-      addRule(r.cleanup(terminals, nonterminals));
+      addRule(r);
     }
+
 
     attributes = attrs;
     if (attributes != null) {

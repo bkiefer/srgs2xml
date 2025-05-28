@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.pizzainputs;
 import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.testURI;
+import static org.jvoicexml.processor.SemanticsInterpreter.interpret;
 
 import java.io.IOException;
 import java.net.URI;
@@ -32,7 +33,7 @@ public class SrgsParserTest {
 
     for (String s : pizzainputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(s, validRule != null);
@@ -48,10 +49,10 @@ public class SrgsParserTest {
     {
       String s = pizzainputs[pizzainputs.length-1];
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
-      JSONObject o = JSInterpreterTest.interpret(checker, validRule);
+      JSONObject o = interpret(checker, validRule);
       JSONObject order = (JSONObject)o.get("order");
       assertNotNull(order);
       assertEquals("big", order.getString("size"));
@@ -71,7 +72,7 @@ public class SrgsParserTest {
 
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);
@@ -99,7 +100,7 @@ public class SrgsParserTest {
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
@@ -122,7 +123,7 @@ public class SrgsParserTest {
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
@@ -151,7 +152,7 @@ public class SrgsParserTest {
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
@@ -180,7 +181,7 @@ public class SrgsParserTest {
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertEquals(s, correct[i], (validRule != null));
@@ -195,12 +196,12 @@ public class SrgsParserTest {
     final Grammar ruleGrammar = manager.loadGrammar(testURI("epsstart.gram"));
 
     String[] tokens = { "pizza" };
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     final ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     assertNotNull(validRule);
     // make sure the interpreter does not crash when empty strings are matched
-    JSONObject object = JSInterpreterTest.interpret(checker, validRule);
+    JSONObject object = interpret(checker, validRule);
     assertEquals("pizza", object.get("val").toString());
   }
 
@@ -223,12 +224,12 @@ public class SrgsParserTest {
     final Grammar ruleGrammar = manager.loadGrammar(testURI("rootrule.gram"));
 
     String[] tokens = { "pizza" };
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     final ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     assertNotNull(validRule);
     // make sure the interpreter does not crash when empty strings are matched
-    JSONObject object = JSInterpreterTest.interpret(checker, validRule);
+    JSONObject object = interpret(checker, validRule);
     assertEquals("pizza", object.get("val").toString());
   }
 

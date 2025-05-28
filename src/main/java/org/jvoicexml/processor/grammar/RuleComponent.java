@@ -38,13 +38,15 @@ import org.jvoicexml.processor.GrammarManager;
 
 public abstract class RuleComponent {
   protected static boolean PRINT_COMPACT = true;
-  public static boolean SHORTEN_URLS = false;
+  public static boolean SHORTEN_URLS = true;
 
   protected String lang;
 
   protected String name;
 
   public boolean parenthesized = false;
+
+  public RuleReference ruleRoot = null;
 
   protected Set<RuleComponent> leftCorner;
 
@@ -188,6 +190,10 @@ public abstract class RuleComponent {
     return lang;
   }
 
+  protected boolean equ(RuleComponent r) {
+    return equals(r);
+  }
+
   protected Boolean eq(Object obj) {
     if (this == obj)
       return true;
@@ -195,6 +201,9 @@ public abstract class RuleComponent {
       return false;
     }
     if (getClass() != obj.getClass()) {
+      return false;
+    }
+    if (ruleRoot != ((RuleComponent)obj).ruleRoot) {
       return false;
     }
     return null;
@@ -212,6 +221,10 @@ public abstract class RuleComponent {
       Map<RuleComponent, RuleComponent> nonterminals);
 
   protected abstract Set<RuleComponent> computeLeftCorner(GrammarManager mgr);
+
+  public RuleComponent getResolved() {
+    return this;
+  }
 
   public Set<RuleComponent> getLeftCorner() {
     return leftCorner;

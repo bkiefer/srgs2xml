@@ -49,7 +49,7 @@ public class Main {
     ChartNode validRule = null;
     try {
       String[] tokens = s.split(" +");
-      checker = AbstractParser.getParser(manager);
+      checker = AbstractParser.getParser();
       validRule = checker.parse(ruleGrammar, tokens);
 
       // System.out.println(validRule);

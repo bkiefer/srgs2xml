@@ -117,7 +117,7 @@ public class RuleSequence extends RuleComponent {
   @Override
   public boolean looksFor(RuleComponent r, int i) {
     // check the i'th element of the sequence
-    return ruleComponents.get(i).equals(r);
+    return ruleComponents.get(i).equ(r);
   }
 
   @Override

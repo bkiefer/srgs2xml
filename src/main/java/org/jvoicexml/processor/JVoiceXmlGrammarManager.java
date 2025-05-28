@@ -82,7 +82,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
     loadExternalGrammars(rules, grammar);
     grammarStack.pop();
 
-    grammar.postProcess();
+    grammar.postProcess(rules);
     return grammar;
   }
 
@@ -129,19 +129,23 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
       final RuleCount count = (RuleCount) component;
       walkSubcomponents(count.getRuleComponent(), grammar);
     } else if (component instanceof RuleReference) {
-      final RuleReference ref = grammarStack.peek()
-          .resolve((RuleReference) component);
+      RuleReference unresolved = (RuleReference) component;
+      final RuleReference ref = grammarStack.peek().resolve(unresolved);
       // check if this is an unknown external reference
       if (!grammars.containsKey(ref.getGrammarReference())) {
         JVoiceXmlGrammar sub = (JVoiceXmlGrammar) loadGrammar(ref.getGrammarReference());
         grammar.addSymbols(sub);
       }
       // now it must be possible to resolve the reference!
-      if (resolve(ref) == null) {
+      Rule r = resolve(ref);
+      if (r == null) {
         throw new GrammarException("Unresolvable rule reference loading "
             + grammarStack.peek().getReference() + ": "
             + ref.getRepresentation());
+      } else {
+        unresolved.setResolved(r);
       }
+
     }
   }
 

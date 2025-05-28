@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.pizzainputs;
 import static org.jvoicexml.processor.srgs.abnf.AbnfParserTest.testURI;
-
+import static org.jvoicexml.processor.SemanticsInterpreter.interpret;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -15,17 +15,11 @@ import org.jvoicexml.processor.AbstractParser;
 import org.jvoicexml.processor.ChartNode;
 import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.JVoiceXmlGrammarManager;
-import org.jvoicexml.processor.SemanticsInterpreter;
+
 import org.jvoicexml.processor.grammar.Grammar;
 import org.jvoicexml.processor.srgs.GrammarException;
 
 public class JSInterpreterTest {
-
-  public static JSONObject interpret(AbstractParser checker,
-      ChartNode validRule) {
-    SemanticsInterpreter walker = new SemanticsInterpreter(checker);
-    return SemanticsInterpreter.execute( walker.createProgram(validRule));
-  }
 
   @Test
   public void pizzatest2() throws GrammarException, IOException, URISyntaxException {
@@ -34,7 +28,7 @@ public class JSInterpreterTest {
 
     String s = pizzainputs[pizzainputs.length-1];
     String[] tokens = s.split(" +");
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     final ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSONObject object = interpret(checker, validRule);
@@ -51,7 +45,7 @@ public class JSInterpreterTest {
 
     String s = pizzainputs[pizzainputs.length-1];
     String[] tokens = s.split(" +");
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     final ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSONObject object = interpret(checker, validRule);
@@ -67,7 +61,7 @@ public class JSInterpreterTest {
     final Grammar ruleGrammar = manager.loadGrammar(testURI("tags.gram"));
 
     String[] tokens = {"1", "is", "2" };
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     JSONObject o = interpret(checker, validRule);
@@ -85,7 +79,7 @@ public class JSInterpreterTest {
         { "is", "it", "f" },
         { "is", "it", "?" }
     };
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     for (String[] toks : tokens) {
       ChartNode validRule = checker.parse(ruleGrammar, toks);
       JSONObject o = interpret(checker, validRule);

@@ -35,7 +35,7 @@ public class Example {
         };
         for (String s : inputs) {
             String[] tokens = s.split(" +");
-            final AbstractParser checker = AbstractParser.getParser(manager);
+            final AbstractParser checker = AbstractParser.getParser();
             final ChartNode validRule = checker.parse(ruleGrammar, tokens);
 
             // System.out.println(validRule);

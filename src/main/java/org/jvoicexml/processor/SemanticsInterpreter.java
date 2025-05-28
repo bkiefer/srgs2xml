@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 import org.json.JSONObject;
 import org.jvoicexml.processor.grammar.RuleAlternative;
 import org.jvoicexml.processor.grammar.RuleAlternatives;
-import org.jvoicexml.processor.grammar.RuleParse;
+import org.jvoicexml.processor.grammar.RuleComponent;
+import org.jvoicexml.processor.grammar.RuleReference;
 import org.jvoicexml.processor.grammar.RuleTag;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
@@ -91,6 +92,18 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
     return source.toString();
   }
 
+  private RuleReference isRuleRef(ChartNode node) {
+    RuleComponent r = node.getRule();
+    RuleReference ref = null;
+    if (r instanceof RuleReference || r.ruleRoot != null) {
+      ref = node.getRule().ruleRoot;
+      if (ref == null) {
+        ref = (RuleReference) node.getRule();
+      }
+    }
+    return ref;
+  }
+
   /** This does the handling of $$n and $%n tags, which have special meanings
    *  $$n : the matched string n positions before this tag
    *  $%n : the value returned by the rule n positions before this tag
@@ -127,8 +140,10 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
             || targ.getRule() instanceof RuleAlternative) {
           targ = targ.getChildren().get(0);
         }
-        if (targ.getRule() instanceof RuleParse) {
+        if (isRuleRef(targ) != null) {
           m.appendReplacement(sb, "rule_" + targ.getId() + "()");
+        } else if (isRuleRef(target) != null) {
+          m.appendReplacement(sb, "rule_" + target.getId() + "()");
         }
       }
     }
@@ -142,10 +157,10 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
   @Override
   public void enter(ChartNode node, boolean leaf) {
     stack.push(node);
-    if (node.getRule() instanceof RuleParse) {
-      RuleParse parse = (RuleParse) node.getRule();
+    RuleReference ref;
+    if ((ref = isRuleRef(node)) != null) {
       // TODO: we need another name generating function for multiple grammars
-      String current = parse.getRuleReference().getRuleName();
+      String current = ref.getRuleName();
       addline("// " + current);
       open("function rule_" + node.getId() + "()");
       addline(" var out = {};");
@@ -159,9 +174,10 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
   @Override
   public void leave(ChartNode node, boolean leaf) {
     ChartNode env = stack.pop(); // == node
-    if (node.getRule() instanceof RuleParse) {
+    RuleReference ref;
+    if ((ref = isRuleRef(node)) != null) {
       // TODO: we need another name generating function for multiple grammars
-      String ruleName = ((RuleParse)env.getRule()).getRuleReference().getRuleName();
+      String ruleName = ref.getRuleName();
       addline("return out;");
       close();
       addline("rules." + ruleName + "= rule_" + node.getId() + "();");

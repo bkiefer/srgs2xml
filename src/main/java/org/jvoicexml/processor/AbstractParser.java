@@ -28,9 +28,7 @@ package org.jvoicexml.processor;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -38,8 +36,6 @@ import org.jvoicexml.processor.grammar.Grammar;
 import org.jvoicexml.processor.grammar.JVoiceXmlGrammar;
 import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.grammar.RuleComponent;
-import org.jvoicexml.processor.grammar.RuleParse;
-import org.jvoicexml.processor.grammar.RuleReference;
 import org.jvoicexml.processor.grammar.RuleToken;
 import org.jvoicexml.processor.srgs.GrammarException;
 import org.slf4j.Logger;
@@ -59,17 +55,9 @@ public abstract class AbstractParser {
 
   public static boolean useLeftCorner = true;
 
-  public static AbstractParser getParser(final GrammarManager grammarManager) {
-    return useLeftCorner ? new LeftCornerParser(grammarManager)
-        : new ChartGrammarChecker(grammarManager);
+  public static AbstractParser getParser() {
+    return useLeftCorner ? new LeftCornerParser() : new ChartGrammarChecker();
   }
-
-  private final GrammarManager manager;
-
-  /** Lazy expansion of RuleReference, to avoid tainting the RuleReference with
-   * grammar resolution code.
-   */
-  private final Map<RuleReference, RuleParse> resolved;
 
   /** An agenda */
   private final Deque<ChartNode> agenda;
@@ -87,16 +75,8 @@ public abstract class AbstractParser {
    *
    * @param grammarManager the grammar manager.
    */
-  protected AbstractParser(final GrammarManager grammarManager) {
-    manager = grammarManager;
-    resolved = new HashMap<RuleReference, RuleParse>();
+  protected AbstractParser() {
     agenda = new ArrayDeque<ChartNode>();
-  }
-
-  protected final RuleComponent getResolved(RuleComponent c) {
-    return (c instanceof RuleParse)
-      ? ((RuleParse) c).getRuleReference()
-      : c;
   }
 
   public Stream<ChartNode> returnAllResults() {
@@ -106,9 +86,6 @@ public abstract class AbstractParser {
     }
     final Rule rule = grammar.getRule(grammar.getRoot());
     RuleComponent compo = rule.getRuleComponent();
-    if (compo instanceof RuleReference) {
-      compo = resolved.get(compo);
-    }
     final RuleComponent component = compo;
     return fromZero
         .stream()
@@ -136,7 +113,6 @@ public abstract class AbstractParser {
   protected final RuleComponent initParse(Grammar gram, String[] in)
       throws GrammarException {
     agenda.clear();
-    resolved.clear();
     input = in;
     chartIn = new ArrayList[in.length + 1];
     chartOut = new ArrayList[in.length + 1];
@@ -223,31 +199,9 @@ public abstract class AbstractParser {
     return true;
   }
 
-  protected final RuleComponent resolve(RuleComponent r) throws GrammarException {
-    if (r instanceof RuleReference) {
-      // resolve r and replace it by the resolved proxy, a RuleParse
-      if (resolved.containsKey(r)) {
-        r = resolved.get(r);
-      } else {
-        final RuleReference reference = (RuleReference) r;
-        final Rule rule = manager.resolve(reference);
-        if (rule == null) {
-          // TODO: SHOULD NEVER HAPPEN, SHOULD BE CAUGHT WHEN GRAMMAR IS READ
-          throw new GrammarException("Invalid rule reference: "
-              + reference.getRepresentation());
-        }
-        final RuleComponent component = rule.getRuleComponent();
-        final RuleParse rp = new RuleParse(reference, component);
-        resolved.put(reference, rp);
-        r = rp;
-      }
-    }
-    return r;
-  }
 
-  protected final void addPrediction(int pos, RuleComponent r)
-      throws GrammarException {
-    add(new ChartNode(pos, resolve(r)));
+  protected final void addPrediction(int pos, RuleComponent r) {
+    add(new ChartNode(pos, r));
   }
 
 

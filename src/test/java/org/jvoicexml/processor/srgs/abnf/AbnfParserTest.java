@@ -105,7 +105,7 @@ public class AbnfParserTest {
 
     for (String s : pizzainputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);
@@ -159,7 +159,7 @@ public class AbnfParserTest {
     final GrammarManager manager = new JVoiceXmlGrammarManager();
     final Grammar ruleGrammar = manager.loadGrammar(testURI("regex.gram"));
 
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
@@ -238,7 +238,7 @@ public class AbnfParserTest {
     final Grammar ruleGrammar = manager.loadGrammar(testURI("tags.gram"));
 
     String[] tokens = {"1", "is", "2" };
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     ChartNode validRule =
         checker.parse(ruleGrammar, tokens);
     SemanticsInterpreter walker = new SemanticsInterpreter(checker);
@@ -257,7 +257,7 @@ public class AbnfParserTest {
     };
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule =
           checker.parse(ruleGrammar, tokens);
       assertTrue(validRule != null);

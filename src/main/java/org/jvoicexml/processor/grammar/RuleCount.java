@@ -189,12 +189,13 @@ public class RuleCount extends RuleComponent {
   @Override
   public boolean looksFor(RuleComponent r, int dot) {
     // dot is the number of repetitions already covered
-    return dot < repeatMax && ruleComponent.equals(r);
+    return dot < repeatMax && ruleComponent.equ(r);
   }
 
   /** For counts and alternatives, the dot has a special meaning. To account for
    *  that, we need these special tests for some subclasses
    */
+  @Override
   public Boolean isPassive(int dot) {
     return dot >= repeatMin && dot <= repeatMax;
   }
@@ -202,6 +203,7 @@ public class RuleCount extends RuleComponent {
   /** For counts and alternatives, the dot has a special meaning. To account for
    *  that, we need these special tests for some subclasses
    */
+  @Override
   public Boolean isActive(int dot) {
     return dot < repeatMax;
   }
@@ -253,6 +255,7 @@ public class RuleCount extends RuleComponent {
     return leftCorner;
   }
 
+  @Override
   public Set<RuleComponent> getLeftCorner(int i) {
     return ruleComponent.leftCorner;
   }

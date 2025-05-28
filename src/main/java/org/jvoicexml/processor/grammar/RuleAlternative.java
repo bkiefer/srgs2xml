@@ -51,7 +51,7 @@ public class RuleAlternative extends RuleComponent {
     // r must be equal to the ith alternative. Because we're using the
     // RuleComponents as immutable objects from the grammar, it's sufficient
     // to test for token identity
-    return component.equals(r);
+    return component.equ(r);
   }
 
   @Override

@@ -60,10 +60,6 @@ public class RuleAlternatives extends RuleComponent {
         new RuleAlternative(this, c, weight, ruleComponents.size()));
   }
 
-  public List<RuleAlternative> getAlternatives() {
-    return ruleComponents;
-  }
-
   public RuleComponent getAlternative(int i) {
     return ruleComponents.get(i).component;
   }
@@ -143,7 +139,7 @@ public class RuleAlternatives extends RuleComponent {
     // r must be equal to the ith alternative. Because we're using the
     // RuleComponents as immutable objects from the grammar, it's sufficient
     // to test for token identity
-    return ruleComponents.get(i).component.equals(r);
+    return ruleComponents.get(i).component.equ(r);
   }
 
   @Override
@@ -157,7 +153,7 @@ public class RuleAlternatives extends RuleComponent {
     // RuleComponents as immutable objects from the grammar, it's sufficient
     // to test for token identity
     return alt.nr < ruleComponents.size() &&
-        ruleComponents.get(alt.nr).equals(alt);
+        ruleComponents.get(alt.nr).equ(alt);
   }
 
   @Override

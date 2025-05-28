@@ -34,10 +34,8 @@ import org.jvoicexml.processor.grammar.Grammar;
 import org.jvoicexml.processor.grammar.RuleAlternatives;
 import org.jvoicexml.processor.grammar.RuleComponent;
 import org.jvoicexml.processor.grammar.RuleCount;
-import org.jvoicexml.processor.grammar.RuleParse;
 import org.jvoicexml.processor.grammar.RuleReference;
 import org.jvoicexml.processor.grammar.RuleSequence;
-import org.jvoicexml.processor.grammar.RuleTag;
 import org.jvoicexml.processor.srgs.GrammarException;
 
 /**
@@ -50,16 +48,8 @@ import org.jvoicexml.processor.srgs.GrammarException;
  */
 public class ChartGrammarChecker extends AbstractParser {
 
-  /** Constructs a new GrammarChecker.
-   *
-   * @param grammarManager the grammar manager.
-   */
-  protected ChartGrammarChecker(final GrammarManager grammarManager) {
-    super(grammarManager);
-  }
-
   private boolean canExpand(ChartNode active, ChartNode passive) {
-    return active.rule.looksFor(getResolved(passive.rule), active.dot);
+    return active.rule.looksFor(passive.rule, active.dot);
   }
 
   /**
@@ -93,7 +83,7 @@ public class ChartGrammarChecker extends AbstractParser {
         }
       } else {
         // active item: add predictions
-        predict(grammar, curr);
+        predict(curr);
         // Complete active item to the right
         if (null != chartOut[curr.end]) {
           for (ChartNode pass : chartOut[curr.end]) {
@@ -111,28 +101,22 @@ public class ChartGrammarChecker extends AbstractParser {
     return returnFirstResult();
   }
 
-  private void predict(Grammar grammar, ChartNode current)
-      throws GrammarException {
+  private void predict(ChartNode current) {
     RuleComponent component = current.rule;
 
     if (component instanceof RuleSequence) {
       final RuleSequence sequence = (RuleSequence) component;
-      predict(grammar, sequence, current);
+      predict(sequence, current);
     } else if (component instanceof RuleAlternatives) {
       final RuleAlternatives alternatives = (RuleAlternatives) component;
-      predict(grammar, alternatives, current);
+      predict(alternatives, current);
     } else if (component instanceof RuleCount) {
       final RuleCount count = (RuleCount) component;
-      predict(grammar, count, current);
+      predict(count, current);
     } else if (component instanceof RuleReference) {
-      final RuleReference ref = (RuleReference)component;
-      predict(grammar, ref, current);
-    } else if (component instanceof RuleParse) {
-      final RuleParse parse = (RuleParse) component;
-      predict(grammar, parse, current);
-    } else if (component instanceof RuleTag) {
-      final RuleTag tag = (RuleTag) component;
-      scan(tag, current);
+      final RuleReference ref = (RuleReference) component;
+      //final RuleParse parse = (RuleParse) component;
+      predict(ref, current);
     } else if (component == GARBAGE) {
       predictGarbage(current);
     }
@@ -146,27 +130,18 @@ public class ChartGrammarChecker extends AbstractParser {
   }
 
 
-  private void predict(final Grammar grammar, final RuleParse reference,
-      final ChartNode current) throws GrammarException {
-    final RuleComponent component = reference.getParse();
-    // predict RHS of new nonterminal: new prediction
-    addPrediction(current.end, component);
-  }
-
-  private void predict(final Grammar grammar,
-      final RuleAlternatives alternatives, final ChartNode current)
-      throws GrammarException {
+  private void predict(final RuleAlternatives alts, final ChartNode current) {
     // one new prediction per alternative: an implicit nonterminal
     if (current.dot == 0) {
       // the one with dot == zero is responsible to introduce the rest
-      for (int dot = 1; dot < alternatives.size(); ++dot) {
+      for (int dot = 1; dot < alts.size(); ++dot) {
         // add predictions for the other alternatives, and one for the
         // embedded node
-        add(new ChartNode(current.end, current.end, alternatives, dot));
+        add(new ChartNode(current.end, current.end, alts, dot));
       }
     }
     // every alternative predicts its own sub-component
-    addPrediction(current.end, alternatives.getAlternative(current.dot));
+    addPrediction(current.end, alts.getAlternative(current.dot));
     /*
     // This seems attractive, but it makes the completion of active items
     // much more complicated. I currently don't have a solution, so i'll stick
@@ -177,14 +152,12 @@ public class ChartGrammarChecker extends AbstractParser {
     */
   }
 
-  private void predict(final Grammar grammar, final RuleSequence sequence,
-      final ChartNode current) throws GrammarException {
+  private void predict(final RuleSequence sequence, final ChartNode current) {
     final List<RuleComponent> components = sequence.getRuleComponents();
     addPrediction(current.end, components.get(current.dot));
   }
 
-  private void predict(final Grammar grammar, final RuleCount count,
-      final ChartNode current) throws GrammarException {
+  private void predict(final RuleCount count, final ChartNode current) {
     final RuleComponent component = count.getRuleComponent();
     final int min = count.getRepeatMin();
     int max = count.getRepeatMax();
@@ -200,29 +173,18 @@ public class ChartGrammarChecker extends AbstractParser {
     }
   }
 
-  private void predict(final Grammar grammar, final RuleReference ref,
-      final ChartNode current) throws GrammarException {
+  private void predict(final RuleReference ref, final ChartNode current) {
+    // predict RHS of new nonterminal
     addPrediction(current.end, ref);
+    addPrediction(current.end, ref.getResolved());
   }
 
-  private void predictGarbage(final ChartNode current) throws GrammarException {
+  private void predictGarbage(final ChartNode current) {
     final RuleComponent component = GARBAGE.getRuleComponent();
     addPrediction(current.end, component);
     // add passive item: a special case
     ChartNode c = new ChartNode(current.start, current.end, GARBAGE, -1);
     c.children.addAll(current.children);
     add(c);
-  }
-
-  /**
-   * This is rather a scan than predict. It directly creates a passive item,
-   * if possible.
-   *
-   * @param token
-   * @param current
-   */
-  private void scan(final RuleTag tag, final ChartNode current) {
-    // add complete epsilon item
-    add(new ChartNode(current.start, current.end, tag, -1));
   }
 }

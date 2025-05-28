@@ -152,7 +152,7 @@ public class OfficialTest {
         Matcher mat = METAPAT.matcher(in.key);
         if (mat.matches()) { // we have an input string to check (key in.X)
           String[] tokens = in.value.split(" +");
-          final AbstractParser checker = AbstractParser.getParser(manager);
+          final AbstractParser checker = AbstractParser.getParser();
           ChartNode validRule = null;
           try {
             validRule = checker.parse(ruleGrammar, tokens);

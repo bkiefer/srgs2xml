@@ -33,7 +33,7 @@ public class TestBestTree {
     int i = 0;
     for (String s : inputs) {
       String[] tokens = s.split(" +");
-      final AbstractParser checker = AbstractParser.getParser(manager);
+      final AbstractParser checker = AbstractParser.getParser();
       final ChartNode validRule = checker.parse(ruleGrammar, tokens);
       assertNotNull(validRule);
 
@@ -58,7 +58,7 @@ public class TestBestTree {
     final Grammar ruleGrammar = manager.loadGrammar(testURI("schrott.gram"));
     String s = "Januar der dreizehnte";
     String[] tokens = s.split(" +");
-    final AbstractParser checker = AbstractParser.getParser(manager);
+    final AbstractParser checker = AbstractParser.getParser();
     final ChartNode validRule = checker.parse(ruleGrammar, tokens);
     assertNotNull(validRule);
 

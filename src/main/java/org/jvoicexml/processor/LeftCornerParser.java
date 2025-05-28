@@ -52,15 +52,14 @@ public class LeftCornerParser extends AbstractParser {
    *
    * @param grammarManager the grammar manager.
    */
-  protected LeftCornerParser(final GrammarManager grammarManager) {
-    super(grammarManager);
+  protected LeftCornerParser() {
     log.info("Initializing Left Corner Parser");
   }
 
   /** Complete for the main loop */
   private void complete(ChartNode act, ChartNode pass, List<ChartNode> expd) {
     //log.debug("   + CO {} ", pass);
-    if (act.rule.looksForLC(getResolved(pass.rule), act.dot)) {
+    if (act.rule.looksForLC(pass.rule, act.dot)) {
       ChartNode newNode = new ChartNode(act, pass);
       expd.add(newNode);
       //log.debug("succeeds");
@@ -72,7 +71,7 @@ public class LeftCornerParser extends AbstractParser {
   /** Complete for the left corner predict */
   private void complete(RuleComponent act, ChartNode pass, List<ChartNode> expd) {
     //log.debug("LC {} + {} ", act, pass);
-    if (act.looksForLC(getResolved(pass.rule), 0)) {
+    if (act.looksForLC(pass.rule, 0)) {
       ChartNode newNode = new ChartNode(act, pass);
       expd.add(newNode);
       //log.debug("succeeds");
@@ -90,10 +89,9 @@ public class LeftCornerParser extends AbstractParser {
    * @throws GrammarException
    */
   private void leftCornerPredict(ChartNode act, ChartNode pass,
-      List<ChartNode> expd) throws GrammarException {
+      List<ChartNode> expd) {
     // We need the left corner relation of act.rule[dot] here
     for (RuleComponent r : act.rule.getLeftCorner(act.dot)) {
-      r = resolve(r);
       complete(r, pass, expd);
     }
   }
@@ -106,11 +104,9 @@ public class LeftCornerParser extends AbstractParser {
    * @param expd
    * @throws GrammarException
    */
-  private void leftCornerCompleteEmpty(ChartNode act, List<ChartNode> expd)
-      throws GrammarException {
+  private void leftCornerCompleteEmpty(ChartNode act, List<ChartNode> expd) {
     // We need the left corner relation of act.rule[dot] here
     for (RuleComponent r : act.rule.getLeftCorner(act.dot)) {
-      r = resolve(r);
       // special treatment of all "empty" items: RuleCount that represents an
       // optional item i.e., where repeatMin == 0, RuleTag and NULL
       if ((r instanceof RuleCount && ((RuleCount)r).getRepeatMin() == 0)

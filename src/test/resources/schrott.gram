@@ -17,9 +17,12 @@ $month = (Januar|Februar){ out = "$$1"; };
 
 $ithink = ([ich] (denke|glaube|meine)) | (denke|glaube|meine) ich;
 
-$month_opt_day = [[der] $day_of_month {out.day="$$1";}] $month {out.what = "$$1";}|
-            $month {out.what = $%1;} [der] $day_of_month {out.day=$%1;};
+$month_opt_day =
+  [[der] $day_of_month {out.day="$$1";}] $month {out.what = "$$1";}
+  | $month { out.what = $%1; } [der] $day_of_month { out.day= $%1; }
+  ;
 
-$month_response = $junk ([$ithink] $month_opt_day { out = $%1 }
-                | $month_opt_day { out = $%1 } $ithink
-                ) { out.da = "Inform"; out.prop = "Month"; } $junk;
+$month_response = $junk (
+  [$ithink] $month_opt_day { out = $%1 }
+  | $month_opt_day { out = $%1 } $ithink
+  ) { out.da = "Inform"; out.prop = "Month"; } $junk;

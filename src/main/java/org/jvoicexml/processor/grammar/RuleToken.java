@@ -147,9 +147,10 @@ public class RuleToken extends RuleComponent {
 
   @Override
   protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
-    if (leftCorner != null) return leftCorner;
-    leftCorner = new HashSet<>();
-    leftCorner.add(this);
+    if (leftCorner == null) {
+      leftCorner = new HashSet<>();
+      leftCorner.add(this);
+    }
     return leftCorner;
   }
 
