@@ -60,7 +60,11 @@ public class BestTreeFinder {
     return best;
   }
 
-    /** Descend into the children of this node.
+  public int noOfSolutions() {
+    return noConfs;
+  }
+
+  /** Descend into the children of this node.
    *  Weight of the configuration is determined here.
    *  protected so it can be overridden.
    *

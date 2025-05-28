@@ -33,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jvoicexml.processor.GrammarManager;
-
 //Comp. 2.0.6
 
 public class RuleSequence extends RuleComponent {
@@ -170,12 +168,12 @@ public class RuleSequence extends RuleComponent {
   }
 
   @Override
-  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+  protected Set<RuleComponent> computeLeftCorner() {
     if (leftCorner != null) return leftCorner;
     leftCorner = new HashSet<>();
     leftCorner.add(this);
     if (! ruleComponents.isEmpty()) {
-      leftCorner.addAll(ruleComponents.get(0).computeLeftCorner(mgr));
+      leftCorner.addAll(ruleComponents.get(0).computeLeftCorner());
     }
     return leftCorner;
   }

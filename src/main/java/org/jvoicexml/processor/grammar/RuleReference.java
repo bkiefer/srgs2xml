@@ -31,7 +31,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jvoicexml.processor.GrammarManager;
 import org.jvoicexml.processor.srgs.GrammarException;
 
 //Comp. 2.0.6
@@ -45,7 +44,7 @@ public class RuleReference extends RuleComponent {
 
   private String mediaType;
 
-  private Rule resolved;
+  private RuleComponent resolved;
 
   public RuleReference(String ruleName) throws IllegalArgumentException {
     checkValidGrammarText(ruleName);
@@ -90,13 +89,12 @@ public class RuleReference extends RuleComponent {
     return ruleName;
   }
 
-  public void setResolved(Rule r) {
+  public void setResolved(RuleComponent r) {
     resolved = r;
   }
 
-  @Override
   public RuleComponent getResolved() {
-    return resolved.getRuleComponent();
+    return resolved;
   }
 
   @Override
@@ -197,28 +195,27 @@ public class RuleReference extends RuleComponent {
     if (nonterm == null) {
       nonterm = this;
       nonterminals.put(nonterm, nonterm);
-      getResolved().cleanup(terminals, nonterminals);
-      getResolved().ruleRoot = this;
+      resolved.cleanup(terminals, nonterminals);
+      resolved.ruleRoot = this;
     }
     return nonterm;
   }
 
   /** Add left corner predictions for the LHS (the resolved rule)
-   * @param mgr
    * @throws GrammarException
    */
   @Override
-  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+  protected Set<RuleComponent> computeLeftCorner() {
     if (leftCorner != null) return leftCorner;
     leftCorner = new HashSet<>();
     leftCorner.add(this);
-    leftCorner.addAll(getResolved().computeLeftCorner(mgr));
+    leftCorner.addAll(resolved.computeLeftCorner());
     return leftCorner;
   }
 
   @Override
   protected boolean equ(RuleComponent r) {
-    return getResolved().equals(r);
+    return resolved.equ(r);
   }
 
   @Override

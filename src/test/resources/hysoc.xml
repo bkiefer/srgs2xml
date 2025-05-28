@@ -117,6 +117,7 @@
     <example>OK</example>
     <one-of>
       <item><item>yes</item><item repeat="0-1">please</item></item>
+      <item><item>yes</item><ruleref special="JUNK"/></item>
       <item>OK</item>
     </one-of>
     <tag>

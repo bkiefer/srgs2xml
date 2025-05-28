@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.processor.srgs.xml;
+package org.jvoicexml.processor.srgs;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,8 +48,6 @@ import org.jvoicexml.processor.grammar.RuleSequence;
 import org.jvoicexml.processor.grammar.RuleSpecial;
 import org.jvoicexml.processor.grammar.RuleTag;
 import org.jvoicexml.processor.grammar.RuleToken;
-import org.jvoicexml.processor.srgs.GrammarException;
-import org.jvoicexml.processor.srgs.RuleGrammarParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -66,7 +64,7 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle-Walka
  * @version $Revision: 1370 $
  */
-public class SrgsRuleGrammarParser extends RuleGrammarParser {
+public class XmlRuleGrammarParser extends RuleGrammarParser {
 
     private static EntityResolver entityResolver = new EmptyEntityResolver();
 
@@ -78,7 +76,7 @@ public class SrgsRuleGrammarParser extends RuleGrammarParser {
         }
     }
 
-    public SrgsRuleGrammarParser() {
+    public XmlRuleGrammarParser() {
       super();
     }
 

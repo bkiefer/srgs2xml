@@ -83,11 +83,11 @@ public class JVoiceXmlGrammar implements Grammar {
       addRule(r.cleanup(terminals, nonterminals));
     }
     for (RuleToken t : getTerminals()) {
-      t.computeLeftCorner(manager);
+      t.computeLeftCorner();
       tokenMap.add(t);
     }
     for (RuleComponent c : getNonterminals()) {
-      c.computeLeftCorner(manager);
+      c.computeLeftCorner();
     }
     /*
     Rule rt = rules.get(getRoot());

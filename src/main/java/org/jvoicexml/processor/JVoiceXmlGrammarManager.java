@@ -19,8 +19,8 @@ import org.jvoicexml.processor.grammar.RuleReference;
 import org.jvoicexml.processor.grammar.RuleSequence;
 import org.jvoicexml.processor.srgs.GrammarException;
 import org.jvoicexml.processor.srgs.RuleGrammarParser;
+import org.jvoicexml.processor.srgs.XmlRuleGrammarParser;
 import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
-import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
 public class JVoiceXmlGrammarManager implements GrammarManager {
 
@@ -54,7 +54,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
     }
     in.close();
     in = url.openStream();
-    final RuleGrammarParser parser = c == '<' ? new SrgsRuleGrammarParser()
+    final RuleGrammarParser parser = c == '<' ? new XmlRuleGrammarParser()
         : new AbnfRuleGrammarParser(grammarReference.toString());
 
     List<Rule> rules = null;
@@ -143,7 +143,7 @@ public class JVoiceXmlGrammarManager implements GrammarManager {
             + grammarStack.peek().getReference() + ": "
             + ref.getRepresentation());
       } else {
-        unresolved.setResolved(r);
+        unresolved.setResolved(r.getRuleComponent());
       }
 
     }

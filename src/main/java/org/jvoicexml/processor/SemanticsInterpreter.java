@@ -46,7 +46,8 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
     }
   }
 
-  public static JSONObject interpret(AbstractParser checker, Traversable root) {
+  public static JSONObject interpret(AbstractParser checker,
+      Traversable<ChartNode> root) {
     SemanticsInterpreter walker = new SemanticsInterpreter(checker);
     String jscode = walker.createProgram(root);
     return execute(jscode);
@@ -74,7 +75,7 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
     this.source.append("\n");
   }
 
-  public String createProgram(Traversable root) {
+  public String createProgram(Traversable<ChartNode> root) {
     stack.clear();
     source = new StringBuilder();
     addline("rules = {};");
@@ -173,6 +174,7 @@ public class SemanticsInterpreter implements TreeWalker<ChartNode> {
 
   @Override
   public void leave(ChartNode node, boolean leaf) {
+    @SuppressWarnings("unused")
     ChartNode env = stack.pop(); // == node
     RuleReference ref;
     if ((ref = isRuleRef(node)) != null) {

@@ -9,7 +9,7 @@ import org.jvoicexml.processor.grammar.RuleSpecial;
 import org.jvoicexml.processor.grammar.RuleTag;
 
 // A chart node structure, a replacement for the rule walker
-public class ChartNode implements Traversable {
+public class ChartNode implements Traversable<ChartNode> {
 
   int start, end, dot, id;
   RuleComponent rule;
@@ -91,7 +91,8 @@ public class ChartNode implements Traversable {
     }
   }
 
-  public void preorder(TreeWalker acceptor) {
+  @Override
+  public void preorder(TreeWalker<ChartNode> acceptor) {
     acceptor.enter(this, children.isEmpty());
     for (ChartNode child : children) {
       child.preorder(acceptor);

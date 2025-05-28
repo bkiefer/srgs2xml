@@ -3,7 +3,8 @@ package org.jvoicexml.processor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Configuration implements Comparable<Configuration>, Traversable {
+public class Configuration
+      implements Comparable<Configuration>, Traversable<ChartNode> {
   double weight;
   private ChartNode node;
   private int variant;
@@ -70,7 +71,7 @@ public class Configuration implements Comparable<Configuration>, Traversable {
   }
 
   @Override
-  public void preorder(TreeWalker acceptor) {
+  public void preorder(TreeWalker<ChartNode> acceptor) {
     ChartNode current = getAlternative();
     acceptor.enter(current, current.getChildren().isEmpty());
     for (Configuration child : children) {

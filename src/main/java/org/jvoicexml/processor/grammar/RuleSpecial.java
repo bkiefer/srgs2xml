@@ -30,8 +30,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jvoicexml.processor.GrammarManager;
-
 //Comp. 2.0.6
 
 public class RuleSpecial extends RuleComponent {
@@ -88,7 +86,7 @@ public class RuleSpecial extends RuleComponent {
   }
 
   @Override
-  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr){
+  protected Set<RuleComponent> computeLeftCorner(){
     return leftCorner;
   }
 

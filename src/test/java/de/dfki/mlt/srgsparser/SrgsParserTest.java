@@ -22,7 +22,7 @@ import org.jvoicexml.processor.JVoiceXmlGrammarManager;
 import org.jvoicexml.processor.grammar.Grammar;
 import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.srgs.GrammarException;
-import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
+import org.jvoicexml.processor.srgs.XmlRuleGrammarParser;
 
 public class SrgsParserTest {
 
@@ -208,7 +208,7 @@ public class SrgsParserTest {
   public void parserTest() throws URISyntaxException, IOException, GrammarException {
     URI grammarReference = testURI("/pizza.srgs");
     final URL url = grammarReference.toURL();
-    SrgsRuleGrammarParser p = new SrgsRuleGrammarParser();
+    XmlRuleGrammarParser p = new XmlRuleGrammarParser();
     List<Rule> rules = p.load(url.openStream());
     String rootname = (String)p.getAttributes().get("root");
     for (Rule r : rules) {

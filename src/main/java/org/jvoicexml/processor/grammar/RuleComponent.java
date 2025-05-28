@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.jvoicexml.processor.GrammarManager;
-
 //Comp 2.0.6
 
 public abstract class RuleComponent {
@@ -191,7 +189,7 @@ public abstract class RuleComponent {
   }
 
   protected boolean equ(RuleComponent r) {
-    return equals(r);
+    return this == r; // works because of cleanup: no equals necessary
   }
 
   protected Boolean eq(Object obj) {
@@ -220,11 +218,7 @@ public abstract class RuleComponent {
   abstract RuleComponent cleanup(Map<RuleToken, RuleToken> terminals,
       Map<RuleComponent, RuleComponent> nonterminals);
 
-  protected abstract Set<RuleComponent> computeLeftCorner(GrammarManager mgr);
-
-  public RuleComponent getResolved() {
-    return this;
-  }
+  protected abstract Set<RuleComponent> computeLeftCorner();
 
   public Set<RuleComponent> getLeftCorner() {
     return leftCorner;

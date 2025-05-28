@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.jvoicexml.processor.GrammarManager;
-
 //Comp. 2.0.6
 
 public class RuleToken extends RuleComponent {
@@ -146,7 +144,7 @@ public class RuleToken extends RuleComponent {
   }
 
   @Override
-  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+  protected Set<RuleComponent> computeLeftCorner() {
     if (leftCorner == null) {
       leftCorner = new HashSet<>();
       leftCorner.add(this);

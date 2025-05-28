@@ -4,31 +4,17 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jvoicexml.processor.GrammarManager;
-
 public class RuleAlternative extends RuleComponent {
   RuleComponent component;
-
-  private RuleAlternatives parent;
 
   double weight;
 
   final int nr;
 
-  public RuleAlternative(RuleAlternatives alternatives,
-      RuleComponent ruleComponent, double weight, int nr) {
+  public RuleAlternative(RuleComponent ruleComponent, double weight, int nr) {
     this.weight = weight;
     this.component = ruleComponent;
-    this.parent = alternatives;
     this.nr = nr;
-  }
-
-  public RuleComponent getRuleComponent() {
-    return component;
-  }
-
-  public RuleAlternatives getParent() {
-    return parent;
   }
 
   @Override
@@ -83,11 +69,11 @@ public class RuleAlternative extends RuleComponent {
   }
 
   @Override
-  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+  protected Set<RuleComponent> computeLeftCorner() {
     if (leftCorner != null) return leftCorner;
     leftCorner = new HashSet<>();
     leftCorner.add(this);
-    leftCorner.addAll(component.computeLeftCorner(mgr));
+    leftCorner.addAll(component.computeLeftCorner());
     return leftCorner;
   }
 

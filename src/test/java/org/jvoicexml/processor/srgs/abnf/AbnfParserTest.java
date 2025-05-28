@@ -29,7 +29,7 @@ import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.grammar.RuleComponent;
 import org.jvoicexml.processor.grammar.RuleToken;
 import org.jvoicexml.processor.srgs.GrammarException;
-import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
+import org.jvoicexml.processor.srgs.XmlRuleGrammarParser;
 
 public class AbnfParserTest {
   public static final String RESOURCE_DIR = "src/test/resources/";
@@ -191,7 +191,7 @@ public class AbnfParserTest {
     List<Rule> rules = p.load(url.openStream());
     grammarReference = testURI("pizza.srgs");
     url = grammarReference.toURL();
-    SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
+    XmlRuleGrammarParser s = new XmlRuleGrammarParser();
     List<Rule> xmlrules = s.load(url.openStream());
     RuleComponent.printCompact(false);
 
@@ -216,7 +216,7 @@ public class AbnfParserTest {
     List<Rule> rules = p.load(url.openStream());
     grammarReference = testURI("mini.xml");
     url = grammarReference.toURL();
-    SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
+    XmlRuleGrammarParser s = new XmlRuleGrammarParser();
     List<Rule> xmlrules = s.load(url.openStream());
 
     for (Rule r : rules) {

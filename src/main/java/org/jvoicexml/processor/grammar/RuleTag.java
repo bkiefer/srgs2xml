@@ -30,8 +30,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jvoicexml.processor.GrammarManager;
-
 //Comp. 2.0.6
 
 /**
@@ -109,7 +107,7 @@ public class RuleTag extends RuleComponent {
   }
 
   @Override
-  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+  protected Set<RuleComponent> computeLeftCorner() {
    if (leftCorner != null) return leftCorner;
    leftCorner = new HashSet<>();
    leftCorner.add(this);

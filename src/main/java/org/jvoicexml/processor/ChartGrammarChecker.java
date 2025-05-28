@@ -115,7 +115,6 @@ public class ChartGrammarChecker extends AbstractParser {
       predict(count, current);
     } else if (component instanceof RuleReference) {
       final RuleReference ref = (RuleReference) component;
-      //final RuleParse parse = (RuleParse) component;
       predict(ref, current);
     } else if (component == GARBAGE) {
       predictGarbage(current);
@@ -175,7 +174,6 @@ public class ChartGrammarChecker extends AbstractParser {
 
   private void predict(final RuleReference ref, final ChartNode current) {
     // predict RHS of new nonterminal
-    addPrediction(current.end, ref);
     addPrediction(current.end, ref.getResolved());
   }
 

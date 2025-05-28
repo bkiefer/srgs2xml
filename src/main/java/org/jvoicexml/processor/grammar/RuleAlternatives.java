@@ -33,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jvoicexml.processor.GrammarManager;
-
 //Comp 2.0.6
 
 public class RuleAlternatives extends RuleComponent {
@@ -57,7 +55,7 @@ public class RuleAlternatives extends RuleComponent {
 
   public void addAlternative(RuleComponent c, double weight) {
     ruleComponents.add(
-        new RuleAlternative(this, c, weight, ruleComponents.size()));
+        new RuleAlternative(c, weight, ruleComponents.size()));
   }
 
   public RuleComponent getAlternative(int i) {
@@ -98,7 +96,7 @@ public class RuleAlternatives extends RuleComponent {
             .append("\"");
       }
       str.append('>');
-      str.append(RuleComponent.toStringXML(alt.component));
+      str.append(alt);
       str.append("</item>");
     }
     str.append("</one-of>");
@@ -124,7 +122,7 @@ public class RuleAlternatives extends RuleComponent {
         // supported in CLDC 1.0
         str.append("/").append(Double.toString(alt.weight)).append("/");
       }
-      str.append(RuleComponent.toStringABNF(alt.component));
+      str.append(alt);
       str.append(" | ");
     }
     str.delete(str.length() - 3, str.length());
@@ -201,12 +199,12 @@ public class RuleAlternatives extends RuleComponent {
   }
 
   @Override
-  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+  protected Set<RuleComponent> computeLeftCorner() {
     if (leftCorner != null) return leftCorner;
     leftCorner = new HashSet<>();
     leftCorner.add(this);
     for (RuleAlternative alt : ruleComponents) {
-      leftCorner.addAll(alt.computeLeftCorner(mgr));
+      leftCorner.addAll(alt.computeLeftCorner());
     }
     return leftCorner;
   }

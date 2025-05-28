@@ -30,8 +30,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jvoicexml.processor.GrammarManager;
-
 //Comp 2.0.6
 
 public class RuleCount extends RuleComponent {
@@ -246,12 +244,12 @@ public class RuleCount extends RuleComponent {
   }
 
   @Override
-  protected Set<RuleComponent> computeLeftCorner(GrammarManager mgr) {
+  protected Set<RuleComponent> computeLeftCorner() {
     if (leftCorner != null) return leftCorner;
     // TODO WHAT ABOUT EPSILON? (RULEMIN = 0)
     leftCorner = new HashSet<>();
     leftCorner.add(this);
-    leftCorner.addAll(ruleComponent.computeLeftCorner(mgr));
+    leftCorner.addAll(ruleComponent.computeLeftCorner());
     return leftCorner;
   }
 

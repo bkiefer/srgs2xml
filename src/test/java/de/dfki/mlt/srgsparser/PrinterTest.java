@@ -26,8 +26,8 @@ import org.junit.runners.Parameterized;
 import org.jvoicexml.processor.grammar.Rule;
 import org.jvoicexml.processor.grammar.RuleComponent;
 import org.jvoicexml.processor.srgs.GrammarException;
+import org.jvoicexml.processor.srgs.XmlRuleGrammarParser;
 import org.jvoicexml.processor.srgs.abnf.AbnfRuleGrammarParser;
-import org.jvoicexml.processor.srgs.xml.SrgsRuleGrammarParser;
 
 @RunWith(Parameterized.class)
 public class PrinterTest {
@@ -130,7 +130,7 @@ public class PrinterTest {
     //System.out.println(xml);
 
     InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
-    SrgsRuleGrammarParser p = new SrgsRuleGrammarParser();
+    XmlRuleGrammarParser p = new XmlRuleGrammarParser();
     List<Rule> outrules = p.load(in);
     checkRules(inrules, outrules);
   }
@@ -139,7 +139,7 @@ public class PrinterTest {
     RuleComponent.printCompact(true);
     URI grammarReference = name.toUri();
     URL url = grammarReference.toURL();
-    SrgsRuleGrammarParser s = new SrgsRuleGrammarParser();
+    XmlRuleGrammarParser s = new XmlRuleGrammarParser();
     List<Rule> inrules = s.load(url.openStream());
     StringBuffer sb = new StringBuffer();
 

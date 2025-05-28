@@ -1,7 +1,7 @@
 package org.jvoicexml.processor;
 
-public interface Traversable {
+public interface Traversable<S> {
 
-  public <T extends TreeWalker> void preorder(T acceptor);
+  public void preorder(TreeWalker<S> acceptor);
 
 }
