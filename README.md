@@ -38,11 +38,11 @@ The ABNF grammar reader assumes the encoding to be UTF-8 if no encoding is speci
 - the private attribute to prevent external rule access does not lead to rejection
 - weights and probabilities are currently not handled by the parser
 
-# Extensions in String Matching: Regular Expressions
+# Extensions in String Matching
 
 If a token string starts with `$$`, the rest of the token is interpreted as Java regular expression, and input tokens will be matched against this token using Jva's regular expression matching implementation.
 
-The special `$GARBAGE` token is implemented as specified in the standard, in fact, it behaves like putting in a `"$$.*"<0->"`, but since the parsers in this implementation always do exhaustive parsing, it's use is somewhat discouraged, since a single `$GARBAGE` will match every token right to it. Therefore, a special token `$JUNK` has been added that will match exactly one nonempty token, like `"$$.*"`.
+The special `$GARBAGE` token is implemented as specified in the standard, in fact, it behaves like putting in a `"$$.*"<0->`, but since the parsers in this implementation always do exhaustive parsing, its use is discouraged, since a single `$GARBAGE` will match every token right of it. Therefore, a special token `$JUNK` has been added that will match exactly one token, like `"$$.*"`.
 
 # Extensions in the Semantic Interpretation
 
