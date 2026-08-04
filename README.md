@@ -1,3 +1,7 @@
+# This repository has been closed to allow for better licensing options
+
+You can find a maintained version of this repository in [https://github.com/bkiefer/srgsparser], which is independent of any JVoiceXML code and therefore able to offer the more flexible Apache 2.0 license. All functionality has been preserved.
+
 # SRGS/XML parser with javascript semantic actions
 
 [![mvn build](https://github.com/bkiefer/srgs2xml/actions/workflows/maven.yml/badge.svg)](https://github.com/bkiefer/srgs2xml/actions/workflows/maven.yml)
